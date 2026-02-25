@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>RZCustomEconomy</AssemblyName>
+    <RootNamespace>RZCustomEconomy</RootNamespace>
+    <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
+    <ModExportPath>D:\Games\SPT_4_0_11\SPT\user\mods\RZCustomEconomy\</ModExportPath>
+    <SourceExportPath>D:\SPT\PublicRepositories\RZCustomEconomy</SourceExportPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SPTarkov.Server.Core" Version="4.0.*" />
+    <PackageReference Include="SPTarkov.DI" Version="4.0.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<None Update="config\autoRoutingConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+	<None Update="config\craftingConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="config\manualOffersConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="config\masterConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="config\hideoutConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="config\buybackConfig.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <Target Name="ExportMod" AfterTargets="Build" Condition="'$(ModExportPath)' != ''">
+    <Message Text="→ Copying to $(ModExportPath)" Importance="High" />
+    <MakeDir Directories="$(ModExportPath)" />
+    <MakeDir Directories="$(ModExportPath)config\" />
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="true" />
+    <Copy
+      SourceFiles="$(ProjectDir)config\autoRoutingConfig.json"
+      DestinationFolder="$(ModExportPath)config\"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(ProjectDir)config\autoRoutingConfig.json')"
+    />
+	<Copy
+      SourceFiles="$(ProjectDir)config\craftingConfig.json"
+      DestinationFolder="$(ModExportPath)config\"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(ProjectDir)config\craftingConfig.json')"
+    />
+	<Copy
+      SourceFiles="$(ProjectDir)config\manualOffersConfig.json"
+      DestinationFolder="$(ModExportPath)config\"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(ProjectDir)config\manualOffersConfig.json')"
+    />
+	<Copy
+      SourceFiles="$(ProjectDir)config\masterConfig.json"
+      DestinationFolder="$(ModExportPath)config\"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(ProjectDir)config\masterConfig.json')"
+    />
+		<Copy
+      SourceFiles="$(ProjectDir)config\hideoutConfig.json"
+      DestinationFolder="$(ModExportPath)config\"
+      SkipUnchangedFiles="true"
+      Condition="Exists('$(ProjectDir)config\hideoutConfig.json')"
+    />
+    <Message Text="→ Mod exported." Importance="High" />
+  </Target>
+
+  <Target Name="ExportSources" AfterTargets="Build" Condition="'$(SourceExportPath)' != ''">
+    <Message Text="→ Exporting sources to $(SourceExportPath)" Importance="High" />
+    <Exec
+      Command="robocopy &quot;$(ProjectDir.TrimEnd('\'))&quot; &quot;$(SourceExportPath.TrimEnd('\'))&quot; /E /XD config bin obj .idea /XF *.user /NFL /NDL /NJH /NJS /NC /NS &amp;&amp; exit 0 || if %ERRORLEVEL% LEQ 7 (exit 0) else (exit %ERRORLEVEL%)"
+      IgnoreExitCode="true"
+    />
+    <Message Text="→ Sources exported." Importance="High" />
+  </Target>
+</Project>

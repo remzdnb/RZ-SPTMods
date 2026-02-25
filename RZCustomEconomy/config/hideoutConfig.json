@@ -1,0 +1,238 @@
+{
+  // 1 GPU ~2h45, 10 GPUs ~50 min, 50 GPUs ~20 min. This is coherent with the rest of the mod's economy. Don't touch it if you don't
+  // want to break balance.
+  "BitcoinFarm": {
+    // Production speed multiplier.
+    "ProductionSpeedMultiplier": 13.38,
+    // How effective each GPU is at boosting production rate.
+    "GpuBoostRate": 0.164,
+    // Max bitcoin capacity of the farm.
+    "MaxCapacity": 10
+  },
+  "Areas": {
+    "Vents": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "Security": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "WaterCloset": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "Stash": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1,
+      "LevelRequirements": {
+        "2": [
+          {
+            "Type": "Item",
+            "ItemTpl": "6656560053eaaa7a23349c86",
+            "ItemCount": 10
+          }
+        ],
+        "3": [
+          {
+            "Type": "Item",
+            "ItemTpl": "6656560053eaaa7a23349c86",
+            "ItemCount": 20
+          }
+        ],
+        "4": [
+          {
+            "Type": "Item",
+            "ItemTpl": "6656560053eaaa7a23349c86",
+            "ItemCount": 50
+          }
+        ]
+      }
+    },
+    "Generator": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "Heating": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "WaterCollector": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "MedStation": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "Kitchen": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "RestSpace": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "Workbench": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "IntelligenceCenter": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "ShootingRange": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "Library": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "ScavCase": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "Illumination": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "PlaceOfFame": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "AirFilteringUnit": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "SolarPower": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "BoozeGenerator": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "BitcoinFarm": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "StartingLevel": 3
+    },
+    "ChristmasIllumination": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 0
+    },
+    "EmergencyWall": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 6
+    },
+    "Gym": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "WeaponStand": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "WeaponStandSecondary": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 3
+    },
+    "EquipmentPresetsStand": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    },
+    "CircleOfCultists": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "StartingLevel": 1
+    }
+  }
+}
+
+/*
+public enum HideoutAreas
+{
+    Generator = 0,
+    Security = 1,
+    Lavatory = 2,        // WaterCloset
+    Vents = 3,
+    Stash = 4,
+    Heating = 5,
+    WaterCollector = 6,
+    MedStation = 7,
+    Kitchen = 8,
+    RestSpace = 9,
+    Workbench = 10,
+    IntelligenceCenter = 11,
+    ShootingRange = 12,
+    Library = 13,
+    ScavCase = 14,
+    Illumination = 15,
+    PlaceOfFame = 16,
+    AirFilteringUnit = 17,
+    SolarPower = 18,
+    BoozeGenerator = 19,
+    BitcoinFarm = 20,
+    ChristmasIllumination = 21,
+    EmergencyWall = 22,
+    Gym = 23,
+    WeaponStand = 24,
+    WeaponStandSecondary = 25,
+    EquipmentPresetsStand = 26,
+    CircleOfCultists = 27
+}*/

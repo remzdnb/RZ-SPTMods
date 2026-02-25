@@ -1,0 +1,428 @@
+{
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // Manual offers grouped by trader ID. Always injected on top of auto-routing.
+  // Each offer supports rouble price, barter items, stack count, loyalty level, durability, and explicit children.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "ManualOffers": [
+    {
+      // PRAPOR
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "54cb50c76803fa8b248b4571",
+      "Offers": []
+    },
+    {
+      // THERAPIST
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "54cb57776803fa99248b456e",
+      "Offers": []
+    },
+    {
+      // PEACEKEEPER
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "5935c25fb3acc3127c3d8cd9",
+      "Offers": []
+    },
+    {
+      // SKIER
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "58330581ace78e27b8b10cee",
+      "Offers": []
+    },
+    {
+      // MECHANIC
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "5a7c2eca46aef81a7ca2145d",
+      "Offers": []
+    },
+    {
+      // RAGMAN
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "5ac3b934156ae10c4430e83c",
+      "Offers": []
+    },
+    {
+      // JAEGER
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "5c0647fdd443bc2504c2d371",
+      "Offers": [
+        {
+          // Tripwire installation kit
+          "ItemTpl": "666b11055a706400b717cfa5",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 24642,
+          "Children": [],
+          "BarterItems": []
+        },
+        {
+          // Weapon Repair Kit
+          "ItemTpl": "5910968f86f77425cf569c32",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 100000,
+          "Children": [],
+          "BarterItems": []
+        },
+        {
+          // Body Armor Repair Kit
+          "ItemTpl": "591094e086f7747caa7bb2ef",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 600000,
+          "Children": [],
+          "BarterItems": []
+        },
+        {
+          // Metal Fuel Tank
+          "ItemTpl": "5d1b36a186f7742523398433",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 50000,
+          "Children": [],
+          "BarterItems": []
+        }
+      ]
+    },
+    {
+      // REF
+      // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+      "Id": "6617beeaa9cfa777ca915b7c",
+      "Offers": [
+        {
+          // BTC
+          "ItemTpl": "59faff1d86f7746c51718c9c",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 1
+        },
+        {
+          // Keycard holder case -> 5x BTC
+          "ItemTpl": "619cbf9e0a7c3a1a2731940a",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Key Tool -> 5x BTC
+          "ItemTpl": "59fafd4b86f7745ca07e1232",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Key Case -> 5x BTC
+          "ItemTpl": "67d3ed3271c17ff82e0a5b0b",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Documents Case -> 5x BTC
+          "ItemTpl": "590c60fc86f77412b13fddcf",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // SICC organizational pouch -> 1x Documents Case + 15x BTC
+          "ItemTpl": "5d235bb686f77443f4331278",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "590c60fc86f77412b13fddcf", "Count": 1 },
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 15 }
+          ]
+        },
+        {
+          // Dogtag Case -> 5x BTC
+          "ItemTpl": "5c093e3486f77430cb02e593",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Injector Case -> 20x BTC
+          "ItemTpl": "619cbf7d23893217ec30b689",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 20 }
+          ]
+        },
+        {
+          // Simple Wallet -> 20k
+          "ItemTpl": "5783c43d2459774bbe137486",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 20000,
+          "BarterItems": []
+        },
+        {
+          // WZ Wallet -> 20k
+          "ItemTpl": "60b0f6c058e0b0481a09ad11",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 50000,
+          "BarterItems": []
+        },
+        {
+          // Money Case -> 5x BTC
+          "ItemTpl": "59fb016586f7746d0d4b423a",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Medicine Case -> 5x BTC
+          "ItemTpl": "5aafbcd986f7745e590fff23",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Mr. Holodilnick thermal bag -> 5x BTC
+          "ItemTpl": "5c093db286f7740a1b2617e3",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Mr. Holodilnick thermal bag -> 5x BTC
+          "ItemTpl": "5c093db286f7740a1b2617e3",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Pistol case -> 5x BTC
+          "ItemTpl": "567143bf4bdc2d1a0f8b4567",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Ammunition Case -> 5x BTC
+          "ItemTpl": "5aafbde786f774389d0cbc0f",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+          ]
+        },
+        {
+          // Grenade Case -> 10x BTC
+          "ItemTpl": "5e2af55f86f7746d4159f07c",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // Magazine Case -> 10x BTC
+          "ItemTpl": "5c127c4486f7745625356c13",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // Ballistic Plate Case -> 10x BTC
+          "ItemTpl": "67600929bd0a0549d70993f6",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // Item Case -> 10x BTC
+          "ItemTpl": "59fb042886f7746c5005a7b2",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // THICC Item Case -> 1x Item Case + 10x BTC
+          "ItemTpl": "5c0a840b86f7742ffa4f2482",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59fb042886f7746c5005a7b2", "Count": 1 },
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // Weapon Case -> 10x BTC
+          "ItemTpl": "59fb023c86f7746d0d4b423c",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // THICC Weapon Case -> 1x Weapon Case + 10x BTC
+          "ItemTpl": "5b6d9ce188a4501afc1b2b25",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59fb023c86f7746d0d4b423c", "Count": 1 },
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+          ]
+        },
+        {
+          // Secure Container Alpha -> 25k + 1 Lega
+          "ItemTpl": "544a11ac4bdc2d470e8b456a",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 25000,
+          "BarterItems": [
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 1 }
+          ]
+        },
+        {
+          // Secure Container Beta -> SC Alpha + 50k + 2 Lega
+          "ItemTpl": "5857a8b324597729ab0a0e7d",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 50000,
+          "BarterItems": [
+            { "ItemTpl": "544a11ac4bdc2d470e8b456a", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 2 }
+          ]
+        },
+        {
+          // Secure Container Epsilon -> SC Beta + 100k + 5 Lega
+          "ItemTpl": "59db794186f77448bc595262",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 100000,
+          "BarterItems": [
+            { "ItemTpl": "5857a8b324597729ab0a0e7d", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 5 }
+          ]
+        },
+        {
+          // Secure Container Gamma -> SC Epsilon + 200k + 10 Lega
+          "ItemTpl": "5857a8bc2459772bad15db29",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 200000,
+          "BarterItems": [
+            { "ItemTpl": "59db794186f77448bc595262", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 10 }
+          ]
+        },
+        {
+          // Secure Container Theta -> SC Gamma + 300k + 15 Lega
+          "ItemTpl": "664a55d84a90fc2c8a6305c9",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 300000,
+          "BarterItems": [
+            { "ItemTpl": "5857a8bc2459772bad15db29", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 15 }
+          ]
+        },
+        {
+          // Secure Container Kappa -> SC Theta + 400k + 20 Lega
+          "ItemTpl": "5c093ca986f7740a1867ab12",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 400000,
+          "BarterItems": [
+            { "ItemTpl": "664a55d84a90fc2c8a6305c9", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 20 }
+          ]
+        },
+        {
+          // Secure Container Kappa Desecrated -> SC Kappa + 500k + 40 Lega
+          "ItemTpl": "676008db84e242067d0dc4c9",
+          "StackCount": 1,
+          "LoyaltyLevel": 2,
+          "Durability": 100,
+          "PriceRoubles": 500000,
+          "BarterItems": [
+            { "ItemTpl": "5c093ca986f7740a1867ab12", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 50 }
+          ]
+        },
+        {
+          // Graphics Card
+          "ItemTpl": "57347ca924597744596b4e71",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "Durability": 100,
+          "PriceRoubles": 100000,
+          "BarterItems": []
+        }
+      ]
+    }
+  ]
+}
