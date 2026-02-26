@@ -53,7 +53,7 @@ public class MasterPatcherPostDbModLoader(
 
     private void PatchHandbookPrices()
     {
-        if (_masterConfig.HandbookPrices.Count == 0)
+        if (!_masterConfig.EnableHandbookPricesConfig || _masterConfig.HandbookPrices.Count == 0)
             return;
 
         var handbook = databaseService.GetTables().Templates?.Handbook;
@@ -193,8 +193,12 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 [Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 1)]
-public class MasterPatchRagfairCallbacksMinusOne(DatabaseService databaseService, ConfigServer configServer, ConfigLoader configLoader)
-    : IOnLoad
+public class MasterPatchRagfairCallbacksMinusOne(
+    ILogger<MasterPatcherRagfairCallbacksMinusTwo> logger,
+    DatabaseService databaseService,
+    ConfigServer configServer,
+    ConfigLoader configLoader
+) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
     private readonly AutoRoutingConfig _autoRoutingConfig = configLoader.Load<AutoRoutingConfig>(AutoRoutingConfig.FileName);
@@ -202,6 +206,7 @@ public class MasterPatchRagfairCallbacksMinusOne(DatabaseService databaseService
     public Task OnLoad()
     {
         ExamineAllItems();
+        UpdateTraderRestockTimes();
         RemoveEmptyTraders();
 
         return Task.CompletedTask;
@@ -242,6 +247,53 @@ public class MasterPatchRagfairCallbacksMinusOne(DatabaseService databaseService
                 }
             }
         }
+    }
+
+    public void UpdateTraderRestockTimes()
+    {
+        if (!_masterConfig.EnableTraderRestockTimesConfig)
+            return;
+
+        var traderConfig = configServer.GetConfig<TraderConfig>();
+
+        foreach (var (traderName, seconds) in _masterConfig.TraderRestockTimes)
+        {
+            var traderId = TraderIds.FromName(traderName);
+            if (traderId is null)
+            {
+                logger.LogWarning("[RZCustomEconomy] TraderRestock: unknown trader '{Name}' — skipping.", traderName);
+                continue;
+            }
+
+            var existing = traderConfig.UpdateTime.FirstOrDefault(u => u.TraderId == traderId);
+            if (existing is not null)
+            {
+                existing.Seconds = new MinMax<int>(seconds, seconds);
+            }
+            else
+            {
+                traderConfig.UpdateTime.Add(new UpdateTime
+                {
+                    Name = traderName,
+                    TraderId = traderId,
+                    Seconds = new MinMax<int>(seconds, seconds)
+                });
+            }
+
+            // Patching UpdateTime only affects future restock intervals — the current NextResupply timestamp is persisted on trader.Base
+            // and survives server restarts. If the configured interval is shorter than the remaining time on the current timer, clamp
+            // NextResupply to now + seconds so the trader resets within the expected window instead of waiting out the old (longer) timer.
+            var trader = databaseService.GetTraders().GetValueOrDefault(traderId);
+            if (trader is not null)
+            {
+                var newNextResupply = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() + seconds;
+                if (trader.Base.NextResupply > newNextResupply)
+                    trader.Base.NextResupply = newNextResupply;
+            }
+        }
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] Trader restock times patched ({Count} override(s)).", _masterConfig.TraderRestockTimes.Count);
     }
 
     public void RemoveEmptyTraders()

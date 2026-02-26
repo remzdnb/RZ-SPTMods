@@ -1,12 +1,22 @@
 {
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // CLEAR AREAS
+  // List of hideout areas whose vanilla recipes will be wiped before injection.
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
   "ClearAreas": [
     "Workbench",
     "MedStation",
     "Kitchen"
   ],
+
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // RECIPES
+  // Crafting recipes grouped by hideout area.
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
   "Recipes": {
 
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // WORKBENCH RECIPES
     // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -27,84 +37,86 @@
       }
     ],
 
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // MEDSTATION RECIPES
     // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
     "MedStation": [
 
-      // 2x AI-2 <= 1x Pile Of Meds
+      // 1x AI-2 <= 1x Pile Of Meds
       {
         "EndProduct": "5755356824597772cb798962",
-        "Count": 2,
+        "Count": 1,
         "Requirements": [
           { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 }
         ]
       },
 
-      // 1x CAR <= 1x Pile Of Meds
+      // 1x CAR <= 2x Pile Of Meds
       {
         "EndProduct": "590c661e86f7741e566b646a",
         "Count": 1,
         "Requirements": [
-          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 }
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 }
         ]
       },
 
-      // 1x Salewa <= 1x Pile Of Meds + 1x Medical Bloodset
+      // 1x Salewa <= 2x Pile Of Meds + 1x Medical Bloodset
       {
         "EndProduct": "544fb45d4bdc2dee738b4568",
         "Count": 1,
         "Requirements": [
-          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 },
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
           { "Type": "Item", "TemplateId": "5b4335ba86f7744d2837a264", "Count": 1 }
         ]
       },
 
-      // 1x IFAK <= 2x Pile Of Meds + 1x Disposable Syringe
+      // 1x IFAK <= 1x Pile Of Meds + 1x Medical Bloodset + 1x Bottle of saline solution
       {
         "EndProduct": "590c678286f77426c9660122",
         "Count": 1,
         "Requirements": [
-          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
-          { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 }
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 },
+          { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 }
         ]
       },
 
-      // 1x Grizzly <= 2x Pile Of Meds + 1x Disposable Syringe + 1x Medical Bloodset
+      // 1x Grizzly <= 1x Pile Of Meds + 1x Medical Bloodset + 1x Bottle of saline solution + 1x Bottle of hydrogen peroxide
       {
         "EndProduct": "590c657e86f77412b013051d",
         "Count": 1,
         "Requirements": [
-          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 },
           { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
-          { "Type": "Item", "TemplateId": "5b4335ba86f7744d2837a264", "Count": 1 }
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 }
         ]
       },
 
-      // 1x AFAK <= 1x Pile Of Meds + 1x Disposable Syringe + 1x Medical Bloodset + 1x Bottle of hydrogen peroxide
+      // 1x AFAK <= 2x Pile Of Meds + 1x Disposable Syringe + 1x Medical Bloodset + 1x Bottle of hydrogen peroxide
       {
         "EndProduct": "60098ad7c2240c0fe85c570a",
         "Count": 1,
         "Requirements": [
           { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
           { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
-          { "Type": "Item", "TemplateId": "5b4335ba86f7744d2837a264", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 },
           { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 }
         ]
       },
 
-      // 1x CMS <= 2x Medical Tools + 1x Bottle of hydrogen peroxide + 1x Bottle of saline solution
+      // 1x CMS <= 3x Medical Tools + 1x Bottle of hydrogen peroxide + 1x Bottle of saline solution
       {
         "EndProduct": "5d02778e86f774203e7dedbe",
         "Count": 1,
         "Requirements": [
-          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 3 },
           { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 },
           { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 }
         ]
       },
 
+      // meh
       // 1x Surv12 <= 4x Medical Tools + 2x Bottle of hydrogen peroxide + 2x Bottle of saline solution
       {
         "EndProduct": "5d02797c86f774203f38e30a",
@@ -116,7 +128,7 @@
         ]
       },
 
-      // 1x SJ6 <= 1x Bottle of OLOLO Multivitamins
+      // 1x SJ6 <= 1x Disposable Syringe +
       {
         "EndProduct": "5c0e531d86f7747fa23f4d42",
         "Count": 1,

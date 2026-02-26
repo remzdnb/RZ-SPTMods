@@ -24,7 +24,7 @@ public class AutoRoutingPatcher(
     {
         var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
-        if (!masterConfig.EnableAutoRouting) {
+        if (!masterConfig.EnableAutoRoutingConfig) {
             return Task.CompletedTask;
         }
 

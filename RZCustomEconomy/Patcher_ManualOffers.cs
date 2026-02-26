@@ -22,7 +22,7 @@ public class ManualOffersPatcher(
     {
         var userConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
-        if (!userConfig.EnableManualOffers)
+        if (!userConfig.EnableManualOffersConfig)
             return Task.CompletedTask;
 
         var config = configLoader.Load<ManualOffersConfig>(ManualOffersConfig.FileName);

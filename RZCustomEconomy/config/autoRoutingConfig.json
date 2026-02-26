@@ -18,7 +18,7 @@
   // Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
   "RouteVanillaItemsOnly": false,
 
-  // Apply the StaticBlacklist (broken/non-functional items).
+  // Apply the StaticBlacklist (broken/non-functional items).d
   "UseStaticBlacklist": true,
 
   // Apply the UserBlacklist (items you want to hide from traders).

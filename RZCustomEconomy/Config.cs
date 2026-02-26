@@ -90,11 +90,13 @@ public class MasterConfig
 
     public bool ClearDefaultAssorts { get; set; } = true;
     public bool ClearFenceAssorts { get; set; } = true;
-    public bool EnableAutoRouting { get; set; } = true;
-    public bool EnableManualOffers { get; set; } = true;
+    public bool EnableAutoRoutingConfig { get; set; } = true;
+    public bool EnableManualOffersConfig { get; set; } = true;
     public bool EnableBuybackConfig { get; set; } = true;
     public bool EnableHideoutConfig { get; set; } = true;
     public bool EnableCraftingConfig { get; set; } = true;
+    public bool EnableHandbookPricesConfig { get; set; } = true;
+    public bool EnableTraderRestockTimesConfig { get; set; } = true;
     public bool DisableFleaMarket { get; set; } = true;
     public bool AllItemsExamined { get; set; } = false;
     public bool UnlockAllTraders { get; set; } = false;
@@ -102,6 +104,7 @@ public class MasterConfig
     public bool EnableDevLogs { get; set; } = false;
 
     public Dictionary<string, int> HandbookPrices { get; set; } = new();
+    public Dictionary<string, int> TraderRestockTimes { get; set; } = new();
     public Dictionary<string, TraderSellConfig> TraderSellConfigs { get; set; } = new();
 }
 

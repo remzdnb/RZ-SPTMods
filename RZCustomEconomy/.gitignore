@@ -1,6 +1,0 @@
-# Build outputs
-bin/
-obj/
-
-# Rider
-.idea/

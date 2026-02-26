@@ -116,10 +116,10 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
             stage.ConstructionTime = 0;
 
-            logger.LogInformation(
+            /*logger.LogInformation(
                 "[RZFreeMode] Area '{Name}' level {Level}: {Count} requirement(s) applied.",
                 areaName, levelStr, stage.Requirements.Count
-            );
+            );*/
         }
     }
 
@@ -215,8 +215,8 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     // Bitcoin farm
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private void PatchBitcoinFarm(BitcoinFarmConfig? config)
-    {
+    private void PatchBitcoinFarm(BitcoinFarmConfig? config) {
+
         if (config is null)
         {
             return;

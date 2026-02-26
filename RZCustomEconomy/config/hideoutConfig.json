@@ -1,6 +1,10 @@
 {
-  // 1 GPU ~2h45, 10 GPUs ~50 min, 50 GPUs ~20 min. This is coherent with the rest of the mod's economy. Don't touch it if you don't
-  // want to break balance.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // BITCOIN FARM SETTINGS
+  //
+  // Default : 1 GPU ~2h45, 10 GPUs ~50 min, 50 GPUs ~20 min.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
   "BitcoinFarm": {
     // Production speed multiplier.
     "ProductionSpeedMultiplier": 13.38,
@@ -9,6 +13,18 @@
     // Max bitcoin capacity of the farm.
     "MaxCapacity": 10
   },
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // HIDEOUT AREA SETTINGS
+  //
+  // RemoveFromDb=true and Enabled=false behave similarly, but with a visual difference: RemoveFromDb=true makes the area look like it's
+  // built at max level, while Enabled=false makes it look like it's built at all.
+  // Not entirely sure how/why, and I don't care.
+  //
+  // Also worth noting: disabling certain areas such as the Circle of Cultists can cause crashes or infinite loading screens, so use
+  // with caution.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
   "Areas": {
     "Vents": {
       "RemoveFromDb": true,

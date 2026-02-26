@@ -6,14 +6,14 @@
   // Clear all vanilla assorts. Disable if you want to add offers on top of existing ones.
   "ClearDefaultAssorts": true,
 
-  // Clear all vanilla assorts. Disable if you want to add offers on top of existing ones.
+  // Same as above but for Fence specifically.
   "ClearFenceAssorts": true,
 
   // Master switch for automatic handbook → trader routing.
-  "EnableAutoRouting": true,
+  "EnableAutoRoutingConfig": true,
 
   // Enable manual offers.
-  "EnableManualOffers": true,
+  "EnableManualOffersConfig": true,
 
   // Set to false to disable all trader sell config overrides.
   "EnableBuybackConfig": true,
@@ -24,7 +24,13 @@
   // Master switch for crafting recipe overrides.
   "EnableCraftingConfig": true,
 
-  //
+  // Master switch for handbook price overrides.
+  "EnableHandbookPricesConfig": true,
+
+  // Master switch for trader restock times overrides.
+  "EnableTraderRestockTimesConfig": true,
+
+  // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
   "DisableFleaMarket": true,
 
   // Mark all items as examined/identified on all profile templates.
@@ -33,11 +39,11 @@
   // Unlock all traders.
   "UnlockAllTraders": true,
 
-  // Dev mode: force all assort prices to 1 rouble, ignoring all price config.
+  // Force all assort prices to 1 rouble, ignoring all price config.
   "EnableDevMode": false,
 
-  // Dev mode: force all assort prices to 1 rouble, ignoring all price config.
-  "EnableDevLogs": false,
+  // Enables verbose logging.
+  "EnableDevLogs": true,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // HANDBOOK PRICE OVERRIDES
@@ -45,9 +51,12 @@
   // Overrides the handbook price of any item by TPL.
   // This affects auto-routing prices (which are based on handbook price), as well as any system in SPT that reads handbook prices (flea
   // market base prices, trader sell prices, etc.).
+  //
+  // Will be expanded in the future with all relevant items.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "HandbookPrices": {
+
     "5755356824597772cb798962": 5000,     // AI-2
     "590c661e86f7741e566b646a": 10000,    // CAR
     "544fb45d4bdc2dee738b4568": 20000,    // Salewa
@@ -77,7 +86,7 @@
     "5b4335ba86f7744d2837a264": 10000,    // Medical bloodset
     "59e361e886f774176c10a2a5": 10000,    // Bottle of hydrogen peroxide
     "59e3606886f77417674759a5": 10000,    // Bottle of saline solution
-    "62a0a043cf4a99369e2624a5": 25000,    // Bottle of OLOLO Multivitamins
+    "62a0a043cf4a99369e2624a5": 30000,    // Bottle of OLOLO Multivitamins
     "5af0534a86f7743b6f354284": 100000,   // Ophthalmoscope
     "5c052e6986f7746b207bc3c9": 250000,   // Portable defibrillator
     "5c0530ee86f774697952d952": 1000000,  // LEDX
@@ -105,5 +114,24 @@
     "5ed5166ad380ab312177c100": 50000,    // Obdolbos
     "637b60c3b7afa97bfc3d7001": 60000     // Obdolbos 2
 
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // TRADER RESTOCK TIMES
+  //
+  // Restock interval in seconds for each trader.
+  // Traders not listed here are left untouched.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "TraderRestockTimes": {
+    "Prapor":      3600,
+    "Therapist":   3600,
+    "Fence":       3600,
+    "Skier":       3600,
+    "Peacekeeper": 3600,
+    "Mechanic":    3600,
+    "Ragman":      3600,
+    "Jaeger":      3600,
+    "Arena":       3600
   }
 }
