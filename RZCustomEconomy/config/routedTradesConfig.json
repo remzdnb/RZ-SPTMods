@@ -18,12 +18,6 @@
   // Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
   "RouteVanillaItemsOnly": false,
 
-  // Apply the StaticBlacklist (broken/non-functional items).d
-  "UseStaticBlacklist": true,
-
-  // Apply the UserBlacklist (items you want to hide from traders).
-  "UseUserBlacklist": true,
-
   // When ForceRouteAll is true, items with no matching category route go here.
   // Set to a trader name (e.g. "Fence") or null to skip unmatched items.
   "FallbackTrader": "Arena",
@@ -161,62 +155,6 @@
     { "Enabled": false,  "CategoryId": "5b47574386f77428ca22b345", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
     // Others
     { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f4", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
-  ],
-
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  // BLACKLISTS
-  // Only affect auto-routing. Blacklisted items are never auto-routed to any trader.
-  // Manual offers and overrides are NOT affected — you can still manually sell a blacklisted item.
-  // Default vanilla assorts are also NOT affected if ClearDefaultAssorts is false.
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-  // STATIC BLACKLIST
-  // Items that are broken, invisible, or non-functional in-game.
-  //
-  // ⚠ These items are:
-  //   - NEVER sold at any trader.
-  //   - NEVER added to the encyclopedia (not identified on the profile), even when AllItemsExamined is true.
-  //
-  // Do not put items here just because you don't want them sold — use UserBlacklist for that.
-  "StaticBlacklist": [
-    "5943d9c186f7745a13413ac9", // Shrapnel
-    "5996f6d686f77467977ba6cc", // MON-50 Shrapnel
-    "5996f6fc86f7745e585b4de3", // M67 Shrapnel
-    "5996f6cb86f774678763a6ca", // RGD-5 Shrapnel
-    "67654a6759116d347b0bfb86", // V40 Shrapnel
-    "5751961824597720a31c09ac", // (off)Black Keycard
-    "5ae083b25acfc4001a5fc702", // Master Hand
-    "5ae089fb5acfc408fb13989b", // Trophy
-    "55d617094bdc2d89028b4568", // KAC QDC 6.5x35 sound suppressor
-    "5648b62b4bdc2d9d488b4585", // GP-34 40mm underbarrel grenade launcher
-    "62811d61578c54356d6d67ea", // !!!DO_NOT_USE!!!AI AXMC 7.62x51mm bolt assembly
-    "679ba90d269ddfea47012159", // Chained Labrys
-    "63a8970d7108f713591149f5", // Small Christmas gift
-    "63a898a328e385334e0640a5", // Christmas gift
-    "63a897c6b1ff6e29734fcc95", // Large Christmas gift
-    "634959225289190e5e773b3b", // Pumpkin with sweets
-    "678fa929819ddc4c350c0317", // Valve handwheel
-    "67ab3d4b83869afd170fdd3f", // BBQ-S43 gas torch
-    "58ac60eb86f77401897560ff", // Balaclava_dev
-    "59e8936686f77467ce798647" // Balaclava_test
-  ],
-
-  // USER BLACKLIST
-  // Items you want to hide from traders for gameplay or balance reasons.
-  //
-  // ⚠ These items are:
-  //   - NEVER sold at any trader
-  //   - Still added to the encyclopedia (identified on the profile) when AllItemsExamined is true
-  //
-  // Use StaticBlacklist instead for items that are genuinely broken.
-  "UserBlacklist": [
-    "5449016a4bdc2d6f028b456f", // Rouble
-    "6087e570b998180e9f76dc24", // Superfors DB 2020 Dead Blow Hammer
-    "63495c500c297e20065a08b1", // Old hand scythe
-    "62a09ec84f842e1bd12da3f2", // Missam forklift key
-    "5d1b33a686f7742523398398", // Canister with purified water
-    "5d1b376e86f774252519444e", // Bottle of Fierce Hatchling moonshine
-    "59e3577886f774176a362503" // Pack of sugar
   ],
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

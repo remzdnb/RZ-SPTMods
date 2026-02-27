@@ -1,111 +1,66 @@
 // RemzDNB - 2026
 
+using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Enums.Hideout;
 
 namespace RZCustomEconomy;
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// Shared primitives
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-public class BarterItem
-{
-    public string ItemTpl { get; set; } = "";
-    public int Count { get; set; } = 1;
-}
-
-public class ChildItem
-{
-    public string ItemTpl { get; set; } = "";
-    public string SlotId { get; set; } = "";
-    public int Count { get; set; } = 1;
-}
-
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// Trader IDs
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-public static class TraderIds
-{
-    public const string Prapor = "54cb50c76803fa8b248b4571";
-    public const string Therapist = "54cb57776803fa99248b456e";
-    public const string Fence = "579dc571d53a0658a154fbec";
-    public const string Skier = "58330581ace78e27b8b10cee";
-    public const string Peacekeeper = "5935c25fb3acc3127c3d8cd9";
-    public const string Mechanic = "5a7c2eca46aef81a7ca2145d";
-    public const string Ragman = "5ac3b934156ae10c4430e83c";
-    public const string Jaeger = "5c0647fdd443bc2504c2d371";
-    public const string Caretaker = "638f541a29ffd1183d187f57";
-    public const string Btr = "656f0f98d80a697f855d34b1";
-    public const string Arena = "6617beeaa9cfa777ca915b7c";
-    public const string Storyteller = "6864e812f9fe664cb8b8e152";
-
-    public static string? FromName(string name)
-    {
-        return typeof(TraderIds).GetField(name)?.GetValue(null) as string;
-    }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// Trader sell config
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-public enum ItemSellMode
-{
-    /// <summary>Leave the trader's vanilla sell config untouched.</summary>
-    Default,
-
-    /// <summary>Trader does not buy anything from the player.</summary>
-    Disabled,
-
-    /// <summary>Trader buys items belonging to the specified handbook categories.</summary>
-    Categories,
-
-    /// <summary>Trader buys all handbook items except those in the blacklist.</summary>
-    AllWithBlacklist,
-}
-
-public class TraderSellConfig
-{
-    public ItemSellMode Mode { get; set; } = ItemSellMode.Default;
-
-    /// <summary>Handbook category IDs. Used when Mode is Categories.</summary>
-    public List<string> Categories { get; set; } = new();
-
-    /// <summary>Item TPLs the trader will not buy. Used when Mode is AllWithBlacklist.</summary>
-    public List<string> Blacklist { get; set; } = new();
-}
-
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 // masterConfig.json
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+public class UserBlacklistConfig
+{
+    public bool ApplyToRoutedTrades { get; set; } = true;
+    public bool ApplyToDefaultAssorts { get; set; } = false;
+    public List<string> Items { get; set; } = new();
+}
 
 public class MasterConfig
 {
     public const string FileName = "masterConfig.json";
 
-    public bool ClearDefaultAssorts { get; set; } = true;
-    public bool ClearFenceAssorts { get; set; } = true;
-    public bool EnableAutoRoutingConfig { get; set; } = true;
-    public bool EnableManualOffersConfig { get; set; } = true;
+    public bool EnableDefaultTrades { get; set; } = true;
+    public bool EnableFenceTrades { get; set; } = true;
+    public bool EnableRoutedTrades { get; set; } = true;
+    public bool EnableManualTrades { get; set; } = true;
     public bool EnableBuybackConfig { get; set; } = true;
+    public bool EnableSupplyConfig { get; set; } = true;
     public bool EnableHideoutConfig { get; set; } = true;
     public bool EnableCraftingConfig { get; set; } = true;
     public bool EnableHandbookPricesConfig { get; set; } = true;
-    public bool EnableTraderRestockTimesConfig { get; set; } = true;
     public bool DisableFleaMarket { get; set; } = true;
     public bool AllItemsExamined { get; set; } = false;
     public bool UnlockAllTraders { get; set; } = false;
     public bool EnableDevMode { get; set; } = false;
     public bool EnableDevLogs { get; set; } = false;
 
+    public List<string> StaticBlacklist { get; set; } = new();
+    public UserBlacklistConfig UserBlacklist { get; set; } = new();
     public Dictionary<string, int> HandbookPrices { get; set; } = new();
-    public Dictionary<string, int> TraderRestockTimes { get; set; } = new();
-    public Dictionary<string, TraderSellConfig> TraderSellConfigs { get; set; } = new();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// defaultTradesConfig.json
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+public enum TradeCurrency { Rub, Eur, Usd }
+
+public record NoBarterTraderEntry
+{
+    public bool Enabled { get; set; } = false;
+    public TradeCurrency Currency { get; set; } = TradeCurrency.Rub;
+    public List<string> ExcludedBarterTpls { get; set; } = new();
+}
+
+public record DefaultTradesConfig
+{
+    public const string FileName = "defaultTradesConfig.json";
+
+    public Dictionary<string, NoBarterTraderEntry> NoBarterTraders { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -132,32 +87,22 @@ public class AutoTradeOverride
     public List<BarterItem> BarterItems { get; set; } = new();
 }
 
-public class AutoRoutingConfig
+public class RoutedTradesConfig
 {
-    public const string FileName = "autoRoutingConfig.json";
+    public const string FileName = "routedTradesConfig.json";
 
     public bool ForceRouteAll { get; set; } = false;
     public bool RouteModdedItemsOnly { get; set; } = false;
     public bool RouteVanillaItemsOnly { get; set; } = false;
     public bool EnableOverrides { get; set; } = true;
-    public bool UseStaticBlacklist { get; set; } = true;
-    public bool UseUserBlacklist { get; set; } = true;
     public string? FallbackTrader { get; set; } = null;
-
-    // Items that are broken, invisible, or non-functional in-game.
-    // Never sold at any trader AND never added to the encyclopedia.
-    public List<string> StaticBlacklist { get; set; } = new();
-
-    // Items you want to hide from traders.
-    // Never sold at any trader, but still added to the encyclopedia.
-    public List<string> UserBlacklist { get; set; } = new();
 
     public List<CategoryRoute> CategoryRoutes { get; set; } = new();
     public List<AutoTradeOverride> Overrides { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// manualOffersConfig.json
+// manualTradesConfig.json
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 public class TradeOffer
@@ -177,10 +122,9 @@ public class ManualTraderOffers
     public List<TradeOffer> Offers { get; set; } = new();
 }
 
-public class ManualOffersConfig
+public class ManualTradesConfig
 {
-    public const string FileName = "manualOffersConfig.json";
-
+    public const string FileName = "manualTradesConfig.json";
     public List<ManualTraderOffers> ManualOffers { get; set; } = new();
 }
 
@@ -212,6 +156,29 @@ public class BuybackConfig
     public const string FileName = "buybackConfig.json";
 
     public Dictionary<string, BuybackRule> Rules { get; set; } = new();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// supplyConfig.json
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+public class StockMultipliersConfig
+{
+    public bool EnableByTrader { get; set; } = false;
+    public Dictionary<string, double> ByTrader { get; set; } = new();
+    public bool EnableByCategory { get; set; } = false;
+    public Dictionary<string, double> ByCategory { get; set; } = new();
+}
+
+public class SupplyConfig
+{
+    public const string FileName = "supplyConfig.json";
+
+    public bool EnableRestockTimes { get; set; } = true;
+    public bool EnableStockMultipliers { get; set; } = true;
+
+    public Dictionary<string, int> RestockTimes { get; set; } = new();
+    public StockMultipliersConfig StockMultipliers { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -300,6 +267,48 @@ public class CraftsConfig
     public const string FileName = "craftingConfig.json";
     public List<HideoutAreas> ClearAreas { get; set; } = new();
     public Dictionary<HideoutAreas, List<CraftRecipe>> Recipes { get; set; } = new();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// Shared primitives
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+public class BarterItem
+{
+    public string ItemTpl { get; set; } = "";
+    public int Count { get; set; } = 1;
+}
+
+public class ChildItem
+{
+    public string ItemTpl { get; set; } = "";
+    public string SlotId { get; set; } = "";
+    public int Count { get; set; } = 1;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// Trader IDs
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+public static class TraderIds
+{
+    public const string Prapor = "54cb50c76803fa8b248b4571";
+    public const string Therapist = "54cb57776803fa99248b456e";
+    public const string Fence = "579dc571d53a0658a154fbec";
+    public const string Skier = "58330581ace78e27b8b10cee";
+    public const string Peacekeeper = "5935c25fb3acc3127c3d8cd9";
+    public const string Mechanic = "5a7c2eca46aef81a7ca2145d";
+    public const string Ragman = "5ac3b934156ae10c4430e83c";
+    public const string Jaeger = "5c0647fdd443bc2504c2d371";
+    public const string Caretaker = "638f541a29ffd1183d187f57";
+    public const string Btr = "656f0f98d80a697f855d34b1";
+    public const string Arena = "6617beeaa9cfa777ca915b7c";
+    public const string Storyteller = "6864e812f9fe664cb8b8e152";
+
+    public static string? FromName(string name)
+    {
+        return typeof(TraderIds).GetField(name)?.GetValue(null) as string;
+    }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

@@ -1,0 +1,106 @@
+{
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // NO BARTER TRADERS
+  //
+  // Replace vanilla barter trades with a straight cash payment at handbook price.
+  // Only affects default trader assorts — auto-routing and manual offers are not impacted.
+  // Has no effect if ClearDefaultAssorts is true.
+  //
+  // Currency : "rub" or "eur" or "usd"
+  //
+  // ExcludedBarterTpls : if every item in a barter scheme belongs to this list, the scheme is left untouched.
+  // Leave empty to convert all barters for that trader.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "NoBarterTraders": {
+
+    // PRAPOR
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Prapor": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // THERAPIST
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Therapist": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // SKIER
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Skier": {
+      "Enabled": false,
+      "Currency": "eur",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // PEACEKEEPER
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Peacekeeper": {
+      "Enabled": false,
+      "Currency": "usd",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // MECHANIC
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Mechanic": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // RAGMAN
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Ragman": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // JAEGER
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Jaeger": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        //
+      ]
+    },
+
+    // REF
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "Arena": {
+      "Enabled": false,
+      "Currency": "rub",
+      "ExcludedBarterTpls":
+      [
+        "6656560053eaaa7a23349c86" // Lega Medal
+        //,"5d235b4d86f7742e017bc88a" // GP Coin
+      ]
+    }
+  }
+}

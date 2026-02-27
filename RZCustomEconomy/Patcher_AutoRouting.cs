@@ -24,11 +24,11 @@ public class AutoRoutingPatcher(
     {
         var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
-        if (!masterConfig.EnableAutoRoutingConfig) {
+        if (!masterConfig.EnableRoutedTrades) {
             return Task.CompletedTask;
         }
 
-        var autoRoutingConfig = configLoader.Load<AutoRoutingConfig>(AutoRoutingConfig.FileName);
+        var autoRoutingConfig = configLoader.Load<RoutedTradesConfig>(RoutedTradesConfig.FileName);
         var traders = databaseService.GetTraders();
         var handbook = databaseService.GetTables().Templates?.Handbook;
 
@@ -42,11 +42,11 @@ public class AutoRoutingPatcher(
         var blacklist = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         if (!autoRoutingConfig.ForceRouteAll)
         {
-            if (autoRoutingConfig.UseStaticBlacklist)
-                blacklist.UnionWith(autoRoutingConfig.StaticBlacklist);
+            //if (autoRoutingConfig.UseStaticBlacklist)
+                blacklist.UnionWith(masterConfig.StaticBlacklist);
 
-            if (autoRoutingConfig.UseUserBlacklist)
-                blacklist.UnionWith(autoRoutingConfig.UserBlacklist);
+            if (/*autoRoutingConfig.UseUserBlacklist &&*/ masterConfig.UserBlacklist.ApplyToRoutedTrades)
+                blacklist.UnionWith(masterConfig.UserBlacklist.Items);
         }
 
         // 2. Build modded item set.

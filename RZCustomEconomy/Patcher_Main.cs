@@ -107,84 +107,212 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _defaultTradesConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
     public Task OnLoad()
     {
-        var traders = databaseService.GetTraders();
-        var traderConfig = configServer.GetConfig<TraderConfig>();
-        var ragfairConfig = configServer.GetConfig<RagfairConfig>();
-
-        // CLEAR DEFAULT ASSORTS
-        // Clear all default assorts here rather than earlier, so any assorts added by other mods are also wiped before we inject our own.
-        // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-        if (_masterConfig.ClearDefaultAssorts)
-        {
-            foreach (var (id, trader) in traders)
-            {
-                trader.Assort = new TraderAssort
-                {
-                    Items = new List<Item>(),
-                    BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
-                    LoyalLevelItems = new Dictionary<MongoId, int>(),
-                    NextResupply = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 3600,
-                };
-            }
-
-            if (_masterConfig.EnableDevLogs)
-                logger.LogInformation("[RZCustomEconomy] All trader assorts cleared.");
-        }
-
-        // REMOVE FLEA MARKET OFFERS
-        // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-        if (_masterConfig.DisableFleaMarket)
-        {
-            // Block initial dynamic offer generation by zeroing all offer counts.
-            foreach (var key in ragfairConfig.Dynamic.OfferItemCount.Keys.ToList()) {
-                ragfairConfig.Dynamic.OfferItemCount[key] = new MinMax<int> { Min = 0, Max = 0 };
-            }
-
-            // Block regeneration of expired offers.
-            ragfairConfig.Dynamic.ExpiredOfferThreshold = int.MaxValue;
-
-            if (_masterConfig.EnableDevLogs)
-                logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
-        }
-
-        // DISABLE FENCE OFFERS
-        // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-        if (_masterConfig.ClearFenceAssorts)
-        {
-            var fence = traderConfig.Fence;
-            fence.AssortSize = 0;
-            fence.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-            fence.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-            fence.DiscountOptions.AssortSize = 0;
-            fence.DiscountOptions.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-            fence.DiscountOptions.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-
-            fenceService.SetFenceAssort(
-                new TraderAssort {
-                    Items = [],
-                    BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
-                    LoyalLevelItems = new Dictionary<MongoId, int>(),
-                }
-            );
-            fenceService.SetFenceDiscountAssort(
-                new TraderAssort {
-                    Items = [],
-                    BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
-                    LoyalLevelItems = new Dictionary<MongoId, int>(),
-                }
-            );
-
-            if (_masterConfig.EnableDevLogs)
-                logger.LogInformation("[RZCustomEconomy] Fence offers disabled.");
-        }
+        ClearDefaultAssorts();
+        DisableFleaMarket();
+        DisableFenceOffers();
+        ReplaceBarterTrades();
 
         return Task.CompletedTask;
+    }
+
+    public void ClearDefaultAssorts()
+    {
+        // Clear all default assorts here rather than earlier, so any assorts added by other mods are also wiped before we inject our own.
+
+        if (_masterConfig.EnableDefaultTrades)
+            return;
+
+        foreach (var (id, trader) in databaseService.GetTraders())
+        {
+            trader.Assort = new TraderAssort {
+                Items = new List<Item>(),
+                BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
+                LoyalLevelItems = new Dictionary<MongoId, int>(),
+                NextResupply = DateTimeOffset.UtcNow.ToUnixTimeSeconds() + 3600,
+            };
+        }
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] All trader assorts cleared.");
+    }
+
+    public void DisableFleaMarket()
+    {
+        if (!_masterConfig.DisableFleaMarket)
+            return;
+
+        var ragfairConfig = configServer.GetConfig<RagfairConfig>();
+
+        // Block initial dynamic offer generation by zeroing all offer counts.
+        foreach (var key in ragfairConfig.Dynamic.OfferItemCount.Keys.ToList()) {
+            ragfairConfig.Dynamic.OfferItemCount[key] = new MinMax<int> { Min = 0, Max = 0 };
+        }
+
+        // Block regeneration of expired offers.
+        ragfairConfig.Dynamic.ExpiredOfferThreshold = int.MaxValue;
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
+    }
+
+    public void DisableFenceOffers()
+    {
+        if (_masterConfig.EnableFenceTrades)
+            return;
+
+        var fence = configServer.GetConfig<TraderConfig>().Fence;
+        fence.AssortSize = 0;
+        fence.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
+        fence.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
+        fence.DiscountOptions.AssortSize = 0;
+        fence.DiscountOptions.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
+        fence.DiscountOptions.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
+
+        fenceService.SetFenceAssort(
+            new TraderAssort {
+                Items = [],
+                BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
+                LoyalLevelItems = new Dictionary<MongoId, int>(),
+            }
+        );
+        fenceService.SetFenceDiscountAssort(
+            new TraderAssort {
+                Items = [],
+                BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
+                LoyalLevelItems = new Dictionary<MongoId, int>(),
+            }
+        );
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] Fence offers disabled.");
+    }
+
+    public void ReplaceBarterTrades()
+    {
+        if (!_masterConfig.EnableDefaultTrades)
+        {
+            logger.LogWarning("[RZCustomEconomy] NoBarterTrades: EnableDefaultAssorts is false — skipping, nothing to convert.");
+            return;
+        }
+
+        var config = configLoader.Load<DefaultTradesConfig>(DefaultTradesConfig.FileName);
+
+        if (config.NoBarterTraders.Count == 0)
+            return;
+
+        var traders = databaseService.GetTraders();
+        var handbook = databaseService.GetTables().Templates?.Handbook;
+
+        if (handbook is null) {
+            logger.LogWarning("[RZCustomEconomy] NoBarterTrades: handbook is null — skipping.");
+            return;
+        }
+
+        HashSet<string> currencyTpls = [
+            ItemTpl.MONEY_ROUBLES,
+            ItemTpl.MONEY_DOLLARS,
+            ItemTpl.MONEY_EUROS,
+        ];
+
+        // Read currency exchange rates from handbook prices.
+        // Handbook stores dollar and euro prices in roubles — dividing gives us the rub→currency rate.
+        var handbookItems = handbook.Items.ToDictionary(e => e.Id.ToString(), e => (double)(e.Price ?? 0));
+
+        var dollarPriceInRub = handbookItems.GetValueOrDefault(ItemTpl.MONEY_DOLLARS.ToString(), 0.0);
+        var euroPriceInRub   = handbookItems.GetValueOrDefault(ItemTpl.MONEY_EUROS.ToString(), 0.0);
+
+        if (dollarPriceInRub <= 0)
+            logger.LogWarning("[RZCustomEconomy] NoBarterTrades: handbook price for USD is 0 or missing — USD conversion will fallback to roubles.");
+        if (euroPriceInRub <= 0)
+            logger.LogWarning("[RZCustomEconomy] NoBarterTrades: handbook price for EUR is 0 or missing — EUR conversion will fallback to roubles.");
+
+        // Build a lookup: traderId → entry (currency + exclusion list).
+        var traderEntryMap = config.NoBarterTraders
+            .Select(kvp => (Id: TraderIds.FromName(kvp.Key), Entry: kvp.Value))
+            .Where(t => t.Id is not null)
+            .ToDictionary(t => t.Id!.ToString(), t => t.Entry);
+
+        var converted = 0;
+        var skipped = 0;
+
+        foreach (var (traderId, trader) in traders)
+        {
+            if (!traderEntryMap.TryGetValue(traderId.ToString(), out var traderEntry))
+                continue;
+
+            if (!traderEntry.Enabled)
+                continue;
+
+            var excludedTpls = traderEntry.ExcludedBarterTpls.ToHashSet();
+
+            var assort = trader.Assort;
+            if (assort?.BarterScheme is null) continue;
+
+            foreach (var (assortId, schemes) in assort.BarterScheme)
+            {
+                foreach (var scheme in schemes)
+                {
+                    // Already a cash-only scheme — leave it alone.
+                    var isCashOnly = scheme.All(s => currencyTpls.Contains(s.Template.ToString()));
+                    if (isCashOnly)
+                        continue;
+
+                    // If every item in the scheme is in the exclusion list, skip it.
+                    if (excludedTpls.Count > 0 && scheme.All(s => excludedTpls.Contains(s.Template.ToString())))
+                        continue;
+
+                    // Find the root item for this assort to get its handbook price.
+                    var rootItem = assort.Items.FirstOrDefault(i => i.Id == assortId);
+                    if (rootItem is null) {
+                        skipped++;
+                        continue;
+                    }
+
+                    if (!handbookItems.TryGetValue(rootItem.Template.ToString(), out var priceRub) || priceRub <= 0) {
+                        skipped++;
+                        logger.LogWarning("[RZCustomEconomy] NoBarterTrades: no handbook price for '{Tpl}' — skipping.", rootItem.Template);
+                        continue;
+                    }
+
+                    // Convert rouble price to the target currency.
+                    MongoId currencyTpl;
+                    double finalPrice;
+
+                    switch (traderEntry.Currency)
+                    {
+                        case TradeCurrency.Usd when dollarPriceInRub > 0:
+                            currencyTpl = ItemTpl.MONEY_DOLLARS;
+                            finalPrice  = Math.Max(1, Math.Round(priceRub / dollarPriceInRub));
+                            break;
+
+                        case TradeCurrency.Eur when euroPriceInRub > 0:
+                            currencyTpl = ItemTpl.MONEY_EUROS;
+                            finalPrice  = Math.Max(1, Math.Round(priceRub / euroPriceInRub));
+                            break;
+
+                        default:
+                            // Rub, or fallback if exchange rate is missing.
+                            currencyTpl = ItemTpl.MONEY_ROUBLES;
+                            finalPrice  = priceRub;
+                            break;
+                    }
+
+                    scheme.Clear();
+                    scheme.Add(new BarterScheme {
+                        Template = currencyTpl,
+                        Count = finalPrice
+                    });
+                    converted++;
+                }
+            }
+        }
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] NoBarterTrades: {Converted} barter(s) converted to cash, {Skipped} skipped.", converted, skipped);
     }
 }
 
@@ -201,27 +329,64 @@ public class MasterPatchRagfairCallbacksMinusOne(
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
-    private readonly AutoRoutingConfig _autoRoutingConfig = configLoader.Load<AutoRoutingConfig>(AutoRoutingConfig.FileName);
 
     public Task OnLoad()
     {
+        ApplyUserBlacklistToDefaultAssorts();
         ExamineAllItems();
-        UpdateTraderRestockTimes();
         RemoveEmptyTraders();
 
         return Task.CompletedTask;
     }
 
+    public void ApplyUserBlacklistToDefaultAssorts()
+    {
+        if (!_masterConfig.EnableDefaultTrades)
+            return;
+
+        var userBlacklist = _masterConfig.UserBlacklist;
+
+        if (!userBlacklist.ApplyToDefaultAssorts || userBlacklist.Items.Count == 0)
+            return;
+
+        var blacklistTpls = userBlacklist.Items.ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var traders = databaseService.GetTraders();
+
+        var removed = 0;
+
+        foreach (var (_, trader) in traders)
+        {
+            var assort = trader.Assort;
+            if (assort?.Items is null)
+                continue;
+
+            // Find root items whose tpl is blacklisted.
+            var toRemove = assort.Items
+                .Where(i => i.ParentId == "hideout" && blacklistTpls.Contains(i.Template.ToString()))
+                .ToList();
+
+            foreach (var root in toRemove)
+            {
+                // Remove root + all children.
+                assort.Items.RemoveAll(i => i.Id == root.Id || i.ParentId == root.Id);
+                assort.BarterScheme.Remove(root.Id);
+                assort.LoyalLevelItems.Remove(root.Id);
+                removed++;
+            }
+        }
+
+        if (_masterConfig.EnableDevLogs)
+            logger.LogInformation("[RZCustomEconomy] UserBlacklist: {Count} item(s) removed from default assorts.", removed);
+    }
+
     public void ExamineAllItems()
     {
-        // We do this here because it's late enough for modded items to be examined as well.
-
         if (!_masterConfig.AllItemsExamined)
             return;
 
         var profiles = databaseService.GetProfileTemplates();
         var allItems = databaseService.GetTables().Templates?.Items?.Keys.ToHashSet();
-        var staticBlacklist = new HashSet<MongoId>(_autoRoutingConfig.StaticBlacklist.Select(tpl => new MongoId(tpl)));
+        var staticBlacklist = new HashSet<MongoId>(_masterConfig.StaticBlacklist.Select(tpl => new MongoId(tpl)));
 
         foreach (var (_, edition) in profiles)
         {
@@ -229,71 +394,18 @@ public class MasterPatchRagfairCallbacksMinusOne(
             {
                 var character = side?.Character;
                 if (character is null)
-                {
                     continue;
-                }
 
                 character.Encyclopedia ??= new Dictionary<MongoId, bool>();
                 foreach (var tpl in allItems!)
                 {
                     if (staticBlacklist.Contains(tpl))
-                    {
-                        // StaticBlacklist items are broken/non-functional — they should never appear as identified in the
-                        // encyclopedia, even when AllItemsExamined is true.
                         continue;
-                    }
 
                     character.Encyclopedia[tpl] = true;
                 }
             }
         }
-    }
-
-    public void UpdateTraderRestockTimes()
-    {
-        if (!_masterConfig.EnableTraderRestockTimesConfig)
-            return;
-
-        var traderConfig = configServer.GetConfig<TraderConfig>();
-
-        foreach (var (traderName, seconds) in _masterConfig.TraderRestockTimes)
-        {
-            var traderId = TraderIds.FromName(traderName);
-            if (traderId is null)
-            {
-                logger.LogWarning("[RZCustomEconomy] TraderRestock: unknown trader '{Name}' — skipping.", traderName);
-                continue;
-            }
-
-            var existing = traderConfig.UpdateTime.FirstOrDefault(u => u.TraderId == traderId);
-            if (existing is not null)
-            {
-                existing.Seconds = new MinMax<int>(seconds, seconds);
-            }
-            else
-            {
-                traderConfig.UpdateTime.Add(new UpdateTime
-                {
-                    Name = traderName,
-                    TraderId = traderId,
-                    Seconds = new MinMax<int>(seconds, seconds)
-                });
-            }
-
-            // Patching UpdateTime only affects future restock intervals — the current NextResupply timestamp is persisted on trader.Base
-            // and survives server restarts. If the configured interval is shorter than the remaining time on the current timer, clamp
-            // NextResupply to now + seconds so the trader resets within the expected window instead of waiting out the old (longer) timer.
-            var trader = databaseService.GetTraders().GetValueOrDefault(traderId);
-            if (trader is not null)
-            {
-                var newNextResupply = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds() + seconds;
-                if (trader.Base.NextResupply > newNextResupply)
-                    trader.Base.NextResupply = newNextResupply;
-            }
-        }
-
-        if (_masterConfig.EnableDevLogs)
-            logger.LogInformation("[RZCustomEconomy] Trader restock times patched ({Count} override(s)).", _masterConfig.TraderRestockTimes.Count);
     }
 
     public void RemoveEmptyTraders()

@@ -22,10 +22,10 @@ public class ManualOffersPatcher(
     {
         var userConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
-        if (!userConfig.EnableManualOffersConfig)
+        if (!userConfig.EnableManualTrades)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<ManualOffersConfig>(ManualOffersConfig.FileName);
+        var config = configLoader.Load<ManualTradesConfig>(ManualTradesConfig.FileName);
 
         if (config.ManualOffers.Count == 0)
             return Task.CompletedTask;
