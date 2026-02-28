@@ -11,15 +11,15 @@
 
   // Restock times.
   "RestockTimes": {
-    "Prapor":      10,
-    "Therapist":   3600,
-    "Fence":       3600,
-    "Skier":       3600,
-    "Peacekeeper": 3600,
-    "Mechanic":    3600,
-    "Ragman":      3600,
-    "Jaeger":      3600,
-    "Arena":       3600
+    "54cb50c76803fa8b248b4571": 3600, // Prapor
+    "54cb57776803fa99248b456e": 3600, // Therapist
+    "579dc571d53a0658a154fbec": 3600, // Fence (not sure if it works)
+    "58330581ace78e27b8b10cee": 3600, // Skier
+    "5935c25fb3acc3127c3d8cd9": 3600, // Peacekeeper
+    "5a7c2eca46aef81a7ca2145d": 3600, // Mechanic
+    "5ac3b934156ae10c4430e83c": 3600, // Ragman
+    "5c0647fdd443bc2504c2d371": 3600, // Jaeger
+    "6617beeaa9cfa777ca915b7c": 3600  // Ref
   },
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -42,15 +42,15 @@
     // BY TRADER
     "EnableByTrader": true,
     "ByTrader": {
-      "Prapor":      2.0,
-      "Therapist":   0.5,
-      "Fence":       1.0,
-      "Skier":       1.0,
-      "Peacekeeper": 1.0,
-      "Mechanic":    1.0,
-      "Ragman":      1.0,
-      "Jaeger":      1.0,
-      "Arena":       1.0
+      "54cb50c76803fa8b248b4571": 1.0, // Prapor
+      "54cb57776803fa99248b456e": 1.0, // Therapist
+      "579dc571d53a0658a154fbec": 1.0, // Fence ( ??? )
+      "58330581ace78e27b8b10cee": 1.0, // Skier
+      "5935c25fb3acc3127c3d8cd9": 1.0, // Peacekeeper
+      "5a7c2eca46aef81a7ca2145d": 1.0, // Mechanic
+      "5ac3b934156ae10c4430e83c": 1.0, // Ragman
+      "5c0647fdd443bc2504c2d371": 1.0, // Jaeger
+      "6617beeaa9cfa777ca915b7c": 1.0  // Ref
     },
 
     // BY CATEGORY

@@ -71,7 +71,6 @@ public class CategoryRoute
 {
     public bool Enabled { get; set; } = true;
     public string CategoryId { get; set; } = "";
-    public string TraderName { get; set; } = "";
     public double PriceMultiplier { get; set; } = 1.0;
     public int LoyaltyLevel { get; set; } = 1;
 }
@@ -79,7 +78,7 @@ public class CategoryRoute
 public class AutoTradeOverride
 {
     public string ItemTpl { get; set; } = "";
-    public string TraderName { get; set; } = "";
+    public string TraderId { get; set; } = "";   // MongoDB ID — supports modded traders
     public int PriceRoubles { get; set; } = 0;
     public double PriceMultiplier { get; set; } = 1.0;
     public int LoyaltyLevel { get; set; } = 1;
@@ -95,9 +94,9 @@ public class RoutedTradesConfig
     public bool RouteModdedItemsOnly { get; set; } = false;
     public bool RouteVanillaItemsOnly { get; set; } = false;
     public bool EnableOverrides { get; set; } = true;
-    public string? FallbackTrader { get; set; } = null;
+    public string? FallbackTraderId { get; set; } = null;
 
-    public List<CategoryRoute> CategoryRoutes { get; set; } = new();
+    public Dictionary<string, List<CategoryRoute>> CategoryRoutes { get; set; } = new();
     public List<AutoTradeOverride> Overrides { get; set; } = new();
 }
 

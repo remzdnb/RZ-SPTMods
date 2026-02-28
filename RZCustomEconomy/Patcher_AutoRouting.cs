@@ -1,6 +1,6 @@
 // RemzDNB - 2026
-// ReSharper disable InvertIf
 // ReSharper disable EnforceIfStatementBraces
+// ReSharper disable InvertIf
 
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
@@ -11,7 +11,6 @@ using SPTarkov.Server.Core.Services;
 
 namespace RZCustomEconomy;
 
-// should be -2
 [Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 2)]
 public class AutoRoutingPatcher(
     ILogger<AutoRoutingPatcher> logger,
@@ -24,15 +23,15 @@ public class AutoRoutingPatcher(
     {
         var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
 
-        if (!masterConfig.EnableRoutedTrades) {
+        if (!masterConfig.EnableRoutedTrades)
             return Task.CompletedTask;
-        }
 
         var autoRoutingConfig = configLoader.Load<RoutedTradesConfig>(RoutedTradesConfig.FileName);
         var traders = databaseService.GetTraders();
         var handbook = databaseService.GetTables().Templates?.Handbook;
 
-        if (handbook is null) {
+        if (handbook is null)
+        {
             logger.LogWarning("[RZCustomEconomy] Handbook is null -- skipping auto-routing.");
             return Task.CompletedTask;
         }
@@ -45,7 +44,7 @@ public class AutoRoutingPatcher(
             //if (autoRoutingConfig.UseStaticBlacklist)
                 blacklist.UnionWith(masterConfig.StaticBlacklist);
 
-            if (/*autoRoutingConfig.UseUserBlacklist &&*/ masterConfig.UserBlacklist.ApplyToRoutedTrades)
+            if (/*autoRoutingConfig.UseUserBlacklist && */masterConfig.UserBlacklist.ApplyToRoutedTrades)
                 blacklist.UnionWith(masterConfig.UserBlacklist.Items);
         }
 
@@ -68,10 +67,21 @@ public class AutoRoutingPatcher(
             logger.LogInformation("[RZCustomEconomy] Detected {Count} modded item(s) via vanilla_handbook.json diff.", moddedTpls.Count);
         }
 
-        // 3. Build category route map.
+        // 3. Build category route map : categoryId → (traderId, route).
+        //    Dictionary is keyed by trader ID directly — no TraderIds.FromName needed.
 
-        var activeRoutes = autoRoutingConfig.ForceRouteAll ? autoRoutingConfig.CategoryRoutes : autoRoutingConfig.CategoryRoutes.Where(r => r.Enabled).ToList();
-        var categoryToRoute = BuildCategoryRouteMap(handbook.Categories, activeRoutes);
+        var catToParent = handbook.Categories.ToDictionary(
+            c => c.Id.ToString(),
+            c => c.ParentId?.ToString(),
+            StringComparer.OrdinalIgnoreCase
+        );
+
+        var categoryToTraderRoute = BuildCategoryRouteMap(
+            handbook.Categories,
+            autoRoutingConfig.CategoryRoutes,
+            autoRoutingConfig.ForceRouteAll
+        );
+
         var overrides = autoRoutingConfig.Overrides.ToDictionary(o => o.ItemTpl, StringComparer.OrdinalIgnoreCase);
 
         int routed = 0, overridden = 0, skipped = 0;
@@ -102,16 +112,15 @@ public class AutoRoutingPatcher(
 
             if (autoRoutingConfig.EnableOverrides && overrides.TryGetValue(itemTpl, out var ov))
             {
-                if (string.IsNullOrEmpty(ov.TraderName))
+                if (string.IsNullOrEmpty(ov.TraderId))
                 {
                     skipped++;
                     continue;
                 }
 
-                var ovTraderId = TraderIds.FromName(ov.TraderName);
-                if (ovTraderId is null || !traders.TryGetValue(ovTraderId, out var ovTrader))
+                if (!traders.TryGetValue(ov.TraderId, out var ovTrader))
                 {
-                    logger.LogWarning("[RZCustomEconomy] Override trader '{T}' not found for '{Tpl}'.", ov.TraderName, itemTpl);
+                    logger.LogWarning("[RZCustomEconomy] Override trader '{Id}' not found for '{Tpl}'.", ov.TraderId, itemTpl);
                     skipped++;
                     continue;
                 }
@@ -123,12 +132,11 @@ public class AutoRoutingPatcher(
 
             // Normal route.
 
-            if (!categoryToRoute.TryGetValue(hbItem.ParentId, out var route))
+            if (!categoryToTraderRoute.TryGetValue(hbItem.ParentId, out var traderRoute))
             {
-                if (autoRoutingConfig.ForceRouteAll && autoRoutingConfig.FallbackTrader is not null)
+                if (autoRoutingConfig.ForceRouteAll && autoRoutingConfig.FallbackTraderId is not null)
                 {
-                    var fallbackId = TraderIds.FromName(autoRoutingConfig.FallbackTrader);
-                    if (fallbackId is not null && traders.TryGetValue(fallbackId, out var fallbackTrader))
+                    if (traders.TryGetValue(autoRoutingConfig.FallbackTraderId, out var fallbackTrader))
                     {
                         var fallbackPrice = Math.Max(1, (int)Math.Round(hbItem.Price ?? 0));
                         InjectAutoOffer(fallbackTrader.Assort, hbItem.Id, fallbackPrice, -1, 1, new List<BarterItem>(), 100);
@@ -142,10 +150,12 @@ public class AutoRoutingPatcher(
                 continue;
             }
 
-            var traderId = TraderIds.FromName(route.TraderName);
-            if (traderId is null || !traders.TryGetValue(traderId, out var trader))
+            var traderId = traderRoute.TraderId;
+            var route = traderRoute.Route;
+
+            if (!traders.TryGetValue(traderId, out var trader))
             {
-                logger.LogWarning("[RZCustomEconomy] Route trader '{T}' not found.", route.TraderName);
+                logger.LogWarning("[RZCustomEconomy] Route trader '{Id}' not found.", traderId);
                 skipped++;
                 continue;
             }
@@ -203,35 +213,47 @@ public class AutoRoutingPatcher(
 
     // ─────────────────────────────────────────────────────────────────────────
     // BuildCategoryRouteMap
+    // Returns a map of categoryId → (traderId, route) with parent inheritance.
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static Dictionary<MongoId, CategoryRoute> BuildCategoryRouteMap(List<HandbookCategory> categories, List<CategoryRoute> routes)
+    private static Dictionary<MongoId, (string TraderId, CategoryRoute Route)> BuildCategoryRouteMap(
+        List<HandbookCategory> categories,
+        Dictionary<string, List<CategoryRoute>> categoryRoutes,
+        bool forceRouteAll
+    )
     {
-        var directRoutes = routes.ToDictionary(r => r.CategoryId, StringComparer.OrdinalIgnoreCase);
+        // Flatten to categoryId → (traderId, route), respecting Enabled flag unless ForceRouteAll.
+        var directRoutes = new Dictionary<string, (string TraderId, CategoryRoute Route)>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (var (traderId, routes) in categoryRoutes)
+        {
+            foreach (var route in routes)
+            {
+                if (!forceRouteAll && !route.Enabled)
+                    continue;
+
+                // Last writer wins if a category is defined under multiple traders.
+                directRoutes[route.CategoryId] = (traderId, route);
+            }
+        }
+
         var catById = categories.ToDictionary(c => c.Id.ToString(), StringComparer.OrdinalIgnoreCase);
-        var result = new Dictionary<MongoId, CategoryRoute>();
+        var result = new Dictionary<MongoId, (string, CategoryRoute)>();
 
         foreach (var cat in categories)
         {
-            var route = FindRouteForCategory(cat.Id.ToString(), catById, directRoutes);
-            if (route is not null)
-                result[cat.Id] = route;
-        }
-
-        foreach (var route in routes)
-        {
-            MongoId key = route.CategoryId;
-            if (!result.ContainsKey(key))
-                result[key] = route;
+            var resolved = FindRouteForCategory(cat.Id.ToString(), catById, directRoutes);
+            if (resolved.HasValue)
+                result[cat.Id] = resolved.Value;
         }
 
         return result;
     }
 
-    private static CategoryRoute? FindRouteForCategory(
+    private static (string TraderId, CategoryRoute Route)? FindRouteForCategory(
         string categoryId,
         Dictionary<string, HandbookCategory> catById,
-        Dictionary<string, CategoryRoute> directRoutes
+        Dictionary<string, (string TraderId, CategoryRoute Route)> directRoutes
     )
     {
         var current = categoryId;

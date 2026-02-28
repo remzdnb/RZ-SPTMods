@@ -1,21 +1,18 @@
 // RemzDNB - 2026
 // ReSharper disable EnforceIfStatementBraces
-// ReSharper disable InvertIf
 
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Common;
+using SPTarkov.Server.Core.Models.Eft.Common.Tables;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Services;
 
 namespace RZCustomEconomy;
 
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// Runs after all assort injections (AutoRouting & ManualOffers are both at RagfairCallbacks - 2).
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
+// Runs after all assort injections (AutoRouting + ManualOffers are both at RagfairCallbacks - 2).
 [Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 1)]
 public class SupplyPatcher(
     ILogger<SupplyPatcher> logger,
@@ -24,49 +21,44 @@ public class SupplyPatcher(
     ConfigLoader configLoader
 ) : IOnLoad
 {
-    private readonly TraderConfig _traderConfig = configServer.GetConfig<TraderConfig>();
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
-    private readonly SupplyConfig _supplyConfig = configLoader.Load<SupplyConfig>(SupplyConfig.FileName);
-
     public Task OnLoad()
     {
-        if (!_masterConfig.EnableSupplyConfig)
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+
+        if (!masterConfig.EnableSupplyConfig)
             return Task.CompletedTask;
 
-        PatchRestockTimes();
-        PatchStockMultipliers();
+        var config = configLoader.Load<SupplyConfig>(SupplyConfig.FileName);
+
+        PatchRestockTimes(config);
+        PatchStockMultipliers(config);
 
         return Task.CompletedTask;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
     // PatchRestockTimes
-    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
 
-    private void PatchRestockTimes()
+    private void PatchRestockTimes(SupplyConfig config)
     {
-        if (!_supplyConfig.EnableRestockTimes || _supplyConfig.RestockTimes.Count == 0)
+        if (!config.EnableRestockTimes || config.RestockTimes.Count == 0)
             return;
 
-        foreach (var (traderName, seconds) in _supplyConfig.RestockTimes)
-        {
-            var traderId = TraderIds.FromName(traderName);
-            if (traderId is null)
-            {
-                logger.LogWarning("[RZCustomEconomy] Supply/RestockTimes: unknown trader '{Name}' — skipping.", traderName);
-                continue;
-            }
+        var traderConfig = configServer.GetConfig<TraderConfig>();
 
-            var existing = _traderConfig.UpdateTime.FirstOrDefault(u => u.TraderId == traderId);
+        foreach (var (traderId, seconds) in config.RestockTimes)
+        {
+            var existing = traderConfig.UpdateTime.FirstOrDefault(u => u.TraderId == traderId);
             if (existing is not null)
             {
                 existing.Seconds = new MinMax<int>(seconds, seconds);
             }
             else
             {
-                _traderConfig.UpdateTime.Add(new UpdateTime
+                traderConfig.UpdateTime.Add(new UpdateTime
                 {
-                    Name = traderName,
+                    Name = traderId,
                     TraderId = traderId,
                     Seconds = new MinMax<int>(seconds, seconds)
                 });
@@ -83,19 +75,21 @@ public class SupplyPatcher(
         }
 
         if (configLoader.Load<MasterConfig>(MasterConfig.FileName).EnableDevLogs)
-            logger.LogInformation("[RZCustomEconomy] Supply/RestockTimes: {Count} override(s) applied.", _supplyConfig.RestockTimes.Count);
+            logger.LogInformation("[RZCustomEconomy] Supply/RestockTimes: {Count} override(s) applied.", config.RestockTimes.Count);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
     // PatchStockMultipliers
-    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // ─────────────────────────────────────────────────────────────────────────
 
-    private void PatchStockMultipliers()
+    private void PatchStockMultipliers(SupplyConfig config)
     {
-        if (!_supplyConfig.EnableStockMultipliers)
+        var stockConfig = config.StockMultipliers;
+
+        if (!config.EnableStockMultipliers)
             return;
 
-        if (!_supplyConfig.StockMultipliers.EnableByTrader && !_supplyConfig.StockMultipliers.EnableByCategory)
+        if (!stockConfig.EnableByTrader && !stockConfig.EnableByCategory)
         {
             logger.LogWarning("[RZCustomEconomy] Supply/StockMultipliers: both EnableByTrader and EnableByCategory are false — nothing to do.");
             return;
@@ -122,12 +116,13 @@ public class SupplyPatcher(
             StringComparer.OrdinalIgnoreCase
         );
 
-        var traderMultipliers = _supplyConfig.StockMultipliers.ByTrader
+        var traderMultipliers = stockConfig.ByTrader
             .Select(kvp => (Id: TraderIds.FromName(kvp.Key), Mult: kvp.Value))
             .Where(t => t.Id is not null)
             .ToDictionary(t => t.Id!, t => t.Mult, StringComparer.OrdinalIgnoreCase);
 
         int patched = 0, skippedUnlimited = 0, skippedMult1 = 0, skippedNullUpd = 0;
+        var devLogs = configLoader.Load<MasterConfig>(MasterConfig.FileName).EnableDevLogs;
 
         foreach (var (traderId, trader) in traders)
         {
@@ -138,7 +133,7 @@ public class SupplyPatcher(
             var rootItems = assort.Items.Where(i => i.ParentId == "hideout").ToList();
 
             var traderMult = 1.0;
-            if (_supplyConfig.StockMultipliers.EnableByTrader && traderMultipliers.TryGetValue(traderId.ToString(), out var tm))
+            if (stockConfig.EnableByTrader && traderMultipliers.TryGetValue(traderId.ToString(), out var tm))
                 traderMult = tm;
 
             var traderPatched = 0;
@@ -167,8 +162,8 @@ public class SupplyPatcher(
                 }
 
                 var categoryMult = 1.0;
-                if (_supplyConfig.StockMultipliers.EnableByCategory && tplToCategory.TryGetValue(item.Template.ToString(), out var categoryId))
-                    categoryMult = ResolveCategoryMultiplier(categoryId, _supplyConfig.StockMultipliers.ByCategory, catToParent);
+                if (stockConfig.EnableByCategory && tplToCategory.TryGetValue(item.Template.ToString(), out var categoryId))
+                    categoryMult = ResolveCategoryMultiplier(categoryId, stockConfig.ByCategory, catToParent);
 
                 var finalMult = traderMult * categoryMult;
 
@@ -181,6 +176,12 @@ public class SupplyPatcher(
 
                 var newMax = Math.Max(1, (int)Math.Round(buyMax.Value * finalMult));
 
+                if (devLogs)
+                    logger.LogInformation(
+                        "[RZCustomEconomy]   tpl={Tpl} BuyRestrictionMax {Old} → {New} (traderMult={TM} categoryMult={CM})",
+                        item.Template, buyMax, newMax, traderMult, categoryMult
+                    );
+
                 upd.BuyRestrictionMax = newMax;
                 upd.BuyRestrictionCurrent = 0;
 
@@ -188,12 +189,17 @@ public class SupplyPatcher(
                 traderPatched++;
             }
 
-            if (_masterConfig.EnableDevLogs)
+            if (devLogs)
                 logger.LogInformation(
                     "[RZCustomEconomy] Supply/StockMultipliers: trader={Id} rootItems={Total} patched={P} skipped(unlimited={U} mult1={M} nullUpd={N})",
                     traderId, rootItems.Count, traderPatched, traderSkippedUnlimited, traderSkippedMult1, traderSkippedNullUpd
                 );
         }
+
+        logger.LogInformation(
+            "[RZCustomEconomy] Supply/StockMultipliers done: {Patched} patched, {Unlimited} unlimited, {Mult1} mult=1, {NullUpd} nullUpd.",
+            patched, skippedUnlimited, skippedMult1, skippedNullUpd
+        );
     }
 
     // ─────────────────────────────────────────────────────────────────────────

@@ -4,21 +4,44 @@ Economy toolkit — full control over trader assorts, buyback policies, hideout,
 
 ## 🔎 Overview
 
-> 🔧 **v1.1.0** — Significant rework and improvements across the board. Some things may have broken in the process, let me know and I'll push hotfixes.
-
-> Full control over SPT's economy through config files : traders, flea market, hideout, crafting.
-Think of it less as a mod and more as a foundation. It's aimed at server owners who want to build a custom economy from scratch, whether that means reworking trader stocks, disabling the flea market, or turning everything into a sandbox.
-If you're looking for a ready-to-play experience, stay tuned for **FreeTarkov** : a full overhaul mod built on top of RZCustomEconomy, currently in development.
+> Full control over SPT's economy through config files : traders, flea market, hideout, crafting. Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
+> If you're looking for a ready-to-play experience, stay tuned for **FreeTarkov** : a full overhaul mod built on top of RZCustomEconomy, currently in development.
 
 ---
 
-The three main features that control what players see at traders are Default Trades, Routed Trades and Manual Trades. It's worth understanding the difference before diving in.
+---
 
-🏷️ EnableDefaultTrades keeps vanilla trader assorts intact and applies patches on top of them, for instance replacing barter requirements with a straight cash price. Setting it to false wipes all vanilla assorts entirely and ignores defaultTradesConfig.json.
+---
 
-🔀 EnableRoutedTrades takes a completely different approach : it rebuilds trader offers from scratch based on the handbook. Every item gets automatically assigned to a trader according to category rules you define. If set to false, routedTradesConfig.json will be entirely ignored.
+### Getting Started
 
-🛒 EnableManualTrades lets you define specific offers for specific traders with full control over every parameter : item, price, currency, barter, durability, attachments. Completely independent from the other two. If set to false, manualTradesConfig.json will be entirely ignored.
+> **⚠️ By default, every feature in this mod is disabled.** Install it as-is and nothing changes in your game - it's a clean slate.
+
+Each feature has a dedicated on/off switch in `masterConfig.json`. Flip it to `true` and the feature is live. That's it. Every switch maps directly to one of the tabs in this description, which contains the full documentation and config reference for that feature.
+
+- 🏷️ **`EnableDefaultTrades`** — 🟢 On by default → see the **Default Trades** tab
+- 🔀 **`EnableRoutedTrades`** — 🔴 Off by default → see the **Routed Trades** tab
+- 🛒 **`EnableManualTrades`** — 🔴 Off by default → see the **Manual Trades** tab
+- 🏪 **`EnableBuybackConfig`** — 🔴 Off by default → see the **Buyback** tab
+- 📦 **`EnableSupplyConfig`** — 🔴 Off by default → see the **Supply** tab
+- 🏠 **`EnableHideoutConfig`** — 🔴 Off by default → see the **Hideout** tab
+- ⚗️ **`EnableCraftingConfig`** — 🔴 Off by default → see the **Crafting** tab
+
+Pick what you need, leave the rest off. Features are fully independent - run any combination you want.
+
+---
+
+The three main features that control what players see at traders are **Default Trades**, **Routed Trades** and **Manual Trades**. It's worth understanding the difference before diving in.
+
+🏷️ **EnableDefaultTrades** keeps vanilla trader assorts intact and applies patches on top of them, for instance replacing barter requirements with a straight cash price. Setting it to false wipes all vanilla assorts entirely and ignores *defaultTradesConfig.json*.
+
+🔀 **EnableRoutedTrades** takes a completely different approach : it rebuilds trader offers from scratch based on the handbook. Every item gets automatically assigned to a trader according to category rules you define. If set to false, *routedTradesConfig.json* will be entirely ignored.
+
+🛒 **EnableManualTrades** lets you define specific offers for specific traders with full control over every parameter : item, price, currency, barter, durability, attachments. Completely independent from the other two. If set to false, *manualTradesConfig.json* will be entirely ignored.
+
+---
+
+---
 
 ---
 
@@ -41,18 +64,27 @@ The three main features that control what players see at traders are Default Tra
 ### *Secondary Features Switches*
 
 - **`EnableFenceTrades`** — Fence is handled differently from other traders internally and hasn't been fully integrated yet. For now this switch only controls whether Fence's dynamic offers are generated or not. Independant from any other feature.
-- **`EnableHandbookPricesConfig`** — Master switch for handbook price overrides.
-- **`EnableTraderRestockTimesConfig`** — Master switch for trader restock times overrides.
 - **`DisableFleaMarket`** — Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
+- **`UnlockAllTraders`** — Sets all traders as unlocked by default.
+- **`AllItemsExamined`** — Mark all items as examined/identified on all profile templates. A small number of items are not affected, not sure why.
 
 ---
 
-### *Shared Settings*
+### *Handbook Price Overrides*
 
-- **`UnlockAllTraders`** — Sets all traders as unlocked by default.
-- **`AllItemsExamined`** — Mark all items as examined/identified on all profile templates. A small number of items are not affected, not sure why.
-- **`HandbookPrices`** — Overrides the handbook price of any item by TPL. Affects auto-routing prices and any SPT system that reads handbook prices (flea market base prices, trader sell values, etc.).
-- **`TraderRestockTimes`** — Restock interval in seconds for each trader.
+Overrides the handbook price of any item by TPL.
+This affects auto-routing prices (which are based on handbook price), as well as any system in SPT that reads handbook prices (flea market base prices, trader sell prices, etc.).
+
+---
+
+### *Blacklists*
+
+- **`StaticBlacklist`** — Items that are broken, invisible, or non-functional in-game.
+- **`UserBlacklist`** — Items you want to hide for gameplay or balance reasons.
+
+> 💡 The two blacklists serve different purposes. The static blacklist is for broken or non-functional items — anything listed there will never be examined even if `AllItemsExamined` is enabled, which prevents them from showing up in weapon modding menus. The user blacklist is simply for items you don't want routed to any trader, or removed from vanilla assorts — both can be toggled independently.
+
+> 💡 Both blacklists will prevent auto routing if `ApplyToRoutedTrades` is true.
 
 ---
 
@@ -60,12 +92,6 @@ The three main features that control what players see at traders are Default Tra
 
 - **`EnableDevMode`** — Force all assort prices to 1 rouble, ignoring all price config.
 - **`EnableDevLogs`** — Enables verbose logging.
-
----
-
-> ⚠️ Out of the box, EnableRoutedTrades is enabled with ForceRouteAll set to true as a demo mode, meaning every handbook item is automatically routed to a trader. If you want to use that feature for real gameplay, set ForceRouteAll to false and configure your CategoryRoutes and Overrides manually. The default config is tuned for my own economy overhaul project and is not meant to be playable immediately. Use it as a reference and starting point.
-
-> 💡 If you're feeling lost, set all master switches to false (except EnableDefaultTrades), this will completely disable every feature of the mod, leaving your game in a vanilla state. You can then re-enable them one by one to understand what each one does.
 
 ## 🏷️ Default Trades
 
@@ -101,15 +127,11 @@ Reads every item in the handbook at runtime and automatically assigns it to a tr
 - **`EnableOverrides`** — Enable overrides.
 - **`RouteModdedItemsOnly`** — Only route items not present in vanilla_handbook.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
 - **`RouteVanillaItemsOnly`** — Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
-- **`UseStaticBlacklist`** — Apply the StaticBlacklist (broken/non-functional items).
-- **`UseUserBlacklist`** — Apply the UserBlacklist (items you want to hide from traders).
 - **`FallbackTrader`** — When ForceRouteAll is true, items with no matching category route go here.
 
 > 💡 Each category route entry maps a handbook category ID to a trader. Sub-categories inherit the parent route automatically.
 
 > 💡 Per-TPL overrides take precedence over category routes.
-
-> 💡 The two blacklists serve different purposes. The static blacklist is for broken or non-functional items — anything listed there will never be examined even if `AllItemsExamined` is enabled, which prevents them from showing up in weapon modding menus. The user blacklist is simply for items you don't want routed to any trader. (both will prevent auto routing)
 
 ## 🛒 Manual Trades
 

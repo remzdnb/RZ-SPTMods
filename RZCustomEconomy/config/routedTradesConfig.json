@@ -1,10 +1,10 @@
 {
-  // ─────────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // Auto-Routing Configuration
   //
   // Controls how handbook items are automatically assigned to traders.
   // See the README for a full explanation of each setting.
-  // ─────────────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Route every handbook item regardless of category routes and blacklists.
   "ForceRouteAll": false,
@@ -24,138 +24,148 @@
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // AUTOMATIC HANDBOOK → TRADER ROUTING
+  // Keyed by trader ID. Each entry is a list of handbook category routes for that trader.
+  // Sub-categories inherit the parent route automatically.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  "CategoryRoutes": [
+  "CategoryRoutes": {
 
     // PRAPOR
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Rounds
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b33b", "TraderName": "Prapor", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Ammo packs
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b33c", "TraderName": "Prapor", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Magazines
-    { "Enabled": true, "CategoryId": "5b5f754a86f774094242f19b", "TraderName": "Prapor", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Throwables
-    { "Enabled": true, "CategoryId": "5b5f7a2386f774093f2ed3c4", "TraderName": "Prapor", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "54cb50c76803fa8b248b4571": [
+      // Rounds
+      { "Enabled": true,  "CategoryId": "5b47574386f77428ca22b33b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Ammo packs
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b33c", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Magazines
+      { "Enabled": true,  "CategoryId": "5b5f754a86f774094242f19b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Throwables
+      { "Enabled": true,  "CategoryId": "5b5f7a2386f774093f2ed3c4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // THERAPIST
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Medkits
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b338", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Injury treatment
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b339", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Injectors
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b33a", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Pills
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b337", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Drinks
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b335", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Food
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b336", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Medical supplies
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b2f3", "TraderName": "Therapist", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "54cb57776803fa99248b456e": [
+      // Medkits
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b338", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Injury treatment
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b339", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Injectors
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b33a", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Pills
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b337", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Drinks
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b335", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Food
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b336", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Medical supplies
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b2f3", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // PEACEKEEPER
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Melee weapons
-    { "Enabled": true,  "CategoryId": "5b5f7a0886f77409407a7f96", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Pistols
-    { "Enabled": true, "CategoryId": "5b5f792486f77447ed5636b3", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Assault carbines
-    { "Enabled": false, "CategoryId": "5b5f78e986f77447ed5636b1", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Assault rifles
-    { "Enabled": false, "CategoryId": "5b5f78fc86f77409407a7f90", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Marksman rifles
-    { "Enabled": false, "CategoryId": "5b5f791486f774093f2ed3be", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Shotguns
-    { "Enabled": false, "CategoryId": "5b5f794b86f77409407a7f92", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Submachine guns
-    { "Enabled": false, "CategoryId": "5b5f796a86f774093f2ed3c0", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Bolt-action rifles
-    { "Enabled": false, "CategoryId": "5b5f798886f77447ed5636b5", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Machine guns
-    { "Enabled": false, "CategoryId": "5b5f79a486f77409407a7f94", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Grenade launchers
-    { "Enabled": false, "CategoryId": "5b5f79d186f774093f2ed3c2", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Special weapons
-    { "Enabled": false, "CategoryId": "5b5f79eb86f77447ed5636b7", "TraderName": "Peacekeeper", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5935c25fb3acc3127c3d8cd9": [
+      // Melee weapons
+      { "Enabled": true,  "CategoryId": "5b5f7a0886f77409407a7f96", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Pistols
+      { "Enabled": true,  "CategoryId": "5b5f792486f77447ed5636b3", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Assault carbines
+      { "Enabled": false, "CategoryId": "5b5f78e986f77447ed5636b1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Assault rifles
+      { "Enabled": false, "CategoryId": "5b5f78fc86f77409407a7f90", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Marksman rifles
+      { "Enabled": false, "CategoryId": "5b5f791486f774093f2ed3be", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Shotguns
+      { "Enabled": false, "CategoryId": "5b5f794b86f77409407a7f92", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Submachine guns
+      { "Enabled": false, "CategoryId": "5b5f796a86f774093f2ed3c0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Bolt-action rifles
+      { "Enabled": false, "CategoryId": "5b5f798886f77447ed5636b5", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Machine guns
+      { "Enabled": false, "CategoryId": "5b5f79a486f77409407a7f94", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Grenade launchers
+      { "Enabled": false, "CategoryId": "5b5f79d186f774093f2ed3c2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Special weapons
+      { "Enabled": false, "CategoryId": "5b5f79eb86f77447ed5636b7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // SKIER
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Money
-    { "Enabled": true, "CategoryId": "5b5f78b786f77447ed5636af", "TraderName": "Skier", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Keys
-    { "Enabled": true, "CategoryId": "5b47574386f77428ca22b342", "TraderName": "Skier", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Maps
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b343", "TraderName": "Skier", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "58330581ace78e27b8b10cee": [
+      // Money
+      { "Enabled": true,  "CategoryId": "5b5f78b786f77447ed5636af", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Keys
+      { "Enabled": true,  "CategoryId": "5b47574386f77428ca22b342", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Maps
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b343", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // MECHANIC
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Weapon parts & mods
-    { "Enabled": true,  "CategoryId": "5b5f71a686f77447ed5636ab", "TraderName": "Mechanic", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Functional mods
-    { "Enabled": true,  "CategoryId": "5b5f71b386f774093f2ecf11", "TraderName": "Mechanic", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5a7c2eca46aef81a7ca2145d": [
+      // Weapon parts & mods
+      { "Enabled": true, "CategoryId": "5b5f71a686f77447ed5636ab", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Functional mods
+      { "Enabled": true, "CategoryId": "5b5f71b386f774093f2ecf11", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // RAGMAN
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Body armors
-    { "Enabled": true,  "CategoryId": "5b5f701386f774093f2ecf0f", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Tactical rigs
-    { "Enabled": true,  "CategoryId": "5b5f6f8786f77447ed563642", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Backpacks
-    { "Enabled": true,  "CategoryId": "5b5f6f6c86f774093f2ecf0b", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Headsets
-    { "Enabled": true,  "CategoryId": "5b5f6f3c86f774094242ef87", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Gear components
-    { "Enabled": true,  "CategoryId": "5b5f704686f77447ec5d76d7", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Facecovers
-    { "Enabled": true,  "CategoryId": "5b47574386f77428ca22b32f", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Headgear
-    { "Enabled": true,  "CategoryId": "5b47574386f77428ca22b330", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Eyewear
-    { "Enabled": true,  "CategoryId": "5b47574386f77428ca22b331", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5ac3b934156ae10c4430e83c": [
+      // Body armors
+      { "Enabled": true, "CategoryId": "5b5f701386f774093f2ecf0f", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Tactical rigs
+      { "Enabled": true, "CategoryId": "5b5f6f8786f77447ed563642", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Backpacks
+      { "Enabled": true, "CategoryId": "5b5f6f6c86f774093f2ecf0b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Headsets
+      { "Enabled": true, "CategoryId": "5b5f6f3c86f774094242ef87", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Gear components
+      { "Enabled": true, "CategoryId": "5b5f704686f77447ec5d76d7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Facecovers
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b32f", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Headgear
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b330", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Eyewear
+      { "Enabled": true, "CategoryId": "5b47574386f77428ca22b331", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // JAEGER
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Storage containers
-    { "Enabled": false,  "CategoryId": "5b5f6fa186f77409407a7eb7", "TraderName": "Jaeger", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Secure containers
-    { "Enabled": false,  "CategoryId": "5b5f6fd286f774093f2ecf0d", "TraderName": "Jaeger", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5c0647fdd443bc2504c2d371": [
+      // Storage containers
+      { "Enabled": false, "CategoryId": "5b5f6fa186f77409407a7eb7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Secure containers
+      { "Enabled": false, "CategoryId": "5b5f6fd286f774093f2ecf0d", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ],
 
     // REF
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-    // Info items
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b341", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Barter items
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b33e", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Energy elements
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ed", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Electronics
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ef", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Building materials
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ee", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Household materials
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f0", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Flammable materials
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f2", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Valuables
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f1", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Tools
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f6", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Special equipment
-    { "Enabled": false,  "CategoryId": "5b47574386f77428ca22b345", "TraderName": "Ragman", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
-    // Others
-    { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f4", "TraderName": "Arena", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
-  ],
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "6617beeaa9cfa777ca915b7c": [
+      // Info items
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b341", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Barter items
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b33e", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Energy elements
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ed", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Electronics
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ef", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Building materials
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2ee", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Household materials
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Flammable materials
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Valuables
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Tools
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f6", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Special equipment
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b345", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 },
+      // Others
+      { "Enabled": false, "CategoryId": "5b47574386f77428ca22b2f4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1 }
+    ]
+  },
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // PER-TPL OVERRIDES

@@ -218,8 +218,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             ItemTpl.MONEY_EUROS,
         ];
 
-        // Read currency exchange rates from handbook prices.
-        // Handbook stores dollar and euro prices in roubles — dividing gives us the rub→currency rate.
         var handbookItems = handbook.Items.ToDictionary(e => e.Id.ToString(), e => (double)(e.Price ?? 0));
 
         var dollarPriceInRub = handbookItems.GetValueOrDefault(ItemTpl.MONEY_DOLLARS.ToString(), 0.0);
@@ -230,22 +228,20 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
         if (euroPriceInRub <= 0)
             logger.LogWarning("[RZCustomEconomy] NoBarterTrades: handbook price for EUR is 0 or missing — EUR conversion will fallback to roubles.");
 
-        // Build a lookup: traderId → entry (currency + exclusion list).
-        var traderEntryMap = config.NoBarterTraders
-            .Select(kvp => (Id: TraderIds.FromName(kvp.Key), Entry: kvp.Value))
-            .Where(t => t.Id is not null)
-            .ToDictionary(t => t.Id!.ToString(), t => t.Entry);
-
+        // Key is already a trader ID — no FromName needed.
         var converted = 0;
         var skipped = 0;
 
-        foreach (var (traderId, trader) in traders)
+        foreach (var (traderId, traderEntry) in config.NoBarterTraders)
         {
-            if (!traderEntryMap.TryGetValue(traderId.ToString(), out var traderEntry))
-                continue;
-
             if (!traderEntry.Enabled)
                 continue;
+
+            if (!traders.TryGetValue(traderId, out var trader))
+            {
+                logger.LogWarning("[RZCustomEconomy] NoBarterTrades: trader '{Id}' not found — skipping.", traderId);
+                continue;
+            }
 
             var excludedTpls = traderEntry.ExcludedBarterTpls.ToHashSet();
 
@@ -256,16 +252,13 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             {
                 foreach (var scheme in schemes)
                 {
-                    // Already a cash-only scheme — leave it alone.
                     var isCashOnly = scheme.All(s => currencyTpls.Contains(s.Template.ToString()));
                     if (isCashOnly)
                         continue;
 
-                    // If every item in the scheme is in the exclusion list, skip it.
                     if (excludedTpls.Count > 0 && scheme.All(s => excludedTpls.Contains(s.Template.ToString())))
                         continue;
 
-                    // Find the root item for this assort to get its handbook price.
                     var rootItem = assort.Items.FirstOrDefault(i => i.Id == assortId);
                     if (rootItem is null) {
                         skipped++;
@@ -278,7 +271,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
                         continue;
                     }
 
-                    // Convert rouble price to the target currency.
                     MongoId currencyTpl;
                     double finalPrice;
 
@@ -295,7 +287,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
                             break;
 
                         default:
-                            // Rub, or fallback if exchange rate is missing.
                             currencyTpl = ItemTpl.MONEY_ROUBLES;
                             finalPrice  = priceRub;
                             break;

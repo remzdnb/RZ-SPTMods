@@ -26,27 +26,24 @@ public class BuybackPatcher(ILogger<BuybackPatcher> logger, DatabaseService data
         var traders = databaseService.GetTraders();
         var handbookTpls = databaseService.GetTables().Templates?.Handbook?.Items.Select(i => i.Id).ToHashSet();
 
-        foreach (var (traderName, rule) in buybackConfig.Rules)
+        foreach (var (traderId, rule) in buybackConfig.Rules)
         {
-            var traderId = TraderIds.FromName(traderName);
-            if (traderId is null || !traders.TryGetValue(traderId, out var trader))
+            if (!traders.TryGetValue(traderId, out var trader))
             {
-                logger.LogWarning("[RZCustomEconomy] Buyback: trader '{Name}' not found -- skipping.", traderName);
+                logger.LogWarning("[RZCustomEconomy] Buyback: trader '{Id}' not found -- skipping.", traderId);
                 continue;
             }
 
             if (rule.Mode == BuybackMode.Default)
-            {
                 continue;
-            }
 
-            trader.Base.ItemsBuy = BuildItemBuyData(traderName, rule, handbookTpls);
+            trader.Base.ItemsBuy = BuildItemBuyData(traderId, rule, handbookTpls);
         }
 
         return Task.CompletedTask;
     }
 
-    private ItemBuyData BuildItemBuyData(string traderName, BuybackRule rule, HashSet<MongoId>? handbookTpls)
+    private ItemBuyData BuildItemBuyData(string traderId, BuybackRule rule, HashSet<MongoId>? handbookTpls)
     {
         switch (rule.Mode)
         {
@@ -60,7 +57,7 @@ public class BuybackPatcher(ILogger<BuybackPatcher> logger, DatabaseService data
             case BuybackMode.AllWithBlacklist:
                 if (handbookTpls is null)
                 {
-                    logger.LogWarning("[RZCustomEconomy] {Trader}: handbook is null, cannot build buyback whitelist.", traderName);
+                    logger.LogWarning("[RZCustomEconomy] Buyback: {Id}: handbook is null, cannot build buyback whitelist.", traderId);
                     return new ItemBuyData { Category = new HashSet<MongoId>(), IdList = new HashSet<MongoId>() };
                 }
 
@@ -69,7 +66,7 @@ public class BuybackPatcher(ILogger<BuybackPatcher> logger, DatabaseService data
                 return new ItemBuyData { Category = new HashSet<MongoId>(), IdList = idList };
 
             default:
-                logger.LogWarning("[RZCustomEconomy] {Trader}: unknown buyback mode '{Mode}' -- disabling.", traderName, rule.Mode);
+                logger.LogWarning("[RZCustomEconomy] Buyback: {Id}: unknown mode '{Mode}' -- disabling.", traderId, rule.Mode);
                 return new ItemBuyData { Category = new HashSet<MongoId>(), IdList = new HashSet<MongoId>() };
         }
     }

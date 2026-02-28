@@ -3,23 +3,24 @@
   // MASTER SETTINGS
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  // Clear all vanilla assorts. Disable if you want to add offers on top of existing ones.
-  "EnableDefaultTrades": true,
+  // Master switch for default trader assorts.
+  "EnableDefaultTrades": false,
 
-  // Same as above but for Fence specifically.
-  "EnableFenceTrades": true,
+  // Fence is handled differently from other traders internally and hasn’t been fully integrated yet.
+  // For now this switch only controls whether Fence’s dynamic offers are generated or not. Independant from any other feature.
+  "EnableFenceTrades": false,
 
   // Master switch for automatic handbook → trader routing.
-  "EnableRoutedTrades": false,
+  "EnableRoutedTrades": true,
 
   // Master switch for manual offers.
-  "EnableManualTrades": false,
+  "EnableManualTrades": true,
 
   // Master switch for trader buyback rules.
   "EnableBuybackConfig": true,
 
   // Master switch for supply configuration (restock timers and stock multipliers).
-  "EnableSupplyConfig": true,
+  "EnableSupplyConfig": false,
 
   // Master switch for hideout patches (requirements, construction times, bitcoin farm).
   "EnableHideoutConfig": true,
@@ -76,7 +77,7 @@
   //
   // ⚠ These items are:
   //   - NEVER sold at any trader (auto-routing only).
-  //   - NEVER added to the encyclopedia (not identified on the profile), even when AllItemsExamined is true.
+  //   - NEVER added to the encyclopedia (not identified on the profile) when AllItemsExamined is true.
   //
   // Do not put items here just because you don't want them sold — use UserBlacklist for that.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

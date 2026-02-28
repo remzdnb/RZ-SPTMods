@@ -2,7 +2,7 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // BUYBACK CONFIGURATION
   //
-  // Controls what each trader will buy from the player. Keyed by trader name.
+  // Controls what each trader will buy from the player. Keyed by trader ID.
   //
   // Modes:
   //   Default          - Leave the trader's vanilla buyback config untouched.
@@ -14,17 +14,17 @@
   "Rules": {
 
     // PRAPOR
-    "Prapor": {
+    "54cb50c76803fa8b248b4571": {
       "Mode": "Disabled"
     },
 
     // THERAPIST
-    "Therapist": {
+    "54cb57776803fa99248b456e": {
       "Mode": "Disabled"
     },
 
     // FENCE
-    "Fence": {
+    "579dc571d53a0658a154fbec": {
       "Mode": "AllWithBlacklist",
       "Blacklist": [
         "59faff1d86f7746c51718c9c", // Physical bitcoin
@@ -40,32 +40,32 @@
     },
 
     // PEACEKEEPER
-    "Peacekeeper": {
+    "5935c25fb3acc3127c3d8cd9": {
       "Mode": "Disabled"
     },
 
     // SKIER
-    "Skier": {
+    "58330581ace78e27b8b10cee": {
       "Mode": "Disabled"
     },
 
     // MECHANIC
-    "Mechanic": {
+    "5a7c2eca46aef81a7ca2145d": {
       "Mode": "Disabled"
     },
 
     // RAGMAN
-    "Ragman": {
+    "5ac3b934156ae10c4430e83c": {
       "Mode": "Disabled"
     },
 
     // JAEGER
-    "Jaeger": {
+    "5c0647fdd443bc2504c2d371": {
       "Mode": "Disabled"
     },
 
     // REF
-    "Arena": {
+    "6617beeaa9cfa777ca915b7c": {
       "Mode": "Disabled"
     }
   }
