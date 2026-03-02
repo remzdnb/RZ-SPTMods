@@ -14,10 +14,12 @@ namespace RZCustomEconomy;
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
 public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
+    private static MasterConfig? _masterConfig;
+
     public Task OnLoad()
     {
-        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
-        if (!masterConfig.EnableHideoutConfig)
+        _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+        if (!_masterConfig.EnableHideoutConfig)
             return Task.CompletedTask;
 
         var hideoutConfig = configLoader.Load<HideoutConfig>(HideoutConfig.FileName);
@@ -115,11 +117,6 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
                 .ToList()!;
 
             stage.ConstructionTime = 0;
-
-            /*logger.LogInformation(
-                "[RZFreeMode] Area '{Name}' level {Level}: {Count} requirement(s) applied.",
-                areaName, levelStr, stage.Requirements.Count
-            );*/
         }
     }
 
@@ -247,13 +244,5 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
         if (config.GpuBoostRate.HasValue)
             hideout.Settings.GpuBoostRate = config.GpuBoostRate.Value;
-
-        logger.LogInformation(
-            "[RZFreeMode] Bitcoin farm -- {Count} recipe(s) patched (speed x{Mult}, cap {Cap}, gpu {Gpu}).",
-            recipes.Count,
-            config.ProductionSpeedMultiplier?.ToString() ?? "-",
-            config.MaxCapacity?.ToString() ?? "-",
-            config.GpuBoostRate?.ToString() ?? "-"
-        );
     }
 }

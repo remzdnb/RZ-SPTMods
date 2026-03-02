@@ -101,33 +101,33 @@
           "PriceRoubles": 1
         },
         {
-          // Keycard holder case -> 5x BTC
-          "ItemTpl": "619cbf9e0a7c3a1a2731940a",
-          "StackCount": -1,
-          "LoyaltyLevel": 1,
-          "PriceRoubles": 0,
-          "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
-          ]
-        },
-        {
-          // Key Tool -> 5x BTC
+          // Key Tool -> 10x BTC
           "ItemTpl": "59fafd4b86f7745ca07e1232",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
           ]
         },
         {
-          // Key Case -> 5x BTC
+          // Key Case -> 50x BTC
           "ItemTpl": "67d3ed3271c17ff82e0a5b0b",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 50 }
+          ]
+        },
+        {
+          // Keycard holder case -> 20x BTC
+          "ItemTpl": "619cbf9e0a7c3a1a2731940a",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 0,
+          "BarterItems": [
+            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 20 }
           ]
         },
         {
@@ -331,96 +331,66 @@
           ]
         },
         {
-          // Secure Container Alpha -> 25k + 1 Lega
+          // Secure Container Alpha -> 10 Lega
           "ItemTpl": "544a11ac4bdc2d470e8b456a",
-          "StackCount": -1,
-          "LoyaltyLevel": 1,
-          "Durability": 100,
-          "PriceRoubles": 25000,
           "BarterItems": [
-            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 1 }
-          ]
-        },
-        {
-          // Secure Container Beta -> SC Alpha + 50k + 2 Lega
-          "ItemTpl": "5857a8b324597729ab0a0e7d",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 50000,
-          "BarterItems": [
-            { "ItemTpl": "544a11ac4bdc2d470e8b456a", "Count": 1 },
-            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 2 }
-          ]
-        },
-        {
-          // Secure Container Epsilon -> SC Beta + 100k + 5 Lega
-          "ItemTpl": "59db794186f77448bc595262",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 100000,
-          "BarterItems": [
-            { "ItemTpl": "5857a8b324597729ab0a0e7d", "Count": 1 },
-            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 5 }
-          ]
-        },
-        {
-          // Secure Container Gamma -> SC Epsilon + 200k + 10 Lega
-          "ItemTpl": "5857a8bc2459772bad15db29",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 200000,
-          "BarterItems": [
-            { "ItemTpl": "59db794186f77448bc595262", "Count": 1 },
             { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 10 }
           ]
         },
         {
-          // Secure Container Theta -> SC Gamma + 300k + 15 Lega
-          "ItemTpl": "664a55d84a90fc2c8a6305c9",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 300000,
+          // Secure Container Beta -> SC Alpha + 20 Lega
+          "ItemTpl": "5857a8b324597729ab0a0e7d",
           "BarterItems": [
-            { "ItemTpl": "5857a8bc2459772bad15db29", "Count": 1 },
-            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 15 }
-          ]
-        },
-        {
-          // Secure Container Kappa -> SC Theta + 400k + 20 Lega
-          "ItemTpl": "5c093ca986f7740a1867ab12",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 400000,
-          "BarterItems": [
-            { "ItemTpl": "664a55d84a90fc2c8a6305c9", "Count": 1 },
+            { "ItemTpl": "544a11ac4bdc2d470e8b456a", "Count": 1 },
             { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 20 }
           ]
         },
         {
-          // Secure Container Kappa Desecrated -> SC Kappa + 500k + 40 Lega
-          "ItemTpl": "676008db84e242067d0dc4c9",
-          "StackCount": 1,
-          "LoyaltyLevel": 2,
-          "Durability": 100,
-          "PriceRoubles": 500000,
+          // Secure Container Epsilon -> SC Beta + 30 Lega
+          "ItemTpl": "59db794186f77448bc595262",
           "BarterItems": [
-            { "ItemTpl": "5c093ca986f7740a1867ab12", "Count": 1 },
+            { "ItemTpl": "5857a8b324597729ab0a0e7d", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 30 }
+          ]
+        },
+        {
+          // Secure Container Gamma -> SC Epsilon + 40 Lega
+          "ItemTpl": "5857a8bc2459772bad15db29",
+          "BarterItems": [
+            { "ItemTpl": "59db794186f77448bc595262", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 40 }
+          ]
+        },
+        {
+          // Secure Container Theta -> SC Gamma + 50 Lega
+          "ItemTpl": "664a55d84a90fc2c8a6305c9",
+          "BarterItems": [
+            { "ItemTpl": "5857a8bc2459772bad15db29", "Count": 1 },
             { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 50 }
           ]
         },
         {
-          // Graphics Card
+          // Secure Container Kappa -> SC Theta + 75 Lega
+          "ItemTpl": "5c093ca986f7740a1867ab12",
+          "BarterItems": [
+            { "ItemTpl": "664a55d84a90fc2c8a6305c9", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 75 }
+          ]
+        },
+        {
+          // Secure Container Kappa Desecrated -> SC Kappa + 100 Lega
+          "ItemTpl": "676008db84e242067d0dc4c9",
+          "BarterItems": [
+            { "ItemTpl": "5c093ca986f7740a1867ab12", "Count": 1 },
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 100 }
+          ]
+        },
+        {
+          // Graphics Card -> 5 Lega
           "ItemTpl": "57347ca924597744596b4e71",
-          "StackCount": -1,
-          "LoyaltyLevel": 1,
-          "Durability": 100,
-          "PriceRoubles": 100000,
-          "BarterItems": []
+          "BarterItems": [
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 5 }
+          ]
         }
       ]
     }

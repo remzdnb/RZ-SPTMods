@@ -6,6 +6,7 @@ using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Eft.Common.Tables;
+using SPTarkov.Server.Core.Models.Enums;
 using SPTarkov.Server.Core.Models.Spt.Config;
 using SPTarkov.Server.Core.Servers;
 using SPTarkov.Server.Core.Services;
@@ -47,8 +48,12 @@ public class SupplyPatcher(
 
         var traderConfig = configServer.GetConfig<TraderConfig>();
 
-        foreach (var (traderId, seconds) in config.RestockTimes)
+        foreach ((string traderId, int seconds) in config.RestockTimes)
         {
+            // Fence is managed by FencePatcher.
+            if (traderId == Traders.FENCE)
+                continue;
+
             var existing = traderConfig.UpdateTime.FirstOrDefault(u => u.TraderId == traderId);
             if (existing is not null)
             {
@@ -64,7 +69,6 @@ public class SupplyPatcher(
                 });
             }
 
-            // Clamp NextResupply if the new interval is shorter than the current timer.
             var trader = databaseService.GetTraders().GetValueOrDefault(traderId);
             if (trader is not null)
             {
@@ -73,9 +77,6 @@ public class SupplyPatcher(
                     trader.Base.NextResupply = newNextResupply;
             }
         }
-
-        if (configLoader.Load<MasterConfig>(MasterConfig.FileName).EnableDevLogs)
-            logger.LogInformation("[RZCustomEconomy] Supply/RestockTimes: {Count} override(s) applied.", config.RestockTimes.Count);
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -124,8 +125,12 @@ public class SupplyPatcher(
         int patched = 0, skippedUnlimited = 0, skippedMult1 = 0, skippedNullUpd = 0;
         var devLogs = configLoader.Load<MasterConfig>(MasterConfig.FileName).EnableDevLogs;
 
-        foreach (var (traderId, trader) in traders)
+        foreach ((MongoId traderId, Trader trader) in traders)
         {
+            // Fence is managed by FencePatcher
+            if (traderId == Traders.FENCE)
+                continue;
+
             var assort = trader.Assort;
             if (assort?.Items is null || assort.Items.Count == 0)
                 continue;
@@ -152,7 +157,6 @@ public class SupplyPatcher(
                     continue;
                 }
 
-                // BuyRestrictionMax is the real purchasable stock. Null or 0 = truly unlimited.
                 var buyMax = upd.BuyRestrictionMax;
                 if (buyMax is null or 0)
                 {
@@ -176,30 +180,19 @@ public class SupplyPatcher(
 
                 var newMax = Math.Max(1, (int)Math.Round(buyMax.Value * finalMult));
 
-                if (devLogs)
-                    logger.LogInformation(
-                        "[RZCustomEconomy]   tpl={Tpl} BuyRestrictionMax {Old} → {New} (traderMult={TM} categoryMult={CM})",
-                        item.Template, buyMax, newMax, traderMult, categoryMult
-                    );
-
                 upd.BuyRestrictionMax = newMax;
                 upd.BuyRestrictionCurrent = 0;
 
                 patched++;
                 traderPatched++;
             }
-
-            if (devLogs)
-                logger.LogInformation(
-                    "[RZCustomEconomy] Supply/StockMultipliers: trader={Id} rootItems={Total} patched={P} skipped(unlimited={U} mult1={M} nullUpd={N})",
-                    traderId, rootItems.Count, traderPatched, traderSkippedUnlimited, traderSkippedMult1, traderSkippedNullUpd
-                );
         }
 
-        logger.LogInformation(
-            "[RZCustomEconomy] Supply/StockMultipliers done: {Patched} patched, {Unlimited} unlimited, {Mult1} mult=1, {NullUpd} nullUpd.",
-            patched, skippedUnlimited, skippedMult1, skippedNullUpd
-        );
+        if (devLogs)
+            logger.LogInformation(
+                "[RZCustomEconomy] Supply/StockMultipliers done: {Patched} patched, {Unlimited} unlimited, {Mult1} mult=1, {NullUpd} nullUpd.",
+                patched, skippedUnlimited, skippedMult1, skippedNullUpd
+            );
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -217,10 +210,8 @@ public class SupplyPatcher(
         {
             if (byCategory.TryGetValue(current, out var mult))
                 return mult;
-
             catToParent.TryGetValue(current, out current!);
         }
-
         return 1.0;
     }
 }

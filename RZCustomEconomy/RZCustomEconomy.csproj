@@ -9,11 +9,13 @@
     <CopyLocalLockFileAssemblies>false</CopyLocalLockFileAssemblies>
     <ModExportPath>D:\Games\SPT_4_0_11\SPT\user\mods\RZCustomEconomy\</ModExportPath>
     <SourceExportPath>D:\SPT\RZ-SPTMods\RZCustomEconomy</SourceExportPath>
+	<NoWarn>CS0618</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="SPTarkov.Server.Core" Version="4.0.*"/>
     <PackageReference Include="SPTarkov.DI" Version="4.0.*"/>
+	<PackageReference Include="HarmonyX" Version="2.15.0" />
   </ItemGroup>
 
   <ItemGroup>

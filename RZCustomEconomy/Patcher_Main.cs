@@ -87,9 +87,6 @@ public class MasterPatcherPostDbModLoader(
         {
             trader.Base.UnlockedByDefault = true;
         }
-
-        if (_masterConfig.EnableDevLogs)
-            logger.LogInformation("[RZCustomEconomy] All traders unlocked.");
     }
 }
 
@@ -101,7 +98,6 @@ public class MasterPatcherPostDbModLoader(
 public class MasterPatcherRagfairCallbacksMinusTwo(
     ILogger<MasterPatcherRagfairCallbacksMinusTwo> logger,
     DatabaseService databaseService,
-    FenceService fenceService,
     ConfigServer configServer,
     ConfigLoader configLoader
 ) : IOnLoad
@@ -113,7 +109,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
     {
         ClearDefaultAssorts();
         DisableFleaMarket();
-        DisableFenceOffers();
+       // DisableFenceOffers();
         ReplaceBarterTrades();
 
         return Task.CompletedTask;
@@ -126,8 +122,11 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
         if (_masterConfig.EnableDefaultTrades)
             return;
 
-        foreach (var (id, trader) in databaseService.GetTraders())
+        foreach ((MongoId id, Trader trader) in databaseService.GetTraders())
         {
+            if (id == Traders.FENCE)
+                continue;
+
             trader.Assort = new TraderAssort {
                 Items = new List<Item>(),
                 BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
@@ -159,7 +158,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
     }
 
-    public void DisableFenceOffers()
+   /* public void DisableFenceOffers()
     {
         if (_masterConfig.EnableFenceTrades)
             return;
@@ -189,7 +188,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
 
         if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Fence offers disabled.");
-    }
+    }*/
 
     public void ReplaceBarterTrades()
     {

@@ -4,44 +4,43 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for default trader assorts.
-  "EnableDefaultTrades": false,
-
-  // Fence is handled differently from other traders internally and hasn’t been fully integrated yet.
-  // For now this switch only controls whether Fence’s dynamic offers are generated or not. Independant from any other feature.
-  "EnableFenceTrades": false,
+  "EnableDefaultTrades": true,
 
   // Master switch for automatic handbook → trader routing.
-  "EnableRoutedTrades": true,
+  "EnableRoutedTrades": false,
 
   // Master switch for manual offers.
-  "EnableManualTrades": true,
+  "EnableManualTrades": false,
+
+  // Master switch for Fence config.
+  "EnableFenceConfig": false,
 
   // Master switch for trader buyback rules.
-  "EnableBuybackConfig": true,
+  "EnableBuybackConfig": false,
 
   // Master switch for supply configuration (restock timers and stock multipliers).
   "EnableSupplyConfig": false,
 
   // Master switch for hideout patches (requirements, construction times, bitcoin farm).
-  "EnableHideoutConfig": true,
+  "EnableHideoutConfig": false,
 
   // Master switch for crafting recipe overrides.
-  "EnableCraftingConfig": true,
+  "EnableCraftingConfig": false,
 
   // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-  "DisableFleaMarket": true,
+  "DisableFleaMarket": false,
 
   // Sets all traders as unlocked by default.
-  "UnlockAllTraders": true,
+  "UnlockAllTraders": false,
 
   // Mark all items as examined/identified on all profile templates. A small number of items are not affected, not sure why.
-  "AllItemsExamined": true,
+  "AllItemsExamined": false,
 
   // Force all assort prices to 1 rouble, ignoring all price config.
   "EnableDevMode": false,
 
   // Enables verbose logging.
-  "EnableDevLogs": true,
+  "EnableDevLogs": false,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // USER BLACKLIST

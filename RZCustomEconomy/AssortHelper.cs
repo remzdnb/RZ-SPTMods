@@ -11,7 +11,7 @@ using SPTarkov.Server.Core.Services;
 namespace RZCustomEconomy;
 
 [Injectable]
-public class AssortHelper(ILogger<AssortHelper> logger, DatabaseService databaseService, ConfigLoader configLoader)
+public class AssortHelper(DatabaseService databaseService, ConfigLoader configLoader)
 {
     // Backing field - holds the cached value after first load.
     private Dictionary<MongoId, TemplateItem>? _itemTemplates;
@@ -51,6 +51,26 @@ public class AssortHelper(ILogger<AssortHelper> logger, DatabaseService database
         }
 
         return payment.Count > 0 ? payment : [new BarterScheme { Template = ItemTpl.MONEY_ROUBLES, Count = 0 }];
+    }
+
+    public List<Item> CreateRootItem(string tpl, int stackCount = 1, bool resolveChildren = true)
+    {
+        var rootItem = new Item
+        {
+            Id       = new MongoId(),
+            Template = tpl,
+            ParentId = "hideout",
+            SlotId   = "hideout",
+            Upd      = new Upd { StackObjectsCount = stackCount }
+        };
+
+        var items = new List<Item> { rootItem };
+
+        if (resolveChildren) {
+            ResolveRequiredChildren(items, rootItem.Id, tpl, 100, new HashSet<string>());
+        }
+
+        return items;
     }
 
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

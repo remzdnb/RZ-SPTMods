@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using SPTarkov.DI.Annotations;
+using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Enums.Hideout;
 
 namespace RZCustomEconomy;
@@ -24,9 +25,9 @@ public class MasterConfig
     public const string FileName = "masterConfig.json";
 
     public bool EnableDefaultTrades { get; set; } = true;
-    public bool EnableFenceTrades { get; set; } = true;
     public bool EnableRoutedTrades { get; set; } = true;
     public bool EnableManualTrades { get; set; } = true;
+    public bool EnableFenceConfig { get; set; } = true;
     public bool EnableBuybackConfig { get; set; } = true;
     public bool EnableSupplyConfig { get; set; } = true;
     public bool EnableHideoutConfig { get; set; } = true;
@@ -125,6 +126,57 @@ public class ManualTradesConfig
 {
     public const string FileName = "manualTradesConfig.json";
     public List<ManualTraderOffers> ManualOffers { get; set; } = new();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// fenceConfig.json
+// ─────────────────────────────────────────────────────────────────────────────
+
+public class FenceConfig
+{
+    public const string FileName = "fenceConfig.json";
+
+    // Default item pool settings.
+    public bool EnableDefaultItemPool { get; set; } = false;
+
+    public int? AssortSize { get; set; } = null;
+    public MinMax<int>? WeaponPresetMinMax { get; set; } = null;
+    public MinMax<int>? EquipmentPresetMinMax { get; set; } = null;
+    public double? ItemPriceMultiplier { get; set; } = 1.0;
+    public double? PresetPriceMultiplier { get; set; } = 1.0;
+
+    public int? DiscountAssortSize { get; set; } = null;
+    public MinMax<int>? DiscountWeaponPresetMinMax { get; set; } = null;
+    public MinMax<int>? DiscountEquipmentPresetMinMax { get; set; } = null;
+    public double? DiscountItemPriceMultiplier { get; set; } = 1.0;
+    public double? DiscountPresetPriceMultiplier { get; set; } = 1.0;
+
+    // Default item pool additions settings.
+    public bool EnableDefaultItemPoolAdditions { get; set; } = false;
+    public List<FencePoolItem> DefaultItemPoolAdditions { get; set; } = new();
+
+    // Custom item pool.
+    public bool EnableCustomItemPool { get; set; } = false;
+    public int CustomItemCount { get; set; } = 10;
+    public double CustomItemPriceMultiplier { get; set; } = 1.0;
+    public List<FenceOffer> CustomItemPool { get; set; } = new();
+}
+
+public class FencePoolItem
+{
+    public string Tpl { get; set; } = "";
+    public int RoublePrice { get; set; } = 0;
+    public int LoyaltyLevel { get; set; } = 1;
+}
+
+public class FenceOffer
+{
+    public string Tpl { get; set; } = "";
+    public int Weight { get; set; } = 1;
+    public int StackSize { get; set; } = 1;
+    public string CurrencyTpl { get; set; } = ItemTpl.MONEY_ROUBLES;
+    public int Price { get; set; } = 1;
+    public int LoyaltyLevel { get; set; } = 1;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -266,6 +318,20 @@ public class CraftsConfig
     public const string FileName = "craftingConfig.json";
     public List<HideoutAreas> ClearAreas { get; set; } = new();
     public Dictionary<HideoutAreas, List<CraftRecipe>> Recipes { get; set; } = new();
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// devConfig.json
+// ─────────────────────────────────────────────────────────────────────────
+
+public class DevConfig
+{
+    public const string FileName = "devConfig.json";
+    public bool DumpEnable { get; set; } = false;
+    public bool DumpHandbookPrice { get; set; } = false;
+    public bool DumpModdedItemsOnly { get; set; } = false;
+    public bool DumpOnlyFromCategories { get; set; } = false;
+    public List<CategoryRoute> DumpCategories { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
