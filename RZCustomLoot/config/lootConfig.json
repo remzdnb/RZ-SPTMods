@@ -5,33 +5,30 @@
   // Items are injected directly into PMC pockets AFTER the bot is fully generated, bypassing SPT's loot budget and weight system entirely.
   // This guarantees deterministic drops unlike the pool-weight approach.
   //
-  // HOW IT WORKS - SEQUENTIAL FILLING:
-  //   Items are processed in order, top to bottom.
-  //   For each item:
-  //     1. A chance roll is performed (0–100).
-  //     2. If the roll FAILS → the item is skipped, the slot is NOT consumed, and we move on to the next item in the list.
-  //     3. If the roll PASSES → the item is injected into the next free slot.
-  //   We stop when all pocket slots are full OR the list is exhausted.
+  // HOW IT WORKS - SEQUENTIAL FILLING :
+  // Items are processed in order, top to bottom.
+  // For each item:
+  //    1. A chance roll is performed (0–100).
+  //    2. If the roll FAILS → the item is skipped, the slot is NOT consumed, and we move on to the next item in the list.
+  //    3. If the roll PASSES → the item is injected into the next free slot.
+  // We stop when all pocket slots are full OR the list is exhausted.
   //
-  // SLOT COUNT:
-  //   Standard PMC pockets have 4 slots (pocket1 → pocket4).
-  //   The mod reads the actual pocket template from the DB at runtime, so
-  //   extended pockets (boss pockets, quest reward pockets, etc.) are handled
-  //   automatically — no hardcoded limit.
+  // SLOT COUNT :
+  // Standard PMC pockets have 4 slots (pocket1 → pocket4).
+  // The mod reads the actual pocket template from the DB at runtime, so extended pockets (boss pockets, quest reward pockets, etc.) are
+  // handled automatically — no hardcoded limit.
   //
-  // ITEM ORDER MATTERS:
-  //   Items at the top of the list are prioritized. If pockets are already partially filled by SPT's normal loot generation,
-  //   lower-priority items may not fit. Put your most important items first.
+  // ITEM ORDER MATTERS :
+  // Items at the top of the list are prioritized. If pockets are already partially filled by SPT's normal loot generation,
+  // lower-priority items may not fit. Put your most important items first.
   //
   // ONLY USE 1x1 ITEMS:
-  //   Pocket slots are individual grid cells, not a 2D container.
-  //   Large items (2x1, 1x2, etc.) will NOT fit and may cause client issues.
+  // Large items will NOT fit and may cause client issues.
   //
   // CHANCE:
-  //   0   = never drops (same as setting enabled: false)
-  //   50  = drops roughly half the time
-  //   100 = always drops (guaranteed, injected every time)
-  //   A failed roll does NOT block subsequent items — the slot stays free.
+  // 0   = never drops
+  // 50  = drops roughly half the time
+  // 100 = always drops when rolled
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch - enable/disable all features.
@@ -89,22 +86,24 @@
     // Use global config ?
     "UseGlobalConfig": true,
 
-    // GLOBAL BOSS LOOT
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
+    // Global boss loot
     "Global": {
       "Pockets":
       [
-        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 100 },   // Bitcoin
-        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 50 },   // Bitcoin
-        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 25 },   // Bitcoin
-        //{ "Tpl": "6656560053eaaa7a23349c86", "Chance": 50 }     // Lega medal
+        // GP Coin
+        { "Tpl": "5d235b4d86f7742e017bc88a", "Chance": 100, "MinStack" : 10, "MaxStack" : 50 },
+        // Lega medal
+        { "Tpl": "6656560053eaaa7a23349c86", "Chance": 100 },
+        // Bitcoin
+        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 100 },
+        // Bitcoin
+        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 50 },
+        // Bitcoin
+        { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 25 },
       ]
     },
 
-    // PER BOSS LOOT
-    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
+    // Per-boss loot
     "PerBoss": {
 
       // Reshala
@@ -179,7 +178,6 @@
           { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 100 },
         ]
       }
-
     }
   },
 
@@ -195,7 +193,8 @@
     // Custom follower loot.
     "Pockets":
     [
-      { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 50 }, // Bitcoin
+      // GP Coin
+      { "Tpl": "5d235b4d86f7742e017bc88a", "Chance": 100, "MinStack" : 1, "MaxStack" : 20 }
     ]
 
   },
@@ -212,7 +211,8 @@
     // Custom PMC loot.
     "Pockets":
     [
-      { "Tpl": "59faff1d86f7746c51718c9c", "Chance": 100 }, // Bitcoin
+      // GP Coin
+      { "Tpl": "5d235b4d86f7742e017bc88a", "Chance": 100, "MinStack" : 1, "MaxStack" : 20 },
     ]
 
   },
@@ -243,18 +243,18 @@
 
   "OverwriteBlacklist": {
 
-    // Specific item TPLs — exact match, takes priority over everything.
+    // Specific item TPLs.
     "Tpls": [
-      "5c0e874186f7745dc7616606", // LEDX
-      "59faff1d86f7746c51718c9c", // Bitcoin
-      "5d235b4d86f7742e017bc88a",  // GP coin
+      "5c0530ee86f774697952d952",   // LEDX
+      "59faff1d86f7746c51718c9c",   // Bitcoin
+      "5d235b4d86f7742e017bc88a",   // GP coin
     ],
 
     // Category IDs : any item whose parent chain contains this ID will be protected.
     // Use the MongoDB IDs from the item template hierarchy, not display names.
     "Categories": [
       "543be5e94bdc2df1348b4568", // Keys
-      "543be5664bdc2dd4348b4569", // Meds
+      //"543be5664bdc2dd4348b4569", // Meds
     ]
   },
 
@@ -262,5 +262,5 @@
   // DEV
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  "EnableVerboseLogging": true,
+  "EnableVerboseLogging": true, // logs only whats happening on tagilla
 }

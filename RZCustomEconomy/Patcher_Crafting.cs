@@ -26,7 +26,7 @@ public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService da
 
         if (recipes is null)
         {
-            logger.LogWarning("[RZFreeMode] Hideout recipes is null -- skipping.");
+            logger.LogWarning("[RZFreeTarkov] Hideout recipes is null -- skipping.");
             return Task.CompletedTask;
         }
 
@@ -51,7 +51,7 @@ public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService da
         }
 
         if (_masterConfig.EnableDevLogs) {
-            logger.LogInformation("[RZFreeMode] {Count} custom recipe(s) injected.", injected);
+            logger.LogInformation("[RZFreeTarkov] {Count} custom recipe(s) injected.", injected);
         }
 
         return Task.CompletedTask;

@@ -4,7 +4,7 @@
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch.
-  "DumpEnable": true,
+  "DumpEnable": false,
 
   // Include handbook price.
   "DumpHandbookPrice": true,

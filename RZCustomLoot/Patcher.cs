@@ -81,10 +81,9 @@ public static class CustomLootPatch
 
         List<Item>? items = bot.Inventory?.Items;
         Item? pocketContainer = items?.FirstOrDefault(i => string.Equals(i.SlotId, "Pockets", StringComparison.OrdinalIgnoreCase));
-        if (pocketContainer is null)
+        string? pocketContainerId = pocketContainer?.Id.ToString();
+        if (pocketContainerId is null)
             return;
-
-        string pocketContainerId = pocketContainer.Id.ToString();
 
         TemplateItem? pocketTemplate =
             _databaseService!.GetTables().Templates?.Items?.GetValueOrDefault(pocketContainer.Template.ToString());
@@ -97,14 +96,16 @@ public static class CustomLootPatch
         if (pool.Count == 0)
             return;
 
-        // Capacité totale par grid
+        // Total cell capacity per grid : CellsH * CellsV for each pocket grid.
         int[] gridCapacity = grids.Select(g => (g.Properties?.CellsH ?? 1) * (g.Properties?.CellsV ?? 1)).ToArray();
 
-        // Cellules utilisées par les items SPT par grid
+        // Cells already occupied by SPT-generated items, tracked per grid.
         int[] gridUsed = new int[grids.Count];
 
-        List<Item> sptPocketItems = items.Where(i => i.ParentId == pocketContainerId).ToList();
-
+        // Collect all SPT-generated items already present in the pocket container, and calculate how many cells they occupy per grid using
+        // their real template dimensions (Width * Height).
+        // This accounts for items larger than 1x1 to avoid overcounting available space.
+        List<Item> sptPocketItems = items!.Where(i => i.ParentId == pocketContainerId).ToList();
         foreach (Item sptItem in sptPocketItems)
         {
             for (int i = 0; i < grids.Count; i++)
@@ -119,33 +120,49 @@ public static class CustomLootPatch
             }
         }
 
-        // Queue de slots libres — chaque slot apparaît autant de fois que sa capacité restante
-        Queue<string> freeSlots = new(Enumerable.Range(0, grids.Count)
-            .SelectMany(i => Enumerable.Repeat($"pocket{i + 1}", gridCapacity[i] - gridUsed[i])));
+        // Free slot queue.
+        Queue<string> freeSlots =
+            new(Enumerable.Range(0, grids.Count).SelectMany(i => Enumerable.Repeat($"pocket{i + 1}", gridCapacity[i] - gridUsed[i])));
 
-        // Items SPT overwritables — filtrés par la blacklist
+        // Overwritable SPT items, filtered by blacklist and sorted by handbook price ascending.
+        // Cheapest items are overwritten first to preserve the most valuable SPT loot.
+        var handbook = _databaseService!.GetTables().Templates?.Handbook?.Items;
         List<(Item item, int gridIndex)> sptOverwritable = sptPocketItems
             .Select(i => (item: i, gridIndex: GetGridIndex(i.SlotId)))
             .Where(t => t.gridIndex >= 0)
             .Where(t => !IsBlacklisted(t.item.Template.ToString()))
+            .OrderBy(t =>
+            {
+                var entry = handbook?.FirstOrDefault(h => h.Id == t.item.Template);
+                return entry?.Price ?? int.MaxValue;
+            })
             .ToList();
-
-        if (isTagilla)
-            _logger?.LogWarning("[ForcedLoot] Tagilla — {Total} cells, {Free} free slots, {Overwritable} SPT overwritable.",
-                gridCapacity.Sum(), freeSlots.Count, sptOverwritable.Count);
 
         int injectedFree = 0;
         int injectedOverwrite = 0;
-
         foreach (LootEntry entry in pool)
         {
-            if (freeSlots.Count == 0 && sptOverwritable.Count == 0) break;
+            // If we have no more slots left, exit.
+            if (freeSlots.Count == 0 && sptOverwritable.Count == 0)
+                break;
 
+            // Drop roll.
             double roll = Random.Shared.NextDouble() * 100.0;
-            if (roll > entry.Chance) continue;
+            if (roll > entry.Chance)
+                continue;
 
+            // Stack size roll.
+            int templateStackMax =
+                _databaseService!.GetTables().Templates?.Items?.GetValueOrDefault(entry.Tpl)?.Properties?.StackMaxSize ?? 1;
+            int minStack = Math.Max(1, entry.MinStack);
+            int maxStack = Math.Min(Math.Max(entry.MaxStack, minStack), templateStackMax);
+            int stackCount = Random.Shared.Next(minStack, maxStack + 1);
+
+            //
             if (freeSlots.Count > 0)
             {
+                // Add to free slot.
+
                 string slot = freeSlots.Dequeue();
                 items.Add(new Item
                 {
@@ -153,7 +170,7 @@ public static class CustomLootPatch
                     Template = new MongoId(entry.Tpl),
                     ParentId = pocketContainerId,
                     SlotId = slot,
-                    Upd = new Upd { StackObjectsCount = 1 },
+                    Upd = new Upd { StackObjectsCount = stackCount },
                 });
                 injectedFree++;
 
@@ -162,9 +179,11 @@ public static class CustomLootPatch
             }
             else
             {
+                // Overwrite.
+
                 (Item sptItem, int gridIndex) = sptOverwritable[0];
                 sptOverwritable.RemoveAt(0);
-                items.Remove(sptItem);
+                items!.Remove(sptItem);
 
                 // Récupérer les cellules libérées et les remettre dans la queue
                 TemplateItem? sptTemplate = _databaseService!.GetTables().Templates?.Items
@@ -182,7 +201,7 @@ public static class CustomLootPatch
                     Template = new MongoId(entry.Tpl),
                     ParentId = pocketContainerId,
                     SlotId = slot,
-                    Upd = new Upd { StackObjectsCount = 1 },
+                    Upd = new Upd { StackObjectsCount = stackCount },
                 });
                 injectedOverwrite++;
 
@@ -191,6 +210,8 @@ public static class CustomLootPatch
                         entry.Tpl, sptItem.Template, slot, freedCells);
             }
         }
+
+        //
 
         if (isTagilla && bDebugLog)
             _logger?.LogWarning("[ForcedLoot] Tagilla — done. {Free} free + {Overwrite} overwrite = {Total} injected.",

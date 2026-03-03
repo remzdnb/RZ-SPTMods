@@ -42,6 +42,8 @@ public record LootEntry
 {
     public string Tpl { get; set; } = "";
     public double Chance { get; set; } = 100;
+    public int MinStack { get; set; } = 1;
+    public int MaxStack { get; set; } = 1;
 }
 
 public class OverwriteBlacklist

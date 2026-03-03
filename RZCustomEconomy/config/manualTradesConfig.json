@@ -220,17 +220,6 @@
           ]
         },
         {
-          // Mr. Holodilnick thermal bag -> 5x BTC
-          "ItemTpl": "5c093db286f7740a1b2617e3",
-          "StackCount": -1,
-          "LoyaltyLevel": 1,
-          "Durability": 100,
-          "PriceRoubles": 0,
-          "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 5 }
-          ]
-        },
-        {
           // Pistol case -> 5x BTC
           "ItemTpl": "567143bf4bdc2d1a0f8b4567",
           "StackCount": -1,
@@ -263,40 +252,40 @@
           ]
         },
         {
-          // Magazine Case -> 10x BTC
+          // Magazine Case -> 30 x GP
           "ItemTpl": "5c127c4486f7745625356c13",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "Durability": 100,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "5d235b4d86f7742e017bc88a", "Count": 30 }
           ]
         },
         {
-          // Ballistic Plate Case -> 10x BTC
+          // Ballistic Plate Case -> 50 x GP
           "ItemTpl": "67600929bd0a0549d70993f6",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "Durability": 100,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "5d235b4d86f7742e017bc88a", "Count": 50 }
           ]
         },
         {
-          // Item Case -> 10x BTC
+          // Item Case -> 100 x GP
           "ItemTpl": "59fb042886f7746c5005a7b2",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "Durability": 100,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "5d235b4d86f7742e017bc88a", "Count": 100 }
           ]
         },
         {
-          // THICC Item Case -> 1x Item Case + 10x BTC
+          // THICC Item Case -> 1x Item Case + 10x LEGA
           "ItemTpl": "5c0a840b86f7742ffa4f2482",
           "StackCount": -1,
           "LoyaltyLevel": 1,
@@ -304,22 +293,22 @@
           "PriceRoubles": 0,
           "BarterItems": [
             { "ItemTpl": "59fb042886f7746c5005a7b2", "Count": 1 },
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 10 }
           ]
         },
         {
-          // Weapon Case -> 10x BTC
+          // Weapon Case -> 100x GP
           "ItemTpl": "59fb023c86f7746d0d4b423c",
           "StackCount": -1,
           "LoyaltyLevel": 1,
           "Durability": 100,
           "PriceRoubles": 0,
           "BarterItems": [
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "5d235b4d86f7742e017bc88a", "Count": 100 }
           ]
         },
         {
-          // THICC Weapon Case -> 1x Weapon Case + 10x BTC
+          // THICC Weapon Case -> 1x Weapon Case + 10 LEGA
           "ItemTpl": "5b6d9ce188a4501afc1b2b25",
           "StackCount": -1,
           "LoyaltyLevel": 1,
@@ -327,7 +316,7 @@
           "PriceRoubles": 0,
           "BarterItems": [
             { "ItemTpl": "59fb023c86f7746d0d4b423c", "Count": 1 },
-            { "ItemTpl": "59faff1d86f7746c51718c9c", "Count": 10 }
+            { "ItemTpl": "6656560053eaaa7a23349c86", "Count": 10 }
           ]
         },
         {

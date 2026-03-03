@@ -194,7 +194,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
     {
         if (!_masterConfig.EnableDefaultTrades)
         {
-            logger.LogWarning("[RZCustomEconomy] NoBarterTrades: EnableDefaultAssorts is false — skipping, nothing to convert.");
             return;
         }
 

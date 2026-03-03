@@ -1,11 +1,3 @@
-LAST PATCH NOTE
-
-- Added Dev Tools - item dump utility to generate TPL lists from the live database (vanilla + modded)
-- Added new features for Fence
-- Fixed an issue affecting Fence when EnableDefaultTrades was disabled
-- Fixed Fence restock timer not working properly
-- Cleaned up some excessive logging
-
 # RZCustomEconomy {.tabset}
 
 Economy toolkit — full control over trader assorts, buyback policies, hideout, and crafting through config files.
@@ -152,7 +144,7 @@ Each offer supports:
 - Loyalty level requirement
 - Durability for weapons and armor
 - Manual children (explicit attachments)
-- Auto-resolved required children — for items with required slots (armor plates etc.), the mod automatically injects the correct child items by reading the template from the DB, recursively 😎
+- Auto-resolved required children — for items with required slots (armor plates etc.), the mod automatically injects the correct child items by reading the template from the DB, recursively.
 
 ---
 
@@ -162,34 +154,41 @@ Each offer supports:
 
 ## 👤 Fence
 
-Controls Fence's item generation and offer injection. Fence is handled differently from other traders internally : this feature is independent from `EnableDefaultTrades`, `EnableRoutedTrades`, and `EnableManualTrades`.
+> Controls Fence's item generation and offer injection. Fence is handled differently from other traders internally : this feature is independent from `EnableDefaultTrades`, `EnableRoutedTrades`, and `EnableManualTrades`.
+
+⚙️ Configuration : `fenceConfig.json`
+
+The config is split into three sub-sections.
 
 ---
 
-### Configuration : `fenceConfig.json`
-
-The config is split into three independent sub-sections.
+---
 
 ---
 
-### *Default Item Pool*
+### ⚫ *Default Item Pool*
 
 SPT's native Fence generation system. On each refresh, SPT randomly picks items from a built-in pool and generates offers from them.
 
-- **`EnableDefaultItemPool`** — Master switch for this sub-section. If false, zeroes all native generation counts entirely and also disables Default Item Pool Additions, regardless of `EnableDefaultItemPoolAdditions`.
+- **`EnableDefaultItemPool`** — Master switch for default item pool. If false, zeroes all native generation counts entirely and also disables Default Item Pool Additions, regardless of `EnableDefaultItemPoolAdditions`.
 - **`AssortSize`** — Number of regular items (ammo, meds...) per refresh.
 - **`WeaponPresetMinMax`** — Number of preconfigured weapons with mods per refresh.
 - **`EquipmentPresetMinMax`** — Number of preconfigured armor rigs per refresh.
 - **`ItemPriceMult`** — Price multiplier applied to all regular items.
 - **`PresetPriceMult`** — Price multiplier applied to all weapon and equipment presets.
 
-All four of the above also have a `Discount*` variant that applies to the secondary discount tab, unlocked at Fence rep level 6.
-
-> 💡 Set `WeaponPresetMinMax` and `EquipmentPresetMinMax` to `{ "Min": 0, "Max": 0 }` to disable preset generation entirely while keeping regular items.
+All of the above also have a `Discount*` variant that applies to the secondary discount tab, unlocked at Fence rep level 6.
 
 ---
 
-### *Default Item Pool Additions*
+---
+
+---
+
+### ⚫ *Default Item Pool Additions*
+
+> 🚨 EXPERIMENTAL, not battle-tested.
+This feature was added mostly out of curiosity and hasn't received much attention since. I don't personally use it and have no plans to in the near future, so I haven't invested time in making it robust. It will likely misbehave with weapons or armors. If you just want to throw a couple of simple items into the vanilla pool it might do the job, but if you actually care about controlling what Fence stocks, just set EnableDefaultItemPool: false and use the Custom Item Pool : it's more reliable and more flexible.
 
 Extends the built-in pool with extra items of your choice. Only active if `EnableDefaultItemPool` is also true.
 
@@ -199,13 +198,13 @@ Extends the built-in pool with extra items of your choice. Only active if `Enabl
     - **`RoublePrice`** — price in roubles
     - **`LoyaltyLevel`** — Fence rep level required (`1` = always visible)
 
-> 🚨 EXPERIMENTAL, not battle-tested.
-This feature was added mostly out of curiosity and hasn't received much attention since. I don't personally use it and have no plans to in the near future, so I haven't invested time in making it robust. It will likely misbehave with weapons or armors. If you just want to throw a couple of simple items into the vanilla pool it might do the job, but if you actually care about controlling what Fence stocks, just set EnableDefaultItemPool: false and use the Custom Item Pool : it's more reliable and more flexible.
-
+---
 
 ---
 
-### *Custom Item Pool*
+---
+
+### ⚫ *Custom Item Pool*
 
 Completely independent from the default pool. Defines a weighted pool of offers that are injected directly into Fence's assort on every refresh, on top of whatever the default pool generates.
 
@@ -297,13 +296,14 @@ Define custom crafting recipes per hideout area, and optionally clear all existi
 
 ## 🛠️ Dev Tools
 
-A utility that runs on server start and dumps item data from the live database directly to files in the `dev/` folder. Since it reads from the actual loaded database - after all mods have injected their content - the output always reflects exactly what's available in your current install, vanilla and modded alike.
-
+>A utility that runs on server start and dumps item data from the live database directly to files in the `dev/` folder. Since it reads from the actual loaded database - after all mods have injected their content - the output always reflects exactly what's available in your current install, vanilla and modded alike.
 The primary use case is config authoring. Building a manual trade list or a Fence custom pool by hand means hunting down TPLs one by one, which is tedious. Here you can dump a filtered, pre-formatted list of every item you care about in one shot, then feed that list directly to an AI to generate a ready-to-paste config block : prices, weights, currencies and all. The dumps are designed with that workflow in mind.
+
+⚙️ Configuration : `devConfig.json`
 
 ---
 
-### Configuration : `devConfig.json`
+---
 
 ---
 

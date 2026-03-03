@@ -1,0 +1,163 @@
+{
+  "Overrides": {
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // SECURE CONTAINERS
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    // Pouch_Waist
+    "5732ee6a24597719ae0c0281": {
+      "Grids": {
+        "0": { "CellsH": 1, "CellsV": 1 }
+      }
+    },
+    // Pouch_Alpha
+    "544a11ac4bdc2d470e8b456a": {
+      "Grids": {
+        "0": { "CellsH": 2, "CellsV": 1 }
+      }
+    },
+    // Pouch_Beta
+    "5857a8b324597729ab0a0e7d": {
+      "Grids": {
+        "0": { "CellsH": 2, "CellsV": 2 }
+      }
+    },
+    // Pouch_Epsilon
+    "59db794186f77448bc595262": {
+      "Grids": {
+        "0": { "CellsH": 3, "CellsV": 2 }
+      }
+    },
+    // Pouch_Gamma
+    "5857a8bc2459772bad15db29": {
+      "Grids": {
+        "0": { "CellsH": 3, "CellsV": 3 }
+      }
+    },
+    // Pouch_Theta
+    "664a55d84a90fc2c8a6305c9": {
+      "Grids": {
+        "0": { "CellsH": 4, "CellsV": 3 }
+      }
+    },
+    // Pouch_Kappa
+    "5c093ca986f7740a1867ab12": {
+      "Grids": {
+        "0": { "CellsH": 4, "CellsV": 4 }
+      }
+    },
+    // Pouch_Kappa_Desecrated
+    "676008db84e242067d0dc4c9": {
+      "Grids": {
+        "0": { "CellsH": 5, "CellsV": 4 }
+      }
+    },
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // MEDICAL ITEMS
+    // Props: MaxHpResource (uses), hpResourceRate (HP per use), MedUseTime (seconds)
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    // Example
+    /*
+    "xxx": {
+      "Props": {
+        "hpResourceRate" : 10,
+        "MaxHpResource": 5,
+        "MedUseTime": 6.0
+      }
+    },
+    */
+
+    // CMS
+    "5d02778e86f774203e7dedbe": {
+      "Props": { "MaxHpResource": 5 }
+    },
+    // Surv-12
+    "5d02797c86f774203f38e30a": {
+      "Props": { "MaxHpResource": 15 }
+    },
+    // Ibuprofen painkillers
+    "5af0548586f7743a532b7e99": {
+      "Props": { "MaxHpResource": 15 }
+    },
+    // Vaseline balm
+    "5755383e24597772cb798966": {
+      "Props": { "MaxHpResource": 6 }
+    },
+    // Golden star balm
+    "5751a89d24597722aa0e8db0": {
+      "Props": { "MaxHpResource": 10 }
+    },
+    // Aluminum splint
+    "5af0454c86f7746bf20992e8": {
+      "Props": { "MaxHpResource": 5 }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // ARMOR — example (6B43 body armor)
+    // Props: ArmorClass, BluntThroughput, Indestructibility, weaponErgonomicPenalty,
+    //        speedPenaltyPercent, mousePenalty, MaxDurability
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    //"5c0e541586f7747fa54205c9": {
+    //  "Props": {
+    //    "ArmorClass":               6,
+    //    "BluntThroughput":          0.18,
+    //    "Indestructibility":        0.0,
+    //    "weaponErgonomicPenalty":   -4.0,
+    //    "speedPenaltyPercent":      -5.0,
+    //    "mousePenalty":             0.0,
+    //    "MaxDurability":            85.0
+    //  }
+    //},
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // AMMO — example (M855A1)
+    // Props: Damage, PenetrationPower, ArmorDamage, InitialSpeed,
+    //        FragmentationChance, RicochetChance, StackMaxSize
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    //"54527ac44bdc2d36668b4567": {
+    //  "Props": {
+    //    "Damage":             55.0,
+    //    "PenetrationPower":   45,
+    //    "ArmorDamage":        50.0,
+    //    "InitialSpeed":       961.0,
+    //    "FragmentationChance": 0.5,
+    //    "StackMaxSize":       60
+    //  }
+    //},
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // WEAPON MOD — receiver/barrel example + slot filter expand
+    // Props: Ergonomics, Recoil, Accuracy, Weight, DurabilityBurnModificator
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    //"618405198004cc50514c3594": {
+    //  "Props": {
+    //    "Ergonomics":               10.0,
+    //    "Recoil":                   -5.0,
+    //    "Weight":                   0.15,
+    //    "DurabilityBurnModificator": 1.0
+    //  },
+    //  "Slots": {
+    //    "mod_scope": {
+    //      "AddFilters":    ["someTPL", "anotherTPL"],
+    //      "RemoveFilters": ["blockedTPL"]
+    //    }
+    //  }
+    //},
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // KEY — example (Labs keycard)
+    // Props: MaximumNumberOfUsage (0 = unlimited)
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    //"5c94bbff86f7747ee735c08a": {
+    //  "Props": { "MaximumNumberOfUsage": 0 }
+    //}
+
+  }
+}

@@ -10,7 +10,7 @@
   "ForceRouteAll": false,
 
   // Enable overrides.
-  "EnableOverrides": true,
+  "EnableOverrides": false,
 
   // Only route items not present in vanilla_handbook.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
   "RouteModdedItemsOnly": false,

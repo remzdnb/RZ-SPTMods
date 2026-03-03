@@ -1,12 +1,12 @@
 using SPTarkov.Server.Core.Models.Spt.Mod;
 using Range = SemanticVersioning.Range;
 
-namespace RZCustomLoot;
+namespace RZCustomItemStats;
 
 public record ModMetadata : AbstractModMetadata
 {
-    public override string ModGuid { get; init; } = "com.rz.customloot";
-    public override string Name { get; init; } = "RZCustomLoot";
+    public override string ModGuid { get; init; } = "com.rz.customitemstats";
+    public override string Name { get; init; } = "RZCustomItemStats";
     public override string Author { get; init; } = "RemzDNB";
     public override SemanticVersioning.Version Version { get; init; } = new("1.0.0");
     public override Range SptVersion { get; init; } = new("~4.0.0");

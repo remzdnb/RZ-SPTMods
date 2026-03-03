@@ -11,9 +11,9 @@
 
   // Restock times.
   "RestockTimes": {
-    "54cb50c76803fa8b248b4571": 40, // Prapor
-    "54cb57776803fa99248b456e": 40, // Therapist
-    "579dc571d53a0658a154fbec": 20, // Fence
+    "54cb50c76803fa8b248b4571": 3600, // Prapor
+    "54cb57776803fa99248b456e": 3600, // Therapist
+    "579dc571d53a0658a154fbec": 3600, // Fence
     "58330581ace78e27b8b10cee": 3600, // Skier
     "5935c25fb3acc3127c3d8cd9": 3600, // Peacekeeper
     "5a7c2eca46aef81a7ca2145d": 3600, // Mechanic

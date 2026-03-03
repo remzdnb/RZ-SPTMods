@@ -4,19 +4,19 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for default trader assorts.
-  "EnableDefaultTrades": true,
+  "EnableDefaultTrades": false,
 
   // Master switch for automatic handbook → trader routing.
-  "EnableRoutedTrades": false,
+  "EnableRoutedTrades": true,
 
   // Master switch for manual offers.
-  "EnableManualTrades": false,
+  "EnableManualTrades": true,
 
   // Master switch for Fence config.
-  "EnableFenceConfig": false,
+  "EnableFenceConfig": true,
 
   // Master switch for trader buyback rules.
-  "EnableBuybackConfig": false,
+  "EnableBuybackConfig": true,
 
   // Master switch for supply configuration (restock timers and stock multipliers).
   "EnableSupplyConfig": false,
@@ -25,16 +25,16 @@
   "EnableHideoutConfig": false,
 
   // Master switch for crafting recipe overrides.
-  "EnableCraftingConfig": false,
+  "EnableCraftingConfig": true,
 
   // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-  "DisableFleaMarket": false,
+  "DisableFleaMarket": true,
 
   // Sets all traders as unlocked by default.
-  "UnlockAllTraders": false,
+  "UnlockAllTraders": true,
 
   // Mark all items as examined/identified on all profile templates. A small number of items are not affected, not sure why.
-  "AllItemsExamined": false,
+  "AllItemsExamined": true,
 
   // Force all assort prices to 1 rouble, ignoring all price config.
   "EnableDevMode": false,

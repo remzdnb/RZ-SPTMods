@@ -38,7 +38,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     {
         var areas = databaseService.GetTables().Hideout?.Areas;
         if (areas is null || areas.Count == 0) {
-            logger.LogWarning("[RZFreeMode] No hideout areas found in database — nothing to patch.");
+            logger.LogWarning("[RZFreeTarkov] No hideout areas found in database — nothing to patch.");
             return;
         }
 
@@ -66,13 +66,13 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         // Apply per-area overrides from config
         foreach (var (areaName, override_) in config.Areas) {
             if (!Enum.TryParse<HideoutAreas>(areaName, ignoreCase: true, out var areaType)) {
-                logger.LogWarning("[RZFreeMode] Unknown hideout area '{Name}' in config — skipping.", areaName);
+                logger.LogWarning("[RZFreeTarkov] Unknown hideout area '{Name}' in config — skipping.", areaName);
                 continue;
             }
 
             var area = areas.FirstOrDefault(a => a.Type == areaType);
             if (area is null) {
-                logger.LogWarning("[RZFreeMode] Area '{Name}' ({Type}) not found in database — skipping.", areaName, areaType);
+                logger.LogWarning("[RZFreeTarkov] Area '{Name}' ({Type}) not found in database — skipping.", areaName, areaType);
                 continue;
             }
 
@@ -100,13 +100,13 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         string areaName)
     {
         if (area.Stages is null) {
-            logger.LogWarning("[RZFreeMode] Area '{Name}' has no stages — cannot apply requirements.", areaName);
+            logger.LogWarning("[RZFreeTarkov] Area '{Name}' has no stages — cannot apply requirements.", areaName);
             return;
         }
 
         foreach (var (levelStr, simpleRequirements) in levelRequirements) {
             if (!area.Stages.TryGetValue(levelStr, out var stage)) {
-                logger.LogWarning("[RZFreeMode] Area '{Name}' has no stage '{Level}' — skipping.", areaName, levelStr);
+                logger.LogWarning("[RZFreeTarkov] Area '{Name}' has no stage '{Level}' — skipping.", areaName, levelStr);
                 continue;
             }
 
@@ -127,7 +127,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             case "item":
 
                 if (string.IsNullOrEmpty(req.ItemTpl)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Item requirement missing ItemTpl.", areaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Item requirement missing ItemTpl.", areaName);
                     return null;
                 }
 
@@ -142,12 +142,12 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             case "area":
 
                 if (string.IsNullOrEmpty(req.AreaName)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Area requirement missing AreaName.", areaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Area requirement missing AreaName.", areaName);
                     return null;
                 }
 
                 if (!Enum.TryParse<HideoutAreas>(req.AreaName, ignoreCase: true, out var requiredArea)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Unknown required area '{ReqArea}'.", areaName, req.AreaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Unknown required area '{ReqArea}'.", areaName, req.AreaName);
                     return null;
                 }
 
@@ -160,7 +160,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
             case "skill":
                 if (string.IsNullOrEmpty(req.SkillName)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Skill requirement missing SkillName.", areaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Skill requirement missing SkillName.", areaName);
                     return null;
                 }
 
@@ -173,13 +173,13 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
             case "traderloyalty":
                 if (string.IsNullOrEmpty(req.TraderName)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Trader requirement missing TraderName.", areaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Trader requirement missing TraderName.", areaName);
                     return null;
                 }
 
                 var traderId = RZCustomEconomy.TraderIds.FromName(req.TraderName);
                 if (traderId is null) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': Unknown trader '{Trader}'.", areaName, req.TraderName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': Unknown trader '{Trader}'.", areaName, req.TraderName);
                     return null;
                 }
 
@@ -192,7 +192,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
             case "questcomplete":
                 if (string.IsNullOrEmpty(req.QuestId)) {
-                    logger.LogWarning("[RZFreeMode] Area '{Area}': QuestComplete requirement missing QuestId.", areaName);
+                    logger.LogWarning("[RZFreeTarkov] Area '{Area}': QuestComplete requirement missing QuestId.", areaName);
                     return null;
                 }
 
@@ -203,7 +203,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
                 };
 
             default:
-                logger.LogWarning("[RZFreeMode] Area '{Area}': Unknown requirement type '{Type}'.", areaName, req.Type);
+                logger.LogWarning("[RZFreeTarkov] Area '{Area}': Unknown requirement type '{Type}'.", areaName, req.Type);
                 return null;
         }
     }
@@ -223,7 +223,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         var recipes = hideout.Production?.Recipes?.FindAll(r => r.EndProduct == ItemTpl.BARTER_PHYSICAL_BITCOIN);
         if (recipes is null || recipes.Count == 0)
         {
-            logger.LogWarning("[RZFreeMode] Bitcoin farm -- no recipes found, skipping.");
+            logger.LogWarning("[RZFreeTarkov] Bitcoin farm -- no recipes found, skipping.");
             return;
         }
 
