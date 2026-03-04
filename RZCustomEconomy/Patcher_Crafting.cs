@@ -1,6 +1,7 @@
 // RemzDNB - 2026
 // ReSharper disable EnforceIfStatementBraces
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -14,19 +15,20 @@ namespace RZCustomEconomy;
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
 public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
         if (!_masterConfig.EnableCraftingConfig)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<CraftsConfig>(CraftsConfig.FileName);
+        var config = configLoader.Load<CraftsConfig>(CraftsConfig.FileName, Assembly.GetExecutingAssembly());
         var recipes = databaseService.GetTables().Hideout?.Production?.Recipes;
 
         if (recipes is null)
         {
-            logger.LogWarning("[RZFreeTarkov] Hideout recipes is null -- skipping.");
+            logger.LogWarning("[RZCustomEconomy] Hideout recipes is null -- skipping.");
             return Task.CompletedTask;
         }
 
@@ -50,8 +52,8 @@ public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService da
             }
         }
 
-        if (_masterConfig.EnableDevLogs) {
-            logger.LogInformation("[RZFreeTarkov] {Count} custom recipe(s) injected.", injected);
+        if (_devConfig.EnableDevLogs) {
+            logger.LogInformation("[RZCustomEconomy] {Count} custom recipe(s) injected.", injected);
         }
 
         return Task.CompletedTask;

@@ -1,9 +1,5 @@
 // RemzDNB - 2026
 
-using Microsoft.Extensions.Logging;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.Models.Common;
 using SPTarkov.Server.Core.Models.Enums.Hideout;
 
@@ -12,13 +8,6 @@ namespace RZCustomEconomy;
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 // masterConfig.json
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-public class UserBlacklistConfig
-{
-    public bool ApplyToRoutedTrades { get; set; } = true;
-    public bool ApplyToDefaultAssorts { get; set; } = false;
-    public List<string> Items { get; set; } = new();
-}
 
 public class MasterConfig
 {
@@ -32,15 +21,11 @@ public class MasterConfig
     public bool EnableSupplyConfig { get; set; } = true;
     public bool EnableHideoutConfig { get; set; } = true;
     public bool EnableCraftingConfig { get; set; } = true;
+    public bool EnableInsuranceConfig { get; set; } = true;
     public bool EnableHandbookPricesConfig { get; set; } = true;
     public bool DisableFleaMarket { get; set; } = true;
-    public bool AllItemsExamined { get; set; } = false;
     public bool UnlockAllTraders { get; set; } = false;
-    public bool EnableDevMode { get; set; } = false;
-    public bool EnableDevLogs { get; set; } = false;
 
-    public List<string> StaticBlacklist { get; set; } = new();
-    public UserBlacklistConfig UserBlacklist { get; set; } = new();
     public Dictionary<string, int> HandbookPrices { get; set; } = new();
 }
 
@@ -96,6 +81,7 @@ public class RoutedTradesConfig
     public bool RouteVanillaItemsOnly { get; set; } = false;
     public bool EnableOverrides { get; set; } = true;
     public string? FallbackTraderId { get; set; } = null;
+    public List<string> Blacklist { get; set; } = [];
 
     public Dictionary<string, List<CategoryRoute>> CategoryRoutes { get; set; } = new();
     public List<AutoTradeOverride> Overrides { get; set; } = new();
@@ -321,12 +307,33 @@ public class CraftsConfig
 }
 
 // ─────────────────────────────────────────────────────────────────────────
+// insuranceConfig.json
+// ─────────────────────────────────────────────────────────────────────────
+
+public record InsuranceConfig
+{
+    public const string FileName = "insuranceConfig.json";
+
+    public bool DisableAll { get; set; } = false;
+    public List<CategoryBlacklistEntry> CategoryBlacklist { get; set; } = [];
+    public List<string> TplBlacklist { get; set; } = [];
+}
+
+public record CategoryBlacklistEntry
+{
+    public bool Enabled { get; set; } = false;
+    public string CategoryId { get; set; } = "";
+}
+
+// ─────────────────────────────────────────────────────────────────────────
 // devConfig.json
 // ─────────────────────────────────────────────────────────────────────────
 
 public class DevConfig
 {
     public const string FileName = "devConfig.json";
+    public bool EnableDevMode { get; set; } = false;
+    public bool EnableDevLogs { get; set; } = false;
     public bool DumpEnable { get; set; } = false;
     public bool DumpHandbookPrice { get; set; } = false;
     public bool DumpModdedItemsOnly { get; set; } = false;
@@ -373,45 +380,5 @@ public static class TraderIds
     public static string? FromName(string name)
     {
         return typeof(TraderIds).GetField(name)?.GetValue(null) as string;
-    }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// Config Loader
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-[Injectable]
-public class ConfigLoader(ILogger<ConfigLoader> logger)
-{
-    private static readonly JsonSerializerOptions _options = new()
-    {
-        PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip,
-        AllowTrailingCommas = true,
-        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
-    };
-
-    private static readonly string _configDir = Path.Combine(AppContext.BaseDirectory, "user", "mods", "RZCustomEconomy", "config");
-
-    private readonly Dictionary<Type, object> _cachedConfigs = new();
-
-    public T Load<T>(string filename)
-        where T : new()
-    {
-        if (_cachedConfigs.TryGetValue(typeof(T), out var cached))
-            return (T)cached;
-
-        var path = Path.Combine(_configDir, filename);
-        if (!File.Exists(path))
-        {
-            logger.LogWarning("[RZCustomEconomy] {File} not found — using default config.", filename);
-            var def = new T();
-            _cachedConfigs[typeof(T)] = def;
-            return def;
-        }
-
-        var result = JsonSerializer.Deserialize<T>(File.ReadAllText(path), _options) ?? new T();
-        _cachedConfigs[typeof(T)] = result;
-        return result;
     }
 }

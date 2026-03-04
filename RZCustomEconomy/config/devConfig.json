@@ -1,4 +1,10 @@
 {
+  // Force all assort prices to 1 rouble, ignoring all price config.
+  "EnableDevMode": false,
+
+  // Enables verbose logging.
+  "EnableDevLogs": false,
+
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // Dumps items to item_dump.txt on server start.
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

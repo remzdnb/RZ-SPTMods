@@ -1,6 +1,7 @@
 // RemzDNB - 2026
 // ReSharper disable EnforceIfStatementBraces
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -24,12 +25,12 @@ public class SupplyPatcher(
 {
     public Task OnLoad()
     {
-        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (!masterConfig.EnableSupplyConfig)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<SupplyConfig>(SupplyConfig.FileName);
+        var config = configLoader.Load<SupplyConfig>(SupplyConfig.FileName, Assembly.GetExecutingAssembly());
 
         PatchRestockTimes(config);
         PatchStockMultipliers(config);
@@ -123,7 +124,7 @@ public class SupplyPatcher(
             .ToDictionary(t => t.Id!, t => t.Mult, StringComparer.OrdinalIgnoreCase);
 
         int patched = 0, skippedUnlimited = 0, skippedMult1 = 0, skippedNullUpd = 0;
-        var devLogs = configLoader.Load<MasterConfig>(MasterConfig.FileName).EnableDevLogs;
+        var devLogs = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly()).EnableDevLogs;
 
         foreach ((MongoId traderId, Trader trader) in traders)
         {

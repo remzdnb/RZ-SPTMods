@@ -4,19 +4,19 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for default trader assorts.
-  "EnableDefaultTrades": false,
+  "EnableDefaultTrades": true,
 
   // Master switch for automatic handbook → trader routing.
-  "EnableRoutedTrades": true,
+  "EnableRoutedTrades": false,
 
   // Master switch for manual offers.
-  "EnableManualTrades": true,
+  "EnableManualTrades": false,
 
   // Master switch for Fence config.
-  "EnableFenceConfig": true,
+  "EnableFenceConfig": false,
 
   // Master switch for trader buyback rules.
-  "EnableBuybackConfig": true,
+  "EnableBuybackConfig": false,
 
   // Master switch for supply configuration (restock timers and stock multipliers).
   "EnableSupplyConfig": false,
@@ -25,84 +25,16 @@
   "EnableHideoutConfig": false,
 
   // Master switch for crafting recipe overrides.
-  "EnableCraftingConfig": true,
+  "EnableCraftingConfig": false,
+
+  // Master switch for crafting recipe overrides.
+  "EnableInsuranceConfig": false,
 
   // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-  "DisableFleaMarket": true,
+  "DisableFleaMarket": false,
 
   // Sets all traders as unlocked by default.
-  "UnlockAllTraders": true,
-
-  // Mark all items as examined/identified on all profile templates. A small number of items are not affected, not sure why.
-  "AllItemsExamined": true,
-
-  // Force all assort prices to 1 rouble, ignoring all price config.
-  "EnableDevMode": false,
-
-  // Enables verbose logging.
-  "EnableDevLogs": false,
-
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  // USER BLACKLIST
-  // Items you want to hide for gameplay or balance reasons.
-  //
-  // ⚠ These items are:
-  //   - Still added to the encyclopedia (identified on the profile) when AllItemsExamined is true
-  //
-  // Toggles (independent, both can be true simultaneously):
-  //   ApplyToRoutedTrades   — items are never auto-routed to any trader.
-  //   ApplyToDefaultAssorts — items are removed from vanilla trader assorts (only relevant if EnableDefaultTrades is true).
-  //
-  // Use StaticBlacklist instead for items that are genuinely broken.
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-  "UserBlacklist": {
-    "ApplyToRoutedTrades": true,
-    "ApplyToDefaultAssorts": false,
-    "Items": [
-      "5449016a4bdc2d6f028b456f", // Rouble
-      "6087e570b998180e9f76dc24", // Superfors DB 2020 Dead Blow Hammer
-      "63495c500c297e20065a08b1", // Old hand scythe
-      "62a09ec84f842e1bd12da3f2", // Missam forklift key
-      "5d1b33a686f7742523398398", // Canister with purified water
-      "5d1b376e86f774252519444e", // Bottle of Fierce Hatchling moonshine
-      "59e3577886f774176a362503" // Pack of sugar
-    ]
-  },
-
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  // STATIC BLACKLIST
-  // Items that are broken, invisible, or non-functional in-game.
-  //
-  // ⚠ These items are:
-  //   - NEVER sold at any trader (auto-routing only).
-  //   - NEVER added to the encyclopedia (not identified on the profile) when AllItemsExamined is true.
-  //
-  // Do not put items here just because you don't want them sold — use UserBlacklist for that.
-  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-  "StaticBlacklist": [
-    "5943d9c186f7745a13413ac9", // Shrapnel
-    "5996f6d686f77467977ba6cc", // MON-50 Shrapnel
-    "5996f6fc86f7745e585b4de3", // M67 Shrapnel
-    "5996f6cb86f774678763a6ca", // RGD-5 Shrapnel
-    "67654a6759116d347b0bfb86", // V40 Shrapnel
-    "5751961824597720a31c09ac", // (off)Black Keycard
-    "5ae083b25acfc4001a5fc702", // Master Hand
-    "5ae089fb5acfc408fb13989b", // Trophy
-    "55d617094bdc2d89028b4568", // KAC QDC 6.5x35 sound suppressor
-    "5648b62b4bdc2d9d488b4585", // GP-34 40mm underbarrel grenade launcher
-    "62811d61578c54356d6d67ea", // !!!DO_NOT_USE!!!AI AXMC 7.62x51mm bolt assembly
-    "679ba90d269ddfea47012159", // Chained Labrys
-    "63a8970d7108f713591149f5", // Small Christmas gift
-    "63a898a328e385334e0640a5", // Christmas gift
-    "63a897c6b1ff6e29734fcc95", // Large Christmas gift
-    "634959225289190e5e773b3b", // Pumpkin with sweets
-    "678fa929819ddc4c350c0317", // Valve handwheel
-    "67ab3d4b83869afd170fdd3f", // BBQ-S43 gas torch
-    "58ac60eb86f77401897560ff", // Balaclava_dev
-    "59e8936686f77467ce798647" // Balaclava_test
-  ],
+  "UnlockAllTraders": false,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // HANDBOOK PRICE OVERRIDES
@@ -115,66 +47,65 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for handbook price overrides.
-  "EnableHandbookPricesConfig": true,
+  "EnableHandbookPricesConfig": false,
 
   // Handbook price overrides.
   "HandbookPrices": {
+    "5755356824597772cb798962": 5000, // AI-2
+    "590c661e86f7741e566b646a": 10000, // CAR
+    "544fb45d4bdc2dee738b4568": 20000, // Salewa
+    "590c678286f77426c9660122": 25000, // IFAK
+    "60098ad7c2240c0fe85c570a": 40000, // AFAK
+    "590c657e86f77412b013051d": 35000, // Grizzly
+    "5d02778e86f774203e7dedbe": 35000, // CMS
+    "5d02797c86f774203f38e30a": 70000, // Surv12
 
-    "5755356824597772cb798962": 5000,     // AI-2
-    "590c661e86f7741e566b646a": 10000,    // CAR
-    "544fb45d4bdc2dee738b4568": 20000,    // Salewa
-    "590c678286f77426c9660122": 25000,    // IFAK
-    "60098ad7c2240c0fe85c570a": 40000,    // AFAK
-    "590c657e86f77412b013051d": 35000,    // Grizzly
-    "5d02778e86f774203e7dedbe": 35000,    // CMS
-    "5d02797c86f774203f38e30a": 70000,    // Surv12
+    "544fb25a4bdc2dfb738b4567": 1500, // Aseptic bandage
+    "5751a25924597722c463c472": 2000, // Army bandage
+    "5e831507ea0a7c419c2f9bd9": 2000, // Esmarch tourniquet
+    "60098af40accd37ef2175f27": 3000, // CAT hemostatic tourniquet
+    "5e8488fa988a8701445df1e4": 6000, // CALOK-B hemostatic applicator
+    "544fb3364bdc2d34748b456a": 3000, // Immobilizing splint
+    "5af0454c86f7746bf20992e8": 8000, // Aluminum splint
 
-    "544fb25a4bdc2dfb738b4567": 1500,     // Aseptic bandage
-    "5751a25924597722c463c472": 2000,     // Army bandage
-    "5e831507ea0a7c419c2f9bd9": 2000,     // Esmarch tourniquet
-    "60098af40accd37ef2175f27": 3000,     // CAT hemostatic tourniquet
-    "5e8488fa988a8701445df1e4": 6000,     // CALOK-B hemostatic applicator
-    "544fb3364bdc2d34748b456a": 3000,     // Immobilizing splint
-    "5af0454c86f7746bf20992e8": 8000,     // Aluminum splint
+    "544fb37f4bdc2dee738b4567": 5000, // Analgin painkillers
+    "590c695186f7741e566b64a2": 15000, // Augmentin antibiotic pills
+    "5af0548586f7743a532b7e99": 25000, // Ibuprofen painkillers
+    "5755383e24597772cb798966": 15000, // Vaseline balm
+    "5751a89d24597722aa0e8db0": 30000, // Golden Star balm
 
-    "544fb37f4bdc2dee738b4567": 5000,     // Analgin painkillers
-    "590c695186f7741e566b64a2": 15000,    // Augmentin antibiotic pills
-    "5af0548586f7743a532b7e99": 25000,    // Ibuprofen painkillers
-    "5755383e24597772cb798966": 15000,    // Vaseline balm
-    "5751a89d24597722aa0e8db0": 30000,    // Golden Star balm
+    "5d1b3a5d86f774252167ba22": 5000, // Pile of meds
+    "619cc01e0a7c3a1a2731940c": 5000, // Medical tools
+    "5d1b3f2d86f774253763b735": 10000, // Disposable syringe
+    "5b4335ba86f7744d2837a264": 10000, // Medical bloodset
+    "59e361e886f774176c10a2a5": 10000, // Bottle of hydrogen peroxide
+    "59e3606886f77417674759a5": 10000, // Bottle of saline solution
+    "62a0a043cf4a99369e2624a5": 30000, // Bottle of OLOLO Multivitamins
+    "5af0534a86f7743b6f354284": 100000, // Ophthalmoscope
+    "5c052e6986f7746b207bc3c9": 250000, // Portable defibrillator
+    "5c0530ee86f774697952d952": 1000000, // LEDX
 
-    "5d1b3a5d86f774252167ba22": 5000,     // Pile of meds
-    "619cc01e0a7c3a1a2731940c": 5000,     // Medical tools
-    "5d1b3f2d86f774253763b735": 10000,    // Disposable syringe
-    "5b4335ba86f7744d2837a264": 10000,    // Medical bloodset
-    "59e361e886f774176c10a2a5": 10000,    // Bottle of hydrogen peroxide
-    "59e3606886f77417674759a5": 10000,    // Bottle of saline solution
-    "62a0a043cf4a99369e2624a5": 30000,    // Bottle of OLOLO Multivitamins
-    "5af0534a86f7743b6f354284": 100000,   // Ophthalmoscope
-    "5c052e6986f7746b207bc3c9": 250000,   // Portable defibrillator
-    "5c0530ee86f774697952d952": 1000000,  // LEDX
-
-    "5c0e530286f7747fa1419862": 25000,    // Propital
-    "5c10c8fd86f7743d7d706df3": 25000,    // Adrenaline
-    "544fb3f34bdc2d03748b456a": 25000,    // Morphine injector
-    "5c0e531d86f7747fa23f4d42": 30000,    // SJ6
-    "5ed515f6915ec335206e4152": 30000,    // AHF1-M
-    "5c0e533786f7747fa23f4d47": 35000,    // Zagustin
-    "5c0e534186f7747fa1419867": 50000,    // eTG-c
-    "5ed51652f6c34d2cc26336a1": 50000,    // Mule
-    "5ed515c8d380ab312177c0fa": 10000,    // 3-(b-TG)
-    "5ed515e03a40a50460332579": 10000,    // L1
-    "5c0e531286f7747fa54205c2": 10000,    // SJ1
-    "5fca13ca637ee0341a484f46": 20000,    // SJ9
-    "637b612fb7afa97bfc3d7005": 30000,    // SJ12
-    "5ed515ece452db0eb56fc028": 30000,    // P22
-    "637b620db7afa97bfc3d7009": 30000,    // Trimadol
-    "637b6179104668754b72f8f5": 30000,    // PNB
-    "5fca138c2a7b221b2852a5c6": 30000,    // XTG-12
-    "5ed5160a87bb8443d10680b5": 40000,    // Meldonin
-    "637b6251104668754b72f8f9": 50000,    // Perfotoran
-    "66507eabf5ddb0818b085b68": 50000,    // 2A2-(b-TG)
-    "5ed5166ad380ab312177c100": 50000,    // Obdolbos
-    "637b60c3b7afa97bfc3d7001": 60000     // Obdolbos 2
+    "5c0e530286f7747fa1419862": 25000, // Propital
+    "5c10c8fd86f7743d7d706df3": 25000, // Adrenaline
+    "544fb3f34bdc2d03748b456a": 25000, // Morphine injector
+    "5c0e531d86f7747fa23f4d42": 30000, // SJ6
+    "5ed515f6915ec335206e4152": 30000, // AHF1-M
+    "5c0e533786f7747fa23f4d47": 35000, // Zagustin
+    "5c0e534186f7747fa1419867": 50000, // eTG-c
+    "5ed51652f6c34d2cc26336a1": 50000, // Mule
+    "5ed515c8d380ab312177c0fa": 10000, // 3-(b-TG)
+    "5ed515e03a40a50460332579": 10000, // L1
+    "5c0e531286f7747fa54205c2": 10000, // SJ1
+    "5fca13ca637ee0341a484f46": 20000, // SJ9
+    "637b612fb7afa97bfc3d7005": 30000, // SJ12
+    "5ed515ece452db0eb56fc028": 30000, // P22
+    "637b620db7afa97bfc3d7009": 30000, // Trimadol
+    "637b6179104668754b72f8f5": 30000, // PNB
+    "5fca138c2a7b221b2852a5c6": 30000, // XTG-12
+    "5ed5160a87bb8443d10680b5": 40000, // Meldonin
+    "637b6251104668754b72f8f9": 50000, // Perfotoran
+    "66507eabf5ddb0818b085b68": 50000, // 2A2-(b-TG)
+    "5ed5166ad380ab312177c100": 50000, // Obdolbos
+    "637b60c3b7afa97bfc3d7001": 60000 // Obdolbos 2
   }
 }

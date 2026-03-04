@@ -76,7 +76,8 @@
       "Enabled": false,
       "Currency": "rub",
       "ExcludedBarterTpls": [
-        "6656560053eaaa7a23349c86" // Lega Medal
+        "6656560053eaaa7a23349c86"
+        // Lega Medal
         //,"5d235b4d86f7742e017bc88a" // GP Coin
       ]
     }

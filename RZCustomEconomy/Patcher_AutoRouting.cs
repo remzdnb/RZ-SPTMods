@@ -2,6 +2,7 @@
 // ReSharper disable EnforceIfStatementBraces
 // ReSharper disable InvertIf
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -21,12 +22,12 @@ public class AutoRoutingPatcher(
 {
     public Task OnLoad()
     {
-        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (!masterConfig.EnableRoutedTrades)
             return Task.CompletedTask;
 
-        var autoRoutingConfig = configLoader.Load<RoutedTradesConfig>(RoutedTradesConfig.FileName);
+        var autoRoutingConfig = configLoader.Load<RoutedTradesConfig>(RoutedTradesConfig.FileName, Assembly.GetExecutingAssembly());
         var traders = databaseService.GetTraders();
         var handbook = databaseService.GetTables().Templates?.Handbook;
 
@@ -38,15 +39,7 @@ public class AutoRoutingPatcher(
 
         // 1. Build blacklist.
 
-        var blacklist = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-        if (!autoRoutingConfig.ForceRouteAll)
-        {
-            //if (autoRoutingConfig.UseStaticBlacklist)
-                blacklist.UnionWith(masterConfig.StaticBlacklist);
-
-            if (/*autoRoutingConfig.UseUserBlacklist && */masterConfig.UserBlacklist.ApplyToRoutedTrades)
-                blacklist.UnionWith(masterConfig.UserBlacklist.Items);
-        }
+        var blacklist = new HashSet<string>(autoRoutingConfig.Blacklist, StringComparer.OrdinalIgnoreCase);
 
         // 2. Build modded item set.
 

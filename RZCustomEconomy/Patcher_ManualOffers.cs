@@ -1,6 +1,7 @@
 // RemzDNB - 2026
 // ReSharper disable EnforceIfStatementBraces
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -20,12 +21,12 @@ public class ManualOffersPatcher(
 {
     public Task OnLoad()
     {
-        var userConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+        var userConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (!userConfig.EnableManualTrades)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<ManualTradesConfig>(ManualTradesConfig.FileName);
+        var config = configLoader.Load<ManualTradesConfig>(ManualTradesConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (config.ManualOffers.Count == 0)
             return Task.CompletedTask;

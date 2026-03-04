@@ -1,5 +1,6 @@
 // DevTools.cs — RemzDNB 2026
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -18,7 +19,7 @@ public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService,
 
     public Task OnLoad()
     {
-        var devConfig = configLoader.Load<DevConfig>(DevConfig.FileName);
+        var devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (devConfig.DumpEnable)
             DumpItems(devConfig);

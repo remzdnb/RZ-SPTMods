@@ -2,6 +2,7 @@
 // ReSharper disable InvertIf
 // ReSharper disable EnforceIfStatementBraces
 
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using SPTarkov.DI.Annotations;
 using SPTarkov.Server.Core.DI;
@@ -41,7 +42,8 @@ public class MasterPatcherPostDbModLoader(
     ConfigLoader configLoader
 ) : IOnLoad
 {
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
@@ -102,8 +104,9 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
     ConfigLoader configLoader
 ) : IOnLoad
 {
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
-    private readonly MasterConfig _defaultTradesConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly MasterConfig _defaultTradesConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
@@ -135,7 +138,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             };
         }
 
-        if (_masterConfig.EnableDevLogs)
+        if (_devConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] All trader assorts cleared.");
     }
 
@@ -154,7 +157,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
         // Block regeneration of expired offers.
         ragfairConfig.Dynamic.ExpiredOfferThreshold = int.MaxValue;
 
-        if (_masterConfig.EnableDevLogs)
+        if (_devConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
     }
 
@@ -197,7 +200,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             return;
         }
 
-        var config = configLoader.Load<DefaultTradesConfig>(DefaultTradesConfig.FileName);
+        var config = configLoader.Load<DefaultTradesConfig>(DefaultTradesConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (config.NoBarterTraders.Count == 0)
             return;
@@ -300,7 +303,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             }
         }
 
-        if (_masterConfig.EnableDevLogs)
+        if (_devConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] NoBarterTrades: {Converted} barter(s) converted to cash, {Skipped} skipped.", converted, skipped);
     }
 }
@@ -317,18 +320,19 @@ public class MasterPatchRagfairCallbacksMinusOne(
     ConfigLoader configLoader
 ) : IOnLoad
 {
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
-        ApplyUserBlacklistToDefaultAssorts();
-        ExamineAllItems();
+       // ApplyUserBlacklistToDefaultAssorts();
+       // ExamineAllItems();
         RemoveEmptyTraders();
 
         return Task.CompletedTask;
     }
 
-    public void ApplyUserBlacklistToDefaultAssorts()
+   /* public void ApplyUserBlacklistToDefaultAssorts()
     {
         if (!_masterConfig.EnableDefaultTrades)
             return;
@@ -366,36 +370,7 @@ public class MasterPatchRagfairCallbacksMinusOne(
 
         if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] UserBlacklist: {Count} item(s) removed from default assorts.", removed);
-    }
-
-    public void ExamineAllItems()
-    {
-        if (!_masterConfig.AllItemsExamined)
-            return;
-
-        var profiles = databaseService.GetProfileTemplates();
-        var allItems = databaseService.GetTables().Templates?.Items?.Keys.ToHashSet();
-        var staticBlacklist = new HashSet<MongoId>(_masterConfig.StaticBlacklist.Select(tpl => new MongoId(tpl)));
-
-        foreach (var (_, edition) in profiles)
-        {
-            foreach (var side in new[] { edition.Usec, edition.Bear })
-            {
-                var character = side?.Character;
-                if (character is null)
-                    continue;
-
-                character.Encyclopedia ??= new Dictionary<MongoId, bool>();
-                foreach (var tpl in allItems!)
-                {
-                    if (staticBlacklist.Contains(tpl))
-                        continue;
-
-                    character.Encyclopedia[tpl] = true;
-                }
-            }
-        }
-    }
+    }*/
 
     public void RemoveEmptyTraders()
     {
@@ -427,13 +402,14 @@ public class RagfairPostPatcher(
     ConfigLoader configLoader
 ) : IOnLoad
 {
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
         // Purge all existing flea market offers.
 
-        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName);
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
         if (!masterConfig.DisableFleaMarket)
             return Task.CompletedTask;
@@ -444,7 +420,7 @@ public class RagfairPostPatcher(
             ragfairOfferHolder.RemoveOffer(id);
         }
 
-        if (_masterConfig.EnableDevLogs)
+        if (_devConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Flea market offers purged.");
 
         return Task.CompletedTask;
