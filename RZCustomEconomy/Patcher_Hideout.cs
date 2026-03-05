@@ -15,12 +15,15 @@ namespace RZCustomEconomy;
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
 public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
-    private static MasterConfig? _masterConfig;
+    private const string TypeItem          = "Item";
+    private const string TypeArea          = "Area";
+    private const string TypeSkill         = "Skill";
+    private const string TypeTraderLoyalty = "TraderLoyalty";
 
     public Task OnLoad()
     {
-        _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-        if (!_masterConfig.EnableHideoutConfig)
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+        if (!masterConfig.EnableHideoutConfig)
             return Task.CompletedTask;
 
         var hideoutConfig = configLoader.Load<HideoutConfig>(HideoutConfig.FileName, Assembly.GetExecutingAssembly());
@@ -43,29 +46,8 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             return;
         }
 
-        // Clear all requirements and construction times SEULEMENT si pas de config custom
-        foreach (var area in areas) {
-            var areaName = area.Type.ToString();
-            var hasCustomRequirements = config.Areas.TryGetValue(areaName, out var areaConfig)
-                                        && areaConfig?.LevelRequirements is not null
-                                        && areaConfig.LevelRequirements.Count > 0;
-
-            if (!hasCustomRequirements) {
-                // Comportement par défaut : clear tout
-                area.Requirements?.Clear();
-                area.EnableAreaRequirements = false;
-
-                if (area.Stages is not null) {
-                    foreach (var (_, stage) in area.Stages) {
-                        stage.Requirements?.Clear();
-                        stage.ConstructionTime = 0;
-                    }
-                }
-            }
-        }
-
-        // Apply per-area overrides from config
-        foreach (var (areaName, override_) in config.Areas) {
+        foreach (var (areaName, areaConfig) in config.Areas)
+        {
             if (!Enum.TryParse<HideoutAreas>(areaName, ignoreCase: true, out var areaType)) {
                 logger.LogWarning("[RZCustomEconomy] Unknown hideout area '{Name}' in config — skipping.", areaName);
                 continue;
@@ -77,171 +59,207 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
                 continue;
             }
 
-            if (override_.RemoveFromDb == true) {
+            if (areaConfig.RemoveFromDb == true) {
                 areas.RemoveAll(a => a.Type == areaType);
                 continue;
             }
 
-            if (override_.Enabled.HasValue)
-                area.IsEnabled = override_.Enabled.Value;
+            if (areaConfig.Enabled.HasValue)
+                area.IsEnabled = areaConfig.Enabled.Value;
 
-            if (override_.DisplayLevel.HasValue)
-                area.DisplayLevel = override_.DisplayLevel.Value;
+            if (areaConfig.DisplayLevel.HasValue)
+                area.DisplayLevel = areaConfig.DisplayLevel.Value;
 
-            // Nouveau : apply custom requirements par level
-            if (override_.LevelRequirements is not null && override_.LevelRequirements.Count > 0) {
-                ApplyCustomRequirements(area, override_.LevelRequirements, areaName);
+            if (area.Stages is null)
+                continue;
+
+            ApplyRequirementPatches(area, areaConfig, areaName);
+        }
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // Requirement patching
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    private void ApplyRequirementPatches(HideoutArea area, HideoutAreaConfig config, string areaName)
+    {
+        if (config.UseCustomItemRequirements) {
+            ClearRequirementsByType(area, TypeItem);
+            InjectRequirements(area, config.ItemRequirements, areaName, InjectItemRequirement);
+        }
+
+        if (config.UseCustomAreaRequirements) {
+            ClearRequirementsByType(area, TypeArea);
+            InjectRequirements(area, config.AreaRequirements, areaName, InjectAreaRequirement);
+        }
+
+        if (config.UseCustomSkillRequirements) {
+            ClearRequirementsByType(area, TypeSkill);
+            InjectRequirements(area, config.SkillRequirements, areaName, InjectSkillRequirement);
+        }
+
+        if (config.UseCustomTraderRequirements) {
+            ClearRequirementsByType(area, TypeTraderLoyalty);
+            InjectRequirements(area, config.TraderRequirements, areaName, InjectTraderRequirement);
+        }
+
+        if (config.UseCustomConstructionTime) {
+            foreach (var (levelStr, stage) in area.Stages!) {
+                stage.ConstructionTime = config.ConstructionTime.TryGetValue(levelStr, out var time) ? time : 0;
             }
         }
     }
 
-    private void ApplyCustomRequirements(
-        HideoutArea area,
-        Dictionary<string, List<StageRequirement>> levelRequirements,
-        string areaName)
-    {
-        if (area.Stages is null) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Name}' has no stages — cannot apply requirements.", areaName);
-            return;
-        }
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // Clear
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-        foreach (var (levelStr, simpleRequirements) in levelRequirements) {
+    private static void ClearRequirementsByType(HideoutArea area, string type)
+    {
+        if (area.Stages is null)
+            return;
+
+        foreach (var (_, stage) in area.Stages)
+            stage.Requirements?.RemoveAll(r => string.Equals(r.Type, type, StringComparison.OrdinalIgnoreCase));
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // Generic inject dispatcher
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    private void InjectRequirements<T>(
+        HideoutArea area,
+        Dictionary<string, List<T>> byStage,
+        string areaName,
+        Func<T, string, string, SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement?> converter)
+    {
+        if (byStage.Count == 0 || area.Stages is null)
+            return;
+
+        foreach (var (levelStr, requirements) in byStage)
+        {
             if (!area.Stages.TryGetValue(levelStr, out var stage)) {
-                logger.LogWarning("[RZCustomEconomy] Area '{Name}' has no stage '{Level}' — skipping.", areaName, levelStr);
+                logger.LogWarning("[RZCustomEconomy] Area '{Area}': stage '{Level}' not found in database — skipping.", areaName, levelStr);
                 continue;
             }
 
-            // Convertir les SimpleStageRequirement en StageRequirement
-            stage.Requirements = simpleRequirements
-                .Select(req => ConvertToStageRequirement(req, areaName))
-                .Where(req => req is not null)
+            var converted = requirements
+                .Select(req => converter(req, areaName, levelStr))
+                .Where(r => r is not null)
                 .ToList()!;
 
-            stage.ConstructionTime = 0;
+            if (converted.Count == 0)
+                continue;
+
+            stage.Requirements ??= new List<SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement>();
+            stage.Requirements.AddRange(converted);
         }
     }
 
-    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? ConvertToStageRequirement(StageRequirement req, string areaName)
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // Converters
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectItemRequirement(ItemRequirement req, string areaName, string levelStr)
     {
-        switch (req.Type.ToLowerInvariant())
-        {
-            case "item":
-
-                if (string.IsNullOrEmpty(req.ItemTpl)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Item requirement missing ItemTpl.", areaName);
-                    return null;
-                }
-
-                return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
-                    Type = "Item",
-                    TemplateId = req.ItemTpl,
-                    Count = req.ItemCount,
-                    IsFunctional = req.ItemFunctional,
-                    IsEncoded = false
-                };
-
-            case "area":
-
-                if (string.IsNullOrEmpty(req.AreaName)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Area requirement missing AreaName.", areaName);
-                    return null;
-                }
-
-                if (!Enum.TryParse<HideoutAreas>(req.AreaName, ignoreCase: true, out var requiredArea)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Unknown required area '{ReqArea}'.", areaName, req.AreaName);
-                    return null;
-                }
-
-                return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
-                    Type = "Area",
-                    AreaType = (int) requiredArea,
-                    RequiredLevel = req.AreaLevel,
-                    IsEncoded = false
-                };
-
-            case "skill":
-                if (string.IsNullOrEmpty(req.SkillName)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Skill requirement missing SkillName.", areaName);
-                    return null;
-                }
-
-                return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
-                    Type = "Skill",
-                    TemplateId = req.SkillName,
-                    Count = req.SkillLevel,
-                    IsEncoded = false
-                };
-
-            case "traderloyalty":
-                if (string.IsNullOrEmpty(req.TraderName)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Trader requirement missing TraderName.", areaName);
-                    return null;
-                }
-
-                var traderId = RZCustomEconomy.TraderIds.FromName(req.TraderName);
-                if (traderId is null) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': Unknown trader '{Trader}'.", areaName, req.TraderName);
-                    return null;
-                }
-
-                return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
-                    Type = "TraderLoyalty",
-                    TraderId = traderId,
-                    LoyaltyLevel = req.TraderLoyalty,
-                    IsEncoded = false
-                };
-
-            case "questcomplete":
-                if (string.IsNullOrEmpty(req.QuestId)) {
-                    logger.LogWarning("[RZCustomEconomy] Area '{Area}': QuestComplete requirement missing QuestId.", areaName);
-                    return null;
-                }
-
-                return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
-                    Type = "QuestComplete",
-                    //QuestId = req.QuestId,
-                    IsEncoded = false
-                };
-
-            default:
-                logger.LogWarning("[RZCustomEconomy] Area '{Area}': Unknown requirement type '{Type}'.", areaName, req.Type);
-                return null;
+        if (string.IsNullOrEmpty(req.ItemTpl)) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Item requirement missing ItemTpl — skipping.", areaName, levelStr);
+            return null;
         }
+
+        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+            Type = TypeItem,
+            TemplateId = req.ItemTpl,
+            Count = req.ItemCount,
+            IsFunctional = req.ItemFunctional,
+            IsEncoded = false
+        };
+    }
+
+    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectAreaRequirement(AreaRequirement req, string areaName, string levelStr)
+    {
+        if (string.IsNullOrEmpty(req.AreaName)) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Area requirement missing AreaName — skipping.", areaName, levelStr);
+            return null;
+        }
+
+        if (!Enum.TryParse<HideoutAreas>(req.AreaName, ignoreCase: true, out var depAreaType)) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Unknown dependency area '{Dep}' — skipping.", areaName, levelStr, req.AreaName);
+            return null;
+        }
+
+        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+            Type = TypeArea,
+            AreaType = (int)depAreaType,
+            RequiredLevel = req.AreaLevel,
+            IsEncoded = false
+        };
+    }
+
+    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectSkillRequirement(SkillRequirement req, string areaName, string levelStr)
+    {
+        if (string.IsNullOrEmpty(req.SkillName)) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Skill requirement missing SkillName — skipping.", areaName, levelStr);
+            return null;
+        }
+
+        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+            Type = TypeSkill,
+            SkillName = req.SkillName,
+            SkillLevel = req.SkillLevel,
+            IsEncoded = false
+        };
+    }
+
+    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectTraderRequirement(TraderRequirement req, string areaName, string levelStr)
+    {
+        if (string.IsNullOrEmpty(req.TraderName)) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': TraderLoyalty requirement missing TraderName — skipping.", areaName, levelStr);
+            return null;
+        }
+
+        var traders = databaseService.GetTraders();
+        var traderEntry = traders.FirstOrDefault(t =>
+            t.Value.Base?.Nickname != null &&
+            t.Value.Base.Nickname.Equals(req.TraderName, StringComparison.OrdinalIgnoreCase));
+
+        if (traderEntry.Value is null) {
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Trader '{Trader}' not found — skipping.", areaName, levelStr, req.TraderName);
+            return null;
+        }
+
+        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+            Type = TypeTraderLoyalty,
+            TraderId = traderEntry.Key,
+            LoyaltyLevel = req.TraderLoyalty,
+            IsEncoded = false
+        };
     }
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     // Bitcoin farm
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private void PatchBitcoinFarm(BitcoinFarmConfig? config) {
-
+    private void PatchBitcoinFarm(BitcoinFarmConfig? config)
+    {
         if (config is null)
-        {
             return;
-        }
 
         var hideout = databaseService.GetHideout();
         var recipes = hideout.Production?.Recipes?.FindAll(r => r.EndProduct == ItemTpl.BARTER_PHYSICAL_BITCOIN);
-        if (recipes is null || recipes.Count == 0)
-        {
-            logger.LogWarning("[RZCustomEconomy] Bitcoin farm -- no recipes found, skipping.");
+        if (recipes is null || recipes.Count == 0) {
+            logger.LogWarning("[RZCustomEconomy] Bitcoin farm — no recipes found, skipping.");
             return;
         }
 
         foreach (var recipe in recipes)
         {
             if (config.ProductionSpeedMultiplier.HasValue)
-            {
                 recipe.ProductionTime = (int)Math.Round((double)recipe.ProductionTime! / config.ProductionSpeedMultiplier.Value);
-            }
 
             if (config.MaxCapacity.HasValue)
-            {
                 recipe.ProductionLimitCount = config.MaxCapacity.Value;
-            }
         }
-
-        // GPU boost rate.
 
         if (config.GpuBoostRate.HasValue)
             hideout.Settings.GpuBoostRate = config.GpuBoostRate.Value;

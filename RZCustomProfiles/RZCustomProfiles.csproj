@@ -13,21 +13,28 @@
   <ItemGroup>
     <PackageReference Include="SPTarkov.Server.Core" Version="4.0.*"/>
     <PackageReference Include="SPTarkov.DI" Version="4.0.*"/>
-    <ProjectReference Include="..\RZShared\RZShared.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' == 'Debug'">
+    <ConfigFiles Include="$(ProjectDir)config_personal\**\*"/>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)' != 'Debug'">
+    <ConfigFiles Include="$(ProjectDir)config_generic\**\*"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ConfigFiles Include="$(ProjectDir)config\**\*"/>
-    <ProfileFiles Include="$(ProjectDir)profiles\**\*" />
+    <ProfileFiles Include="$(ProjectDir)profiles\**\*"/>
   </ItemGroup>
 
   <Target Name="ExportMod" AfterTargets="Build" Condition="'$(ModExportPath)' != ''">
-    <Message Text="→ Copying to $(ModExportPath)" Importance="High" />
-    <MakeDir Directories="$(ModExportPath)" />
-    <MakeDir Directories="$(ModExportPath)config\" />
-    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="false" />
+    <Message Text="→ Copying to $(ModExportPath) [$(Configuration)]" Importance="High"/>
+    <MakeDir Directories="$(ModExportPath)"/>
+    <MakeDir Directories="$(ModExportPath)config\"/>
+    <MakeDir Directories="$(ModExportPath)profiles\"/>
+    <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="false"/>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(ModExportPath)config\%(Filename)%(Extension)')" SkipUnchangedFiles="false"/>
     <Copy SourceFiles="@(ProfileFiles)" DestinationFiles="@(ProfileFiles->'$(ModExportPath)profiles\%(Filename)%(Extension)')" SkipUnchangedFiles="false"/>
-	<Message Text="→ Mod exported." Importance="High"/>
+    <Message Text="→ Mod exported." Importance="High"/>
   </Target>
 </Project>

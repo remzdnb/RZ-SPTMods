@@ -1,0 +1,26 @@
+using SPTarkov.Server.Core.Models.Spt.Mod;
+using Range = SemanticVersioning.Range;
+
+namespace RZCustomProfiles;
+
+public record ModMetadata : AbstractModMetadata
+{
+    public override SemanticVersioning.Version Version { get; init; } = new(
+        "1.0.1"
+    );
+
+    public override Dictionary<string, Range>? ModDependencies { get; init; } = new()
+    {
+        ["com.rz.shared"] = new Range("~1.0.0")
+    };
+
+    public override string ModGuid { get; init; } = "com.rz.customprofiles";
+    public override string Name { get; init; } = "RZCustomProfiles";
+    public override string Author { get; init; } = "RemzDNB";
+    public override Range SptVersion { get; init; } = new("~4.0.0");
+    public override string License { get; init; } = "MIT";
+    public override List<string>? Contributors { get; init; } = null;
+    public override List<string>? Incompatibilities { get; init; } = null;
+    public override string? Url { get; init; } = null;
+    public override bool? IsBundleMod { get; init; } = false;
+}

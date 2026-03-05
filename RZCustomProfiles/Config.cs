@@ -7,6 +7,10 @@ public record MasterConfig
     public const string FileName = "masterConfig.json";
     public HashSet<int> EnabledBaseProfiles { get; set; } = new();
     public bool UnlockAllOutfits { get; set; } = false;
+    public bool UnlockJaeger { get; set; } = false;
+    public bool UnlockRef { get; set; } = false;
+    public List<CategoryEntry> ExaminedCategoryBlacklist { get; set; } = [];
+    public List<string> ExaminedBlacklist { get; set; } = [];
 
     public static readonly Dictionary<int, string> BaseProfiles = new()
     {
@@ -37,14 +41,6 @@ public record MasterConfig
         [12] = ItemTpl.SECURE_TOURNAMENT_SECURED_CONTAINER,
     };
 
-    public static readonly Dictionary<int, string> Pockets = new()
-    {
-        [1] = ItemTpl.POCKETS_1X3,
-        [2] = ItemTpl.POCKETS_1X4_TUE,
-        [3] = ItemTpl.POCKETS_2X3,
-        [4] = ItemTpl.POCKETS_LARGE,
-    };
-
     public static readonly HashSet<string> ProtectedSlots = new(StringComparer.OrdinalIgnoreCase)
     {
         "SecuredContainer", "Pockets", "Dogtag"
@@ -53,17 +49,20 @@ public record MasterConfig
 
 public record ProfileConfig
 {
+    public bool Enabled { get; set; } = true;
+    public int BaseProfile { get; set; } = 6;
     public string Name { get; set; } = "DefaultProfileName";
     public string? Description { get; set; }
-    public int BaseProfile { get; set; } = 6;
+    public bool AllItemsExamined { get; set; } = false;
     public bool MaxLevel { get; set; } = false;
+    public int? StartingLevel { get; set; } = null;
     public bool MaxSkills { get; set; } = false;
+    public Dictionary<string, float>? SkillOverrides { get; set; } = null;
     public Dictionary<string, TraderLoyaltyConfig>? TradersLoyalty { get; set; }
-    public bool ClearStash { get; set; } = true;
+    public bool ClearStash { get; set; } = false;
     public bool ClearEquipment { get; set; } = false;
     public int SecureContainer { get; set; } = 0;
-    public int Pockets { get; set; } = 0;
-    public StartingItemsConfig? StartingItems { get; set; }
+    public StartingItemsConfig? AdditionalStartingItems { get; set; }
     public Dictionary<string, int>? HideoutStartingLevels { get; set; }
 }
 
@@ -71,17 +70,22 @@ public record TraderLoyaltyConfig
 {
     public double Standing { get; set; } = 99.0;
     public double SalesSum { get; set; } = 1000000;
-    public bool Unlocked { get; set; } = true;
 }
 
 public record StartingItemsConfig
 {
     public bool Enabled { get; set; } = true;
-    public List<BaseItem> Items { get; set; } = new();
+    public List<ItemEntry> Items { get; set; } = new();
 }
 
-public record BaseItem
+public class ItemEntry
 {
     public string Tpl { get; set; } = "";
     public int Count { get; set; } = 1;
+}
+
+public record CategoryEntry
+{
+    public string CategoryId { get; set; } = "";
+    public bool Enabled { get; set; } = false;
 }

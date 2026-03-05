@@ -119,9 +119,7 @@ public class SupplyPatcher(
         );
 
         var traderMultipliers = stockConfig.ByTrader
-            .Select(kvp => (Id: TraderIds.FromName(kvp.Key), Mult: kvp.Value))
-            .Where(t => t.Id is not null)
-            .ToDictionary(t => t.Id!, t => t.Mult, StringComparer.OrdinalIgnoreCase);
+            .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
 
         int patched = 0, skippedUnlimited = 0, skippedMult1 = 0, skippedNullUpd = 0;
         var devLogs = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly()).EnableDevLogs;

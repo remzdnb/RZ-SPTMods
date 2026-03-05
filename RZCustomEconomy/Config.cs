@@ -23,9 +23,8 @@ public class MasterConfig
     public bool EnableCraftingConfig { get; set; } = true;
     public bool EnableInsuranceConfig { get; set; } = true;
     public bool EnableHandbookPricesConfig { get; set; } = true;
-    public bool DisableFleaMarket { get; set; } = true;
-    public bool UnlockAllTraders { get; set; } = false;
 
+    public bool DisableFleaMarket { get; set; } = true;
     public Dictionary<string, int> HandbookPrices { get; set; } = new();
 }
 
@@ -230,38 +229,64 @@ public class HideoutConfig
     public BitcoinFarmConfig? BitcoinFarm { get; set; }
 }
 
-public class StageRequirement
-{
-    public string Type { get; set; } = "";
-
-    // Pour Type = "Item"
-    public string? ItemTpl { get; set; }
-    public int ItemCount { get; set; } = 1;
-    public bool ItemFunctional { get; set; } = false;
-
-    // Pour Type = "Area"
-    public string? AreaName { get; set; }
-    public int AreaLevel { get; set; } = 1;
-
-    // Pour Type = "Skill"
-    public string? SkillName { get; set; }
-    public int SkillLevel { get; set; } = 1;
-
-    // Pour Type = "TraderLoyalty"
-    public string? TraderName { get; set; }
-    public int TraderLoyalty { get; set; } = 1;
-
-    // Pour Type = "QuestComplete"
-    public string? QuestId { get; set; }
-}
-
 public class HideoutAreaConfig
 {
+    // Removes the area from the database entirely.
     public bool? RemoveFromDb { get; set; }
+
+    // Whether the area is available to the player.
     public bool? Enabled { get; set; }
+
+    // Whether the current level is displayed in the UI.
     public bool? DisplayLevel { get; set; }
-    public int? StartingLevel { get; set; } = null;
-    public Dictionary<string, List<StageRequirement>>? LevelRequirements { get; set; }
+
+    // ── Construction time ─────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // If true, applies ConstructionTime to every stage. Vanilla values are untouched if false.
+
+    public bool UseCustomConstructionTime { get; set; } = false;
+    public Dictionary<string, double> ConstructionTime { get; set; } = new();
+
+    // ── Custom requirements ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // If Use* is true: vanilla requirements of that type are cleared on every stage, then the matching dict is injected per stage.
+    // If Use* is false: vanilla requirements of that type are left completely untouched.
+    // Keys are stage level strings ("1", "2", "3"...). Missing stages are silently skipped.
+
+    public bool UseCustomItemRequirements { get; set; } = false;
+    public Dictionary<string, List<ItemRequirement>> ItemRequirements { get; set; } = new();
+
+    public bool UseCustomAreaRequirements { get; set; } = false;
+    public Dictionary<string, List<AreaRequirement>> AreaRequirements { get; set; } = new();
+
+    public bool UseCustomSkillRequirements { get; set; } = false;
+    public Dictionary<string, List<SkillRequirement>> SkillRequirements { get; set; } = new();
+
+    public bool UseCustomTraderRequirements { get; set; } = false;
+    public Dictionary<string, List<TraderRequirement>> TraderRequirements { get; set; } = new();
+}
+
+public class ItemRequirement
+{
+    public string ItemTpl { get; set; } = "";
+    public int ItemCount { get; set; } = 1;
+    public bool ItemFunctional { get; set; } = false;
+}
+
+public class AreaRequirement
+{
+    public string AreaName { get; set; } = "";
+    public int AreaLevel { get; set; } = 1;
+}
+
+public class SkillRequirement
+{
+    public string SkillName { get; set; } = "";
+    public int SkillLevel { get; set; } = 1;
+}
+
+public class TraderRequirement
+{
+    public string TraderName { get; set; } = "";
+    public int TraderLoyalty { get; set; } = 1;
 }
 
 public class BitcoinFarmConfig
@@ -332,6 +357,8 @@ public record CategoryBlacklistEntry
 public class DevConfig
 {
     public const string FileName = "devConfig.json";
+
+    // Items dump
     public bool EnableDevMode { get; set; } = false;
     public bool EnableDevLogs { get; set; } = false;
     public bool DumpEnable { get; set; } = false;
@@ -339,6 +366,10 @@ public class DevConfig
     public bool DumpModdedItemsOnly { get; set; } = false;
     public bool DumpOnlyFromCategories { get; set; } = false;
     public List<CategoryRoute> DumpCategories { get; set; } = new();
+
+
+    // Category dump
+    public bool DumpCategoriesEnable { get; set; } = false;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

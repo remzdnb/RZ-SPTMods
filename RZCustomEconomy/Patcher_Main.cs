@@ -48,7 +48,6 @@ public class MasterPatcherPostDbModLoader(
     public Task OnLoad()
     {
         PatchHandbookPrices();
-        UnlockAllTraders();
 
         return Task.CompletedTask;
     }
@@ -75,19 +74,6 @@ public class MasterPatcherPostDbModLoader(
             }
 
             entry.Price = price;
-        }
-    }
-
-    private void UnlockAllTraders()
-    {
-        var traders = databaseService.GetTraders();
-
-        if (!_masterConfig.UnlockAllTraders)
-            return;
-
-        foreach (var (_, trader) in traders)
-        {
-            trader.Base.UnlockedByDefault = true;
         }
     }
 }
@@ -160,38 +146,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
         if (_devConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
     }
-
-   /* public void DisableFenceOffers()
-    {
-        if (_masterConfig.EnableFenceTrades)
-            return;
-
-        var fence = configServer.GetConfig<TraderConfig>().Fence;
-        fence.AssortSize = 0;
-        fence.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-        fence.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-        fence.DiscountOptions.AssortSize = 0;
-        fence.DiscountOptions.WeaponPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-        fence.DiscountOptions.EquipmentPresetMinMax = new MinMax<int> { Min = 0, Max = 0 };
-
-        fenceService.SetFenceAssort(
-            new TraderAssort {
-                Items = [],
-                BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
-                LoyalLevelItems = new Dictionary<MongoId, int>(),
-            }
-        );
-        fenceService.SetFenceDiscountAssort(
-            new TraderAssort {
-                Items = [],
-                BarterScheme = new Dictionary<MongoId, List<List<BarterScheme>>>(),
-                LoyalLevelItems = new Dictionary<MongoId, int>(),
-            }
-        );
-
-        if (_masterConfig.EnableDevLogs)
-            logger.LogInformation("[RZCustomEconomy] Fence offers disabled.");
-    }*/
 
     public void ReplaceBarterTrades()
     {

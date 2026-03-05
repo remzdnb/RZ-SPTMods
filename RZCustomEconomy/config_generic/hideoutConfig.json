@@ -1,0 +1,490 @@
+{
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // BITCOIN FARM
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "BitcoinFarm": {
+    "ProductionSpeedMultiplier": 13.38,
+    "GpuBoostRate": 0.164,
+    "MaxCapacity": 10
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // HIDEOUT AREAS
+  //
+  // RemoveFromDb  : removes the area from the DB entirely — visually looks like it's built at max level.
+  // Enabled       : makes the area available to the player.
+  // DisplayLevel  : whether the current level is shown in the UI.
+  //
+  // ── Construction time ───────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  //   UseCustomConstructionTime  : if true, applies ConstructionTime per stage. Vanilla values untouched if false.
+  //   ConstructionTime           : dict of stage level → time in seconds. e.g. { "1": 0, "2": 3600 }
+  //
+  // ── Requirements ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  //   If Use* is true  : vanilla requirements of that type are cleared on every stage, then the dict is injected per stage.
+  //   If Use* is false : vanilla requirements of that type are left completely untouched.
+  //   Keys are stage level strings ("1", "2", "3"...). Missing stages are silently skipped.
+  //
+  //   UseCustomItemRequirements    + ItemRequirements    { "1": [ { "ItemTpl", "ItemCount", "ItemFunctional" } ] }
+  //   UseCustomAreaRequirements    + AreaRequirements    { "1": [ { "AreaName", "AreaLevel" } ] }
+  //   UseCustomSkillRequirements   + SkillRequirements   { "1": [ { "SkillName", "SkillLevel" } ] }
+  //   UseCustomTraderRequirements  + TraderRequirements  { "1": [ { "TraderName", "TraderLoyalty" } ] }
+  //
+  // Also worth noting: disabling certain areas such as CircleOfCultists can cause crashes or infinite loading screens.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "Areas": {
+
+    "Vents": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Security": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "WaterCloset": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Stash": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": true,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": true,
+      "ItemRequirements": {
+        "2": [ { "ItemTpl": "6656560053eaaa7a23349c86", "ItemCount": 10, "ItemFunctional": false } ],
+        "3": [ { "ItemTpl": "6656560053eaaa7a23349c86", "ItemCount": 20, "ItemFunctional": false } ],
+        "4": [ { "ItemTpl": "6656560053eaaa7a23349c86", "ItemCount": 50, "ItemFunctional": false } ]
+      },
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Generator": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Heating": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "WaterCollector": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "MedStation": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Kitchen": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "RestSpace": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Workbench": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "IntelligenceCenter": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "ShootingRange": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Library": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "ScavCase": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Illumination": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "PlaceOfFame": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "AirFilteringUnit": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "SolarPower": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "BoozeGenerator": {
+      "RemoveFromDb": true,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "BitcoinFarm": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": false,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "ChristmasIllumination": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "EmergencyWall": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "Gym": {
+      "RemoveFromDb": true,
+      "Enabled": false,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "WeaponStand": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "WeaponStandSecondary": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "EquipmentPresetsStand": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    },
+
+    "CircleOfCultists": {
+      "RemoveFromDb": false,
+      "Enabled": true,
+      "DisplayLevel": true,
+      "UseCustomConstructionTime": false,
+      "ConstructionTime": {},
+      "UseCustomItemRequirements": false,
+      "ItemRequirements": {},
+      "UseCustomAreaRequirements": false,
+      "AreaRequirements": {},
+      "UseCustomSkillRequirements": false,
+      "SkillRequirements": {},
+      "UseCustomTraderRequirements": false,
+      "TraderRequirements": {}
+    }
+  }
+}

@@ -11,7 +11,7 @@ using Path = System.IO.Path;
 namespace RZCustomEconomy;
 
 [Injectable(TypePriority = OnLoadOrder.PostSptModLoader)]
-public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService, ConfigLoader configLoader ) : IOnLoad
+public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
     private static readonly string _devDir = Path.Combine(
         AppContext.BaseDirectory, "user", "mods", "RZCustomEconomy", "dev"
@@ -23,6 +23,9 @@ public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService,
 
         if (devConfig.DumpEnable)
             DumpItems(devConfig);
+
+        if (devConfig.DumpCategoriesEnable)
+            DumpCategories();
 
         return Task.CompletedTask;
     }
@@ -111,6 +114,96 @@ public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService,
     }
 
     // ─────────────────────────────────────────────────────────────────────────
+    // DumpCategories
+    // Dumps all Node entries from Templates.Items to dev/category_dump.txt.
+    // Each line : <id>  parent:<parentId>  <depth>  <name>
+    // Sorted by parent chain so the tree reads top-down.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private void DumpCategories()
+    {
+        var templateItems = databaseService.GetTables().Templates?.Items;
+        if (templateItems is null)
+        {
+            logger.LogWarning("[RZCustomEconomy] DevTools: Templates.Items is null, cannot dump categories.");
+            return;
+        }
+
+        Dictionary<string, string>? enLocale = null;
+        if (databaseService.GetTables().Locales?.Global.TryGetValue("en", out var enLocaleRaw) == true)
+            enLocale = enLocaleRaw?.Value;
+
+        // Collect all Node entries (categories, not real items).
+        var nodes = templateItems
+            .Where(kvp => string.Equals(kvp.Value.Type, "Node", StringComparison.OrdinalIgnoreCase))
+            .Select(kvp =>
+            {
+                var id       = kvp.Key.ToString();
+                var parentId = kvp.Value.Parent.ToString() ?? "";
+                var name     = "?";
+                if (enLocale is not null)
+                {
+                    enLocale.TryGetValue($"{id} Name", out name);
+                    name ??= "?";
+                }
+                return (Id: id, ParentId: parentId, Name: name);
+            })
+            .ToList();
+
+        // Build parent → children map for depth calculation and tree ordering.
+        var childrenOf = nodes
+            .GroupBy(n => n.ParentId)
+            .ToDictionary(g => g.Key, g => g.Select(n => n.Id).ToList());
+
+        var idToNode = nodes.ToDictionary(n => n.Id);
+
+        // BFS from roots (nodes whose parent is not itself a node) to get depth + sorted order.
+        var rootIds = nodes
+            .Where(n => !idToNode.ContainsKey(n.ParentId))
+            .Select(n => n.Id)
+            .OrderBy(id => idToNode.TryGetValue(id, out var nd) ? nd.Name : id)
+            .ToList();
+
+        var ordered = new List<(string Id, string ParentId, string Name, int Depth)>();
+        var queue   = new Queue<(string Id, int Depth)>(rootIds.Select(id => (id, 0)));
+
+        while (queue.Count > 0)
+        {
+            var (current, depth) = queue.Dequeue();
+            if (!idToNode.TryGetValue(current, out var node))
+                continue;
+
+            ordered.Add((node.Id, node.ParentId, node.Name, depth));
+
+            if (!childrenOf.TryGetValue(current, out var children))
+                continue;
+
+            foreach (var child in children.OrderBy(c => idToNode.TryGetValue(c, out var cn) ? cn.Name : c))
+                queue.Enqueue((child, depth + 1));
+        }
+
+        // Format lines.
+        var lines = ordered.Select(n =>
+        {
+            var indent   = new string(' ', n.Depth * 2);
+            var parentInfo = n.Depth == 0 ? "ROOT" : $"parent:{n.ParentId}";
+            return $"{indent}{n.Id}  {parentInfo}  {n.Name}";
+        });
+
+        var outputPath = Path.Combine(_devDir, "category_dump.txt");
+        try
+        {
+            Directory.CreateDirectory(_devDir);
+            File.WriteAllLines(outputPath, lines);
+            logger.LogInformation("\e[1;32m[RZCustomEconomy] DevTools: {Count} category/ies dumped to dev/category_dump.txt.\e[0m", ordered.Count);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("[RZCustomEconomy] DevTools: failed to write category_dump.txt: {Err}", ex.Message);
+        }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
     // Helpers
     // ─────────────────────────────────────────────────────────────────────────
 
@@ -125,7 +218,7 @@ public class DevTools(ILogger<DevTools> logger, DatabaseService databaseService,
 
         try
         {
-            var raw       = File.ReadAllText(vanillaPath);
+            var raw = File.ReadAllText(vanillaPath);
             using var doc = System.Text.Json.JsonDocument.Parse(raw);
 
             var tpls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

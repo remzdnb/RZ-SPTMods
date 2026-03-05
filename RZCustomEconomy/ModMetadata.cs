@@ -11,7 +11,7 @@ public record ModMetadata : AbstractModMetadata
     public override string Name { get; init; } = "RZCustomEconomy";
     public override string Author { get; init; } = "RemzDNB";
 
-    public override SemanticVersioning.Version Version { get; init; } = new("1.0.0");
+    public override SemanticVersioning.Version Version { get; init; } = new("1.1.3");
 
     /// <summary>
     /// Compatible SPT version range.

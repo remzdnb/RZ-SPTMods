@@ -1,7 +1,4 @@
-- Added Insurance feature.
-- Removed `AllItemsExamined` and the two blacklists from `masterConfig`, didn't belong here and was confusing af. `AllItemsExamined` will be moved to CustomProfiles (per-profile). The routing blacklist is now a single list directly in `routedTradesConfig`.
-- Config files are now `.jsonc`, no more ugly mess when opened with Notepad++.
-
+- Removed UnlockJaeger setting, doesn't belong here and can be done with SVM
 
 # RZCustomEconomy {.tabset}
 
@@ -12,7 +9,6 @@ Economy toolkit — full control over trader assorts, buyback policies, hideout,
 > Full control over SPT's economy through config files : traders, flea market, hideout, crafting. Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
 > If you're looking for a ready-to-play experience, stay tuned for **FreeTarkov** : a full overhaul mod built on top of RZCustomEconomy, currently in development.
 
-> Use Notepad++ or VSCode to edit your config files, the default Windows Notepad will mess up your formatting and won't warn you about syntax errors.</br>[Download Notepad++](https://notepad-plus-plus.org/downloads/v8.9.2/) </br> [Download VSCode](https://code.visualstudio.com/)
 ---
 
 ---
@@ -23,7 +19,7 @@ Economy toolkit — full control over trader assorts, buyback policies, hideout,
 
 > **⚠️ By default, every feature in this mod is disabled.** Install it as-is and nothing changes in your game - it's a clean slate.
 
-Each feature has a dedicated on/off switch in `masterConfig.jsonc`. Flip it to `true` and the feature is live. That's it. Every switch maps directly to one of the tabs in this description, which contains the full documentation and config reference for that feature.
+Each feature has a dedicated on/off switch in `masterConfig.json`. Flip it to `true` and the feature is live. That's it. Every switch maps directly to one of the tabs in this description, which contains the full documentation and config reference for that feature.
 
 - 🏷️ **`EnableDefaultTrades`** — 🟢 On by default → see the **Default Trades** tab
 - 🔀 **`EnableRoutedTrades`** — 🔴 Off by default → see the **Routed Trades** tab
@@ -41,40 +37,39 @@ Pick what you need, leave the rest off. Features are fully independent - run any
 
 The three main features that control what players see at traders are **Default Trades**, **Routed Trades** and **Manual Trades**. It's worth understanding the difference before diving in.
 
-🏷️ **EnableDefaultTrades** keeps vanilla trader assorts intact and applies patches on top of them, for instance replacing barter requirements with a straight cash price. Setting it to false wipes all vanilla assorts entirely and ignores *defaultTradesConfig.jsonc*.
+🏷️ **EnableDefaultTrades** keeps vanilla trader assorts intact and applies patches on top of them, for instance replacing barter requirements with a straight cash price. Setting it to false wipes all vanilla assorts entirely and ignores *defaultTradesConfig.json*.
 
-🔀 **EnableRoutedTrades** takes a completely different approach : it rebuilds trader offers from scratch based on the handbook. Every item gets automatically assigned to a trader according to category rules you define. If set to false, *routedTradesConfig.jsonc* will be entirely ignored.
+🔀 **EnableRoutedTrades** takes a completely different approach : it rebuilds trader offers from scratch based on the handbook. Every item gets automatically assigned to a trader according to category rules you define. If set to false, *routedTradesConfig.json* will be entirely ignored.
 
-🛒 **EnableManualTrades** lets you define specific offers for specific traders with full control over every parameter : item, price, currency, barter, durability, attachments. Completely independent from the other two. If set to false, *manualTradesConfig.jsonc* will be entirely ignored.
-
----
+🛒 **EnableManualTrades** lets you define specific offers for specific traders with full control over every parameter : item, price, currency, barter, durability, attachments. Completely independent from the other two. If set to false, *manualTradesConfig.json* will be entirely ignored.
 
 ---
 
 ---
 
-> You can find all the following settings in `masterConfig.jsonc`
+---
+
+> You can find all the following settings in `masterConfig.json`
 
 ---
 
 ### *Main Features Switches*
 
-- 🏷️ **`EnableDefaultTrades`** — Master switch for default trader assorts. (`defaultTradesConfig.jsonc`)
-- 🔀 **`EnableRoutedTrades`** — Master switch for automatic handbook → trader routing. (`routedTradesConfig.jsonc`)
-- 🛒 **`EnableManualTrades`** — Master switch for manual offers. (`manualTradesConfig.jsonc`)
-- 👤 **`EnableFenceConfig`** — Master switch for Fence config. (`fenceConfig.jsonc`)
-- 🏪 **`EnableBuybackConfig`** — Master switch for trader buyback rules. (`buybackConfig.jsonc`)
-- 📦 **`EnableSupplyConfig`** — Master switch for supply configuration. (`supplyConfig.jsonc`)
-- 🏠 **`EnableHideoutConfig`** — Master switch for hideout patchess. (`hideoutConfig.jsonc`)
-- ⚗️ **`EnableCraftingConfig`** — Master switch for crafting recipe overrides. (`craftingConfig.jsonc`)
-- 🛡️ **`EnableInsuranceConfig`** — Master switch for insurance configuration. (`insuranceConfig.jsonc`)
+- 🏷️ **`EnableDefaultTrades`** — Master switch for default trader assorts. (`defaultTradesConfig.json`)
+- 🔀 **`EnableRoutedTrades`** — Master switch for automatic handbook → trader routing. (`routedTradesConfig.json`)
+- 🛒 **`EnableManualTrades`** — Master switch for manual offers. (`manualTradesConfig.json`)
+- 👤 **`EnableFenceConfig`** — Master switch for Fence config. (`fenceConfig.json`)
+- 🏪 **`EnableBuybackConfig`** — Master switch for trader buyback rules. (`buybackConfig.json`)
+- 📦 **`EnableSupplyConfig`** — Master switch for supply configuration. (`supplyConfig.json`)
+- 🏠 **`EnableHideoutConfig`** — Master switch for hideout patchess. (`hideoutConfig.json`)
+- ⚗️ **`EnableCraftingConfig`** — Master switch for crafting recipe overrides. (`craftingConfig.json`)
+- 🛡️ **`EnableInsuranceConfig`** — Master switch for insurance configuration. (`insuranceConfig.json`)
 
 ---
 
 ### *Secondary Features Switches*
 
 - **`DisableFleaMarket`** — Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-- **`UnlockAllTraders`** — Sets all traders as unlocked by default.
 
 ---
 
@@ -82,6 +77,18 @@ The three main features that control what players see at traders are **Default T
 
 Overrides the handbook price of any item by TPL.
 This affects auto-routing prices (which are based on handbook price), as well as any system in SPT that reads handbook prices (flea market base prices, trader sell prices, etc.).
+
+---
+
+---
+
+---
+
+
+> ⚠️ Use Notepad++ or VSCode to edit your config files, the default Windows Notepad will mess up your formatting and won't warn you about syntax errors. ----->
+> [Download Notepad++](https://notepad-plus-plus.org/downloads/v8.9.2/) - [Download VSCode](https://code.visualstudio.com/)
+
+*By the way, real Gs use Rider. I don’t make the rules.*
 
 ## 🏷️ Default Trades
 
@@ -93,7 +100,7 @@ This affects auto-routing prices (which are based on handbook price), as well as
 
 ---
 
-#### ⚙️ Configuration : `fenceConfig.jsonc`
+#### ⚙️ Configuration : `fenceConfig.json`
 
 **`NoBarterTraders`** — replaces barter schemes with a straight cash payment at handbook price, per trader. Each trader entry supports:
 
@@ -109,7 +116,7 @@ This affects auto-routing prices (which are based on handbook price), as well as
 
 **For visibility** — `ForceRouteAll` bypasses all filters and routes every item in the handbook. Combined with `AllItemsExamined`, nothing is hidden.
 
-**For economy overhauls** — instead of hand-editing dozens of assort jsonc files, you maintain a single config that describes the intent and the mod handles the rest.
+**For economy overhauls** — instead of hand-editing dozens of assort json files, you maintain a single config that describes the intent and the mod handles the rest.
 
 ---
 
@@ -117,11 +124,11 @@ This affects auto-routing prices (which are based on handbook price), as well as
 
 ---
 
-#### ⚙️ Configuration : `routedTradesConfig.jsonc`
+#### ⚙️ Configuration : `routedTradesConfig.json`
 
 - **`ForceRouteAll`** — Route every handbook item regardless of category routes and blacklists.
-- **`RouteModdedItemsOnly`** — Only route items not present in vanilla_handbook.jsonc (modded items). Mutually exclusive with RouteVanillaItemsOnly.
-- **`RouteVanillaItemsOnly`** — Only route items present in vanilla_handbook.jsonc (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
+- **`RouteModdedItemsOnly`** — Only route items not present in vanilla_handbook.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
+- **`RouteVanillaItemsOnly`** — Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
 - **`FallbackTrader`** — When ForceRouteAll is true, items with no matching category route go here.
 - **`Overrides`** — Per-TPL overrides that take precedence over category routes. When enabled, specific items can be redirected to a different trader, priced differently.
 - **`Blacklist`** — Items that are never routed to any trader, regardless of category routes. Use this for broken or invisible items, or anything you simply don't want sold.
@@ -136,7 +143,7 @@ This affects auto-routing prices (which are based on handbook price), as well as
 
 ---
 
-#### ⚙️ Configuration : `manualTradesConfig.jsonc`
+#### ⚙️ Configuration : `manualTradesConfig.json`
 
 Each offer supports:
 - Rouble price or barter payment (or both combined)
@@ -150,7 +157,7 @@ Each offer supports:
 
 > Controls Fence's item generation and offer injection. Fence is handled differently from other traders internally : this feature is independent from `EnableDefaultTrades`, `EnableRoutedTrades`, and `EnableManualTrades`.
 
-#### ⚙️ Configuration : `fenceConfig.jsonc`
+#### ⚙️ Configuration : `fenceConfig.json`
 
 The config is split into three sub-sections.
 
@@ -214,7 +221,7 @@ Completely independent from the default pool. Defines a weighted pool of offers 
 
 > 💡 The weighted draw means you can mix rare and common items in the same pool — a weapon with `Weight: 2` is twice as likely to appear as one with `Weight: 1`. Set extreme values (e.g. `Weight: 100` vs `Weight: 1`) to simulate truly rare drops.
 
-> 💡 Example config included. The default fenceConfig.jsonc ships with a ready-to-use custom pool listing every weapon in the game — including all weapons added by WTT - Content Backport — all priced in GP coins. Feel free to use it as a starting point or strip it down to whatever you actually need.
+> 💡 Example config included. The default fenceConfig.json ships with a ready-to-use custom pool listing every weapon in the game — including all weapons added by WTT - Content Backport — all priced in GP coins. Feel free to use it as a starting point or strip it down to whatever you actually need.
 
 ## 🏪 Buyback
 
@@ -226,7 +233,7 @@ Completely independent from the default pool. Defines a weighted pool of offers 
 
 ---
 
-#### ⚙️ Configuration : `buybackConfig.jsonc`
+#### ⚙️ Configuration : `buybackConfig.json`
 
 Each trader can be set to one of four modes:
 
@@ -245,7 +252,7 @@ Each trader can be set to one of four modes:
 
 ---
 
-#### ⚙️ Configuration : `supplyConfig.jsonc`
+#### ⚙️ Configuration : `supplyConfig.json`
 
 **`RestockTimes`** — Restock interval in seconds for each trader. If the configured interval is shorter than the trader's current timer, the timer is clamped immediately on server start — no need to wait out the old one.
 
@@ -258,23 +265,118 @@ Each trader can be set to one of four modes:
 
 ## 🏠 Hideout
 
-> ⚠️ New, hasn't been thoroughly tested.
-
-Controls hideout area requirements, construction times, and the bitcoin farm. By default all requirements and construction times are cleared — individual areas can be overridden with custom requirements per level if needed.
+> Full control over hideout area requirements, construction times, and the bitcoin farm through config files.
 
 ---
 
-### Configuration : `hideoutConfig.jsonc`
+---
 
-Each area supports the following fields:
+---
 
-- **`RemoveFromDb`** — removes the area from the database entirely
-- **`Enabled`** — whether the area is available to the player
-- **`DisplayLevel`** — whether the current level is displayed in the UI
-- **`StartingLevel`** — level the area starts at on a new profile
-- **`LevelRequirements`** — optional per-level requirements (trader loyalty, quest completion). If not defined, all requirements for that area are cleared
+#### ⚙️ Configuration : `hideoutConfig.json`
 
-Bitcoin farm has its own dedicated block:
+Each area supports the following fields :
+
+- **`RemoveFromDb`** — removes the area from the database entirely. Visually the area looks like it's already built at max level.
+- **`Enabled`** — whether the area is available to the player.
+- **`DisplayLevel`** — whether the current level is displayed in the UI.
+
+---
+
+#### Construction time
+
+- **`UseCustomConstructionTime`** — master toggle. If false, vanilla construction times are left untouched.
+- **`ConstructionTime`** — dict of stage level → time in seconds. Only stages listed here are patched.
+
+> 💡 Stages not listed in the dict default to `0`. To set everything to 0, just use an empty dict `{}`. To keep a specific stage at its vanilla value, don't use this feature for that area — `UseCustomConstructionTime` is all-or-nothing per area.
+
+```jsonc
+// Set all stages to 0 except stage 3 which takes 1 hour.
+"UseCustomConstructionTime": true,
+"ConstructionTime": {
+  "3": 3600
+}
+```
+
+---
+
+#### Requirements
+
+Each requirement type is controlled independently. For each type :
+
+- **`UseCustom*Requirements`** — master toggle for that type. If false, vanilla requirements of that type are left completely untouched.
+- When true : vanilla requirements of that type are **cleared** on every stage first, then the custom list is injected per stage.
+- To **only clear** vanilla requirements without injecting anything, set the toggle to true and leave the dict empty `{}`.
+
+```jsonc
+// Clear all vanilla item requirements, inject nothing.
+"UseCustomItemRequirements": true,
+"ItemRequirements": {}
+```
+
+Dict keys are stage level strings (`"1"`, `"2"`, `"3"`...). Stages not listed are left as-is after the clear. Each value is a list of requirements for that stage.
+
+---
+
+**`ItemRequirements`** — items the player must provide to build a stage.
+
+```jsonc
+"UseCustomItemRequirements": true,
+"ItemRequirements": {
+  "1": [ { "ItemTpl": "...", "ItemCount": 5, "ItemFunctional": false } ],
+  "2": [ { "ItemTpl": "...", "ItemCount": 10, "ItemFunctional": false } ]
+}
+```
+
+- `ItemTpl` — item template ID
+- `ItemCount` — quantity required
+- `ItemFunctional` — if true, the item must be functional (e.g. a loaded weapon)
+
+---
+
+**`AreaRequirements`** — other hideout areas that must be at a certain level before this stage can be built.
+
+```jsonc
+"UseCustomAreaRequirements": true,
+"AreaRequirements": {
+  "2": [ { "AreaName": "Generator", "AreaLevel": 1 } ]
+}
+```
+
+- `AreaName` — area name (matches the `HideoutAreas` enum, case-insensitive)
+- `AreaLevel` — minimum level required
+
+---
+
+**`SkillRequirements`** — player skills that must be at a certain level.
+
+```jsonc
+"UseCustomSkillRequirements": true,
+"SkillRequirements": {
+  "3": [ { "SkillName": "Crafting", "SkillLevel": 10 } ]
+}
+```
+
+- `SkillName` — skill name
+- `SkillLevel` — minimum level required
+
+---
+
+**`TraderRequirements`** — trader loyalty levels required before a stage can be built.
+
+```jsonc
+"UseCustomTraderRequirements": true,
+"TraderRequirements": {
+  "2": [ { "TraderName": "Mechanic", "TraderLoyalty": 2 } ]
+}
+```
+
+- `TraderName` — trader nickname as it appears in-game (case-insensitive)
+- `TraderLoyalty` — minimum loyalty level required
+
+---
+
+#### Bitcoin farm
 
 - **`ProductionSpeedMultiplier`** — multiplies production speed (e.g. `2.0` = twice as fast)
 - **`MaxCapacity`** — maximum number of bitcoins that can accumulate
@@ -286,7 +388,7 @@ Bitcoin farm has its own dedicated block:
 
 ---
 
-#### ⚙️ Configuration : `craftingConfig.jsonc`
+#### ⚙️ Configuration : `craftingConfig.json`
 
 - **`ClearAreas`** — list of hideout areas whose vanilla recipes will be wiped before injection
 - **`Recipes`** — recipes grouped by hideout area. Each recipe supports area level requirement, end product, count, production time, fuel requirement, and a list of input requirements (items or area levels)
@@ -297,7 +399,7 @@ Bitcoin farm has its own dedicated block:
 
 ---
 
-#### ⚙️ Configuration : `insuranceConfig.jsonc`
+#### ⚙️ Configuration : `insuranceConfig.json`
 
 - **`DisableAll`** — Disables insurance on every item in the game. If true, the blacklists below are ignored.
 - **`CategoryBlacklist`** — Disables insurance on all items belonging to the specified handbook categories. Sub-categories are included automatically. Ships with the full vanilla category list pre-filled, all disabled by default.
@@ -318,7 +420,7 @@ The primary use case is config authoring. Building a manual trade list or a Fenc
 
 ---
 
-#### ⚙️ Configuration : `devConfig.jsonc`
+#### ⚙️ Configuration : `devConfig.json`
 
 - **`EnableDevMode`** — Force all assort prices to 1 rouble, ignoring all price config.
 - **`EnableDevLogs`** — Enables verbose logging.
@@ -329,11 +431,11 @@ Dumps a flat list of items to `dev/item_dump.txt`. Each line contains the TPL, t
 
 - **`DumpEnable`** — Master switch for this feature.
 - **`DumpHandbookPrice`** — Whether to include the handbook price on each line.
-- **`DumpModdedItemsOnly`** — If true, only items not present in `vanilla_handbook.jsonc` are included. Useful to get a clean list of everything added by your mods without the noise of ~2000 vanilla entries.
+- **`DumpModdedItemsOnly`** — If true, only items not present in `vanilla_handbook.json` are included. Useful to get a clean list of everything added by your mods without the noise of ~2000 vanilla entries.
 - **`DumpOnlyFromCategories`** — Restricts the output to items belonging to the specified handbook categories. Sub-categories are included automatically.
 - **`DumpCategories`** — List of handbook category IDs to dump from. Each entry has a `CategoryId` and an `Enabled` toggle so you can flip categories on and off without editing the list.
 
-> 💡 The category filter and the modded-only filter can be combined : for instance, dump only modded weapons by enabling both `DumpModdedItemsOnly` and a weapons category filter. The default `devConfig.jsonc` ships with the full vanilla category list pre-filled, all disabled by default, ready to toggle.
+> 💡 The category filter and the modded-only filter can be combined : for instance, dump only modded weapons by enabling both `DumpModdedItemsOnly` and a weapons category filter. The default `devConfig.json` ships with the full vanilla category list pre-filled, all disabled by default, ready to toggle.
 
 ## 🔌 Mod Compatibility
 

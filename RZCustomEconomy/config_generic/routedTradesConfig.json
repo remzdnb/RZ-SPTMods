@@ -1,0 +1,180 @@
+{
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // Auto-Routing Configuration
+  //
+  // Controls how handbook items are automatically assigned to traders.
+  // See the README for a full explanation of each setting.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  // Route every handbook item regardless of category routes and blacklists.
+  "ForceRouteAll": false,
+
+  // Enable overrides.
+  "EnableOverrides": false,
+
+  // Only route items not present in vanilla_handbook.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
+  "RouteModdedItemsOnly": false,
+
+  // Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
+  "RouteVanillaItemsOnly": false,
+
+  // When ForceRouteAll is true, items with no matching category route go here.
+  // Set to a trader name (e.g. "Fence") or null to skip unmatched items.
+  "FallbackTrader": "Arena",
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // AUTOMATIC HANDBOOK → TRADER ROUTING
+  // Keyed by trader ID. Each entry is a list of handbook category routes for that trader.
+  // Sub-categories inherit the parent route automatically.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "CategoryRoutes": {
+
+    // PRAPOR
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "54cb50c76803fa8b248b4571": [
+      { "CategoryId": "5b47574386f77428ca22b33b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Rounds
+      { "CategoryId": "5b47574386f77428ca22b33c", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Ammo packs
+      { "CategoryId": "5b5f754a86f774094242f19b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Magazines
+      { "CategoryId": "5b5f7a2386f774093f2ed3c4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Throwables
+    ],
+
+    // THERAPIST
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "54cb57776803fa99248b456e": [
+      { "CategoryId": "5b47574386f77428ca22b338", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Medkits
+      { "CategoryId": "5b47574386f77428ca22b339", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Injury treatment
+      { "CategoryId": "5b47574386f77428ca22b33a", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Injectors
+      { "CategoryId": "5b47574386f77428ca22b337", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Pills
+      { "CategoryId": "5b47574386f77428ca22b335", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Drinks
+      { "CategoryId": "5b47574386f77428ca22b336", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Food
+      { "CategoryId": "5b47574386f77428ca22b2f3", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Medical supplies
+    ],
+
+    // PEACEKEEPER
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5935c25fb3acc3127c3d8cd9": [
+      { "CategoryId": "5b5f7a0886f77409407a7f96", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Melee weapons
+      { "CategoryId": "5b5f792486f77447ed5636b3", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Pistols
+      { "CategoryId": "5b5f78e986f77447ed5636b1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Assault carbines
+      { "CategoryId": "5b5f78fc86f77409407a7f90", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Assault rifles
+      { "CategoryId": "5b5f791486f774093f2ed3be", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Marksman rifles
+      { "CategoryId": "5b5f794b86f77409407a7f92", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Shotguns
+      { "CategoryId": "5b5f796a86f774093f2ed3c0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Submachine guns
+      { "CategoryId": "5b5f798886f77447ed5636b5", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Bolt-action rifles
+      { "CategoryId": "5b5f79a486f77409407a7f94", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Machine guns
+      { "CategoryId": "5b5f79d186f774093f2ed3c2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Grenade launchers
+      { "CategoryId": "5b5f79eb86f77447ed5636b7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Special weapons
+    ],
+
+    // SKIER
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "58330581ace78e27b8b10cee": [
+      { "CategoryId": "5b5f78b786f77447ed5636af", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Money
+      { "CategoryId": "5b47574386f77428ca22b342", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true  }, // Keys
+      { "CategoryId": "5b47574386f77428ca22b343", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Maps
+    ],
+
+    // MECHANIC
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5a7c2eca46aef81a7ca2145d": [
+      { "CategoryId": "5b5f71a686f77447ed5636ab", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Weapon parts & mods
+      { "CategoryId": "5b5f71b386f774093f2ecf11", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Functional mods
+    ],
+
+    // RAGMAN
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5ac3b934156ae10c4430e83c": [
+      { "CategoryId": "5b5f701386f774093f2ecf0f", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Body armors
+      { "CategoryId": "5b5f6f8786f77447ed563642", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Tactical rigs
+      { "CategoryId": "5b5f6f6c86f774093f2ecf0b", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Backpacks
+      { "CategoryId": "5b5f6f3c86f774094242ef87", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Headsets
+      { "CategoryId": "5b5f704686f77447ec5d76d7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Gear components
+      { "CategoryId": "5b47574386f77428ca22b32f", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Facecovers
+      { "CategoryId": "5b47574386f77428ca22b330", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Headgear
+      { "CategoryId": "5b47574386f77428ca22b331", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Eyewear
+    ],
+
+    // JAEGER
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "5c0647fdd443bc2504c2d371": [
+      { "CategoryId": "5b5f6fa186f77409407a7eb7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Storage containers
+      { "CategoryId": "5b5f6fd286f774093f2ecf0d", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Secure containers
+    ],
+
+    // REF
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "6617beeaa9cfa777ca915b7c": [
+      { "CategoryId": "5b47574386f77428ca22b341", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Info items
+      { "CategoryId": "5b47574386f77428ca22b33e", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Barter items
+      { "CategoryId": "5b47574386f77428ca22b2ed", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Energy elements
+      { "CategoryId": "5b47574386f77428ca22b2ef", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Electronics
+      { "CategoryId": "5b47574386f77428ca22b2ee", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Building materials
+      { "CategoryId": "5b47574386f77428ca22b2f0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Household materials
+      { "CategoryId": "5b47574386f77428ca22b2f2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Flammable materials
+      { "CategoryId": "5b47574386f77428ca22b2f1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Valuables
+      { "CategoryId": "5b47574386f77428ca22b2f6", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Tools
+      { "CategoryId": "5b47574386f77428ca22b345", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Special equipment
+      { "CategoryId": "5b47574386f77428ca22b2f4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Others
+    ]
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // PER-TPL OVERRIDES
+  //
+  // Take precedence over auto-routing for specific items.
+  // TraderName = "" → blacklists this item without touching UserBlacklist.
+  // PriceRoubles = 0 → uses handbook price * PriceMultiplier.
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "Overrides": [
+    {
+      "ItemTpl": "5c0126f40db834002a125382",
+      "TraderName": "Jaeger",
+      "PriceRoubles": 0,
+      "PriceMultiplier": 1.0,
+      "LoyaltyLevel": 1,
+      "StackCount": -1,
+      "BarterItems": [
+        {
+          "ItemTpl": "5c13cef886f774072e618e82",
+          "Count": 1
+        }
+      ]
+    }
+  ],
+
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // BLACKLIST
+  // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "Blacklist": [
+    "5943d9c186f7745a13413ac9", // Shrapnel
+    "5996f6d686f77467977ba6cc", // MON-50 Shrapnel
+    "5996f6fc86f7745e585b4de3", // M67 Shrapnel
+    "5996f6cb86f774678763a6ca", // RGD-5 Shrapnel
+    "67654a6759116d347b0bfb86", // V40 Shrapnel
+    "5751961824597720a31c09ac", // (off)Black Keycard
+    "5ae083b25acfc4001a5fc702", // Master Hand
+    "5ae089fb5acfc408fb13989b", // Trophy
+    "55d617094bdc2d89028b4568", // KAC QDC 6.5x35 sound suppressor
+    "5648b62b4bdc2d9d488b4585", // GP-34 40mm underbarrel grenade launcher
+    "62811d61578c54356d6d67ea", // !!!DO_NOT_USE!!!AI AXMC 7.62x51mm bolt assembly
+    "679ba90d269ddfea47012159", // Chained Labrys
+    "63a8970d7108f713591149f5", // Small Christmas gift
+    "63a898a328e385334e0640a5", // Christmas gift
+    "63a897c6b1ff6e29734fcc95", // Large Christmas gift
+    "634959225289190e5e773b3b", // Pumpkin with sweets
+    "678fa929819ddc4c350c0317", // Valve handwheel
+    "67ab3d4b83869afd170fdd3f", // BBQ-S43 gas torch
+    "58ac60eb86f77401897560ff", // Balaclava_dev
+    "59e8936686f77467ce798647", // Balaclava_test
+    "5449016a4bdc2d6f028b456f", // Rouble
+    "6087e570b998180e9f76dc24", // Superfors DB 2020 Dead Blow Hammer
+    "63495c500c297e20065a08b1", // Old hand scythe
+    "62a09ec84f842e1bd12da3f2", // Missam forklift key
+    "5d1b33a686f7742523398398", // Canister with purified water
+    "5d1b376e86f774252519444e", // Bottle of Fierce Hatchling moonshine
+    "59e3577886f774176a362503"  // Pack of sugar
+  ]
+}
