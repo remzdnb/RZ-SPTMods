@@ -24,27 +24,30 @@ public class InsurancePatcher(
         if (!masterConfig.EnableInsuranceConfig)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<InsuranceConfig>(InsuranceConfig.FileName, Assembly.GetExecutingAssembly());
+        var insuranceConfig = configLoader.Load<InsuranceConfig>(InsuranceConfig.FileName, Assembly.GetExecutingAssembly());
 
         var items = databaseService.GetTables().Templates?.Items;
-        if (items is null)
-        {
+        if (items is null) {
             logger.LogWarning("[RZCustomEconomy] Templates.Items is null — skipping insurance patch.");
             return Task.CompletedTask;
         }
 
-        if (config.DisableAll)
+        if (insuranceConfig.DisableAll)
         {
             foreach (var (_, item) in items)
             {
                 if (item.Properties is not null)
                     item.Properties.InsuranceDisabled = true;
             }
-            logger.LogInformation("[RZCustomEconomy] Insurance disabled on all items.");
+
+            if (masterConfig.EnableDevLogs) {
+                logger.LogInformation("[RZCustomEconomy] Insurance disabled on all items.");
+            }
+
             return Task.CompletedTask;
         }
 
-        var blacklistedTpls = BuildTplSet(config, items);
+        var blacklistedTpls = BuildTplSet(insuranceConfig, items);
         if (blacklistedTpls.Count == 0)
             return Task.CompletedTask;
 
@@ -54,7 +57,10 @@ public class InsurancePatcher(
                 item.Properties.InsuranceDisabled = true;
         }
 
-        logger.LogInformation("[RZCustomEconomy] Insurance disabled on {Count} item(s).", blacklistedTpls.Count);
+        if (masterConfig.EnableDevLogs) {
+            logger.LogInformation("[RZCustomEconomy] Insurance disabled on {Count} item(s).", blacklistedTpls.Count);
+        }
+
         return Task.CompletedTask;
     }
 
@@ -99,8 +105,9 @@ public class InsurancePatcher(
             if (!result.Add(current))
                 continue;
 
-            foreach (var child in handbook.Categories.Where(c => c.ParentId?.ToString() == current))
+            foreach (var child in handbook.Categories.Where(c => c.ParentId?.ToString() == current)) {
                 queue.Enqueue(child.Id.ToString());
+            }
         }
 
         return result;

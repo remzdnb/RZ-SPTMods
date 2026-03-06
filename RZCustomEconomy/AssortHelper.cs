@@ -29,9 +29,9 @@ public class AssortHelper(DatabaseService databaseService, ConfigLoader configLo
 
     public List<BarterScheme> BuildPayment(int priceRoubles, List<BarterItem> barterItems)
     {
-        var devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
-        if (devConfig.EnableDevMode)
+        if (masterConfig.EnableDevMode)
         {
             // In DevMode, all prices are forced to 1 rouble regardless of config.
             return [new BarterScheme { Template = ItemTpl.MONEY_ROUBLES, Count = 1 }];

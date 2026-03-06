@@ -10,31 +10,31 @@
   "EnableRoutedTrades": false,
 
   // Master switch for manual trader offers. (manualTradesConfig.json)
-  "EnableManualTrades": false,
+  "EnableManualTrades": true,
 
   // Master switch for Fence configuration. (fenceConfig.json)
-  "EnableFenceConfig": false,
+  "EnableFenceConfig": true,
 
   // Master switch for trader buyback rules configuration. (buybackConfig.json)
-  "EnableBuybackConfig": false,
+  "EnableBuybackConfig": true,
 
   // Master switch for trader supply configuration. (supplyConfig.json)
-  "EnableSupplyConfig": false,
+  "EnableSupplyConfig": true,
 
   // Master switch for hideout configuration. (hideoutConfig.json)
-  "EnableHideoutConfig": false,
+  "EnableHideoutConfig": true,
 
   // Master switch for crafting recipe overrides. (craftingConfig.json)
-  "EnableCraftingConfig": false,
+  "EnableCraftingConfig": true,
 
   // Master switch for insurance configuration. (insuranceConfig.json)
-  "EnableInsuranceConfig": false,
+  "EnableInsuranceConfig": true,
 
   // Master switch for handbook prices overrides. (handbookPricesConfig.json)
-  "EnableHandbookPricesConfig": false,
+  "EnableHandbookPricesConfig": true,
 
   // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-  "DisableFleaMarket": false,
+  "DisableFleaMarket": true,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // DEV SETTINGS

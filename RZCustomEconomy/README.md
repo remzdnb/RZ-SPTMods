@@ -1,12 +1,10 @@
-- Removed UnlockJaeger setting, doesn't belong here and can be done with SVM
-
 # RZCustomEconomy {.tabset}
 
 Economy toolkit — full control over trader assorts, buyback policies, hideout, and crafting through config files.
 
 ## 🔎 Overview
 
-> Full control over SPT's economy through config files : traders, flea market, hideout, crafting. Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
+> Full control over SPT's economy through config files : traders, crafting, insurance... Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
 > If you're looking for a ready-to-play experience, stay tuned for **FreeTarkov** : a full overhaul mod built on top of RZCustomEconomy, currently in development.
 
 ---
@@ -27,9 +25,10 @@ Each feature has a dedicated on/off switch in `masterConfig.json`. Flip it to `t
 - 👤 **`EnableFenceConfig`** — 🔴 Off by default → see the **Fence** tab
 - 🏪 **`EnableBuybackConfig`** — 🔴 Off by default → see the **Buyback** tab
 - 📦 **`EnableSupplyConfig`** — 🔴 Off by default → see the **Supply** tab
-- 🏠 **`EnableHideoutConfig`** — 🔴 Off by default → see the **Hideout** tab
-- ⚗️ **`EnableCraftingConfig`** — 🔴 Off by default → see the **Crafting** tab
+- 📝 **`EnableHandbookPricesConfig`** — 🔴 Off by default → see the **Handbook Prices** tab
 - 🛡️ **`EnableInsuranceConfig`** — 🔴 Off by default → see the **Insurance** tab
+- 🏠 **`EnableHideoutConfig`** — 🔴 Off by default → see the **Hideout** tab
+- ⚗️ **`EnableCraftingConfig`** — 🔴 Off by default → see the **Crafting** tab\
 
 Pick what you need, leave the rest off. Features are fully independent - run any combination you want.
 
@@ -61,22 +60,16 @@ The three main features that control what players see at traders are **Default T
 - 👤 **`EnableFenceConfig`** — Master switch for Fence config. (`fenceConfig.json`)
 - 🏪 **`EnableBuybackConfig`** — Master switch for trader buyback rules. (`buybackConfig.json`)
 - 📦 **`EnableSupplyConfig`** — Master switch for supply configuration. (`supplyConfig.json`)
+- 📝 **`EnableHandbookPricesConfig`** — Master switch for handbook prices configuration. (`handbookPricesConfig.json`)
+- 🛡️ **`EnableInsuranceConfig`** — Master switch for insurance configuration. (`insuranceConfig.json`)
 - 🏠 **`EnableHideoutConfig`** — Master switch for hideout patchess. (`hideoutConfig.json`)
 - ⚗️ **`EnableCraftingConfig`** — Master switch for crafting recipe overrides. (`craftingConfig.json`)
-- 🛡️ **`EnableInsuranceConfig`** — Master switch for insurance configuration. (`insuranceConfig.json`)
 
 ---
-
-### *Secondary Features Switches*
 
 - **`DisableFleaMarket`** — Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
 
----
-
-### *Handbook Price Overrides*
-
-Overrides the handbook price of any item by TPL.
-This affects auto-routing prices (which are based on handbook price), as well as any system in SPT that reads handbook prices (flea market base prices, trader sell prices, etc.).
+> The flea market is not something I'm interested in working on. Disabling it entirely is the only flea-related feature this mod will ever have.
 
 ---
 
@@ -87,8 +80,6 @@ This affects auto-routing prices (which are based on handbook price), as well as
 
 > ⚠️ Use Notepad++ or VSCode to edit your config files, the default Windows Notepad will mess up your formatting and won't warn you about syntax errors. ----->
 > [Download Notepad++](https://notepad-plus-plus.org/downloads/v8.9.2/) - [Download VSCode](https://code.visualstudio.com/)
-
-*By the way, real Gs use Rider. I don’t make the rules.*
 
 ## 🏷️ Default Trades
 
@@ -263,135 +254,30 @@ Each trader can be set to one of four modes:
 
 > 💡 Both modes can be active simultaneously — multipliers are combined.
 
-## 🏠 Hideout
+> ⚠️ **Stock multipliers are not compatible with routed trades.** Routed offers are automatically injected as unlimited stock, which means they have no `BuyRestrictionMax` to multiply, the supply patcher skips them entirely. This is a known limitation with no planned fix for now, as unlimited stock is the intended behavior for routed trades. If you need stock restrictions on specific items, use manual trades instead.
 
-> Full control over hideout area requirements, construction times, and the bitcoin farm through config files.
+## 📝 Handbook Prices
+
+> Overrides the handbook price of any item by TPL.
+
+---
 
 ---
 
 ---
 
----
+#### ⚙️ Configuration : `handbookPricesConfig.json`
 
-#### ⚙️ Configuration : `hideoutConfig.json`
-
-Each area supports the following fields :
-
-- **`RemoveFromDb`** — removes the area from the database entirely. Visually the area looks like it's already built at max level.
-- **`Enabled`** — whether the area is available to the player.
-- **`DisplayLevel`** — whether the current level is displayed in the UI.
-
----
-
-#### Construction time
-
-- **`UseCustomConstructionTime`** — master toggle. If false, vanilla construction times are left untouched.
-- **`ConstructionTime`** — dict of stage level → time in seconds. Only stages listed here are patched.
-
-> 💡 Stages not listed in the dict default to `0`. To set everything to 0, just use an empty dict `{}`. To keep a specific stage at its vanilla value, don't use this feature for that area — `UseCustomConstructionTime` is all-or-nothing per area.
-
+A flat dict of `TPL → price in roubles`. Any item in the game can be overridden here.
 ```jsonc
-// Set all stages to 0 except stage 3 which takes 1 hour.
-"UseCustomConstructionTime": true,
-"ConstructionTime": {
-  "3": 3600
-}
+"62330c18744e5e31df12f516": 186, // .357 Magnum JHP
+"59faff1d86f7746c51718c9c": 35000 // Physical bitcoin
 ```
 
----
+Handbook prices are the foundation of several SPT systems, this feature has broad effects beyond just what's visible at traders :
 
-#### Requirements
-
-Each requirement type is controlled independently. For each type :
-
-- **`UseCustom*Requirements`** — master toggle for that type. If false, vanilla requirements of that type are left completely untouched.
-- When true : vanilla requirements of that type are **cleared** on every stage first, then the custom list is injected per stage.
-- To **only clear** vanilla requirements without injecting anything, set the toggle to true and leave the dict empty `{}`.
-
-```jsonc
-// Clear all vanilla item requirements, inject nothing.
-"UseCustomItemRequirements": true,
-"ItemRequirements": {}
-```
-
-Dict keys are stage level strings (`"1"`, `"2"`, `"3"`...). Stages not listed are left as-is after the clear. Each value is a list of requirements for that stage.
-
----
-
-**`ItemRequirements`** — items the player must provide to build a stage.
-
-```jsonc
-"UseCustomItemRequirements": true,
-"ItemRequirements": {
-  "1": [ { "ItemTpl": "...", "ItemCount": 5, "ItemFunctional": false } ],
-  "2": [ { "ItemTpl": "...", "ItemCount": 10, "ItemFunctional": false } ]
-}
-```
-
-- `ItemTpl` — item template ID
-- `ItemCount` — quantity required
-- `ItemFunctional` — if true, the item must be functional (e.g. a loaded weapon)
-
----
-
-**`AreaRequirements`** — other hideout areas that must be at a certain level before this stage can be built.
-
-```jsonc
-"UseCustomAreaRequirements": true,
-"AreaRequirements": {
-  "2": [ { "AreaName": "Generator", "AreaLevel": 1 } ]
-}
-```
-
-- `AreaName` — area name (matches the `HideoutAreas` enum, case-insensitive)
-- `AreaLevel` — minimum level required
-
----
-
-**`SkillRequirements`** — player skills that must be at a certain level.
-
-```jsonc
-"UseCustomSkillRequirements": true,
-"SkillRequirements": {
-  "3": [ { "SkillName": "Crafting", "SkillLevel": 10 } ]
-}
-```
-
-- `SkillName` — skill name
-- `SkillLevel` — minimum level required
-
----
-
-**`TraderRequirements`** — trader loyalty levels required before a stage can be built.
-
-```jsonc
-"UseCustomTraderRequirements": true,
-"TraderRequirements": {
-  "2": [ { "TraderName": "Mechanic", "TraderLoyalty": 2 } ]
-}
-```
-
-- `TraderName` — trader nickname as it appears in-game (case-insensitive)
-- `TraderLoyalty` — minimum loyalty level required
-
----
-
-#### Bitcoin farm
-
-- **`ProductionSpeedMultiplier`** — multiplies production speed (e.g. `2.0` = twice as fast)
-- **`MaxCapacity`** — maximum number of bitcoins that can accumulate
-- **`GpuBoostRate`** — GPU boost rate
-
-## ⚗️ Crafting
-
-> Define custom crafting recipes per hideout area, and optionally clear all existing recipes for specific areas before injecting your own.
-
----
-
-#### ⚙️ Configuration : `craftingConfig.json`
-
-- **`ClearAreas`** — list of hideout areas whose vanilla recipes will be wiped before injection
-- **`Recipes`** — recipes grouped by hideout area. Each recipe supports area level requirement, end product, count, production time, fuel requirement, and a list of input requirements (items or area levels)
+- **Routed trades** — routed offer prices are derived from handbook price, so overriding a price here directly changes what it costs at the trader.
+- **Trader sell prices** — what traders pay when buying items from the player is also handbook-based.
 
 ## 🛡️ Insurance
 
@@ -409,33 +295,76 @@ Dict keys are stage level strings (`"1"`, `"2"`, `"3"`...). Stages not listed ar
 
 > 📝 All other insurance-related settings are already covered by ServerValueModifier. No point duplicating them here.
 
-## 🛠️ Dev Tools
+## 🏠 Hideout
 
->A utility that runs on server start and dumps item data from the live database directly to files in the `dev/` folder. Since it reads from the actual loaded database - after all mods have injected their content - the output always reflects exactly what's available in your current install, vanilla and modded alike.
-The primary use case is config authoring. Building a manual trade list or a Fence custom pool by hand means hunting down TPLs one by one, which is tedious. Here you can dump a filtered, pre-formatted list of every item you care about in one shot, then feed that list directly to an AI to generate a ready-to-paste config block : prices, weights, currencies and all. The dumps are designed with that workflow in mind.
-
----
+> Full control over hideout area requirements, construction times, and the bitcoin farm through config files.
 
 ---
 
 ---
 
-#### ⚙️ Configuration : `devConfig.json`
+---
 
-- **`EnableDevMode`** — Force all assort prices to 1 rouble, ignoring all price config.
-- **`EnableDevLogs`** — Enables verbose logging.
+#### ⚙️ Configuration : `hideoutConfig.json`
 
-#### *Item Dump*
+---
 
-Dumps a flat list of items to `dev/item_dump.txt`. Each line contains the TPL, the English display name, and optionally the handbook price.
+#### Area fields
 
-- **`DumpEnable`** — Master switch for this feature.
-- **`DumpHandbookPrice`** — Whether to include the handbook price on each line.
-- **`DumpModdedItemsOnly`** — If true, only items not present in `vanilla_handbook.json` are included. Useful to get a clean list of everything added by your mods without the noise of ~2000 vanilla entries.
-- **`DumpOnlyFromCategories`** — Restricts the output to items belonging to the specified handbook categories. Sub-categories are included automatically.
-- **`DumpCategories`** — List of handbook category IDs to dump from. Each entry has a `CategoryId` and an `Enabled` toggle so you can flip categories on and off without editing the list.
+- **`RemoveFromDb`** — removes the area from the database entirely. Visually the area looks like it's already built at max level.
+- **`Enabled`** — whether the area is available to the player.
+- **`DisplayLevel`** — whether the current level is displayed in the UI.
 
-> 💡 The category filter and the modded-only filter can be combined : for instance, dump only modded weapons by enabling both `DumpModdedItemsOnly` and a weapons category filter. The default `devConfig.json` ships with the full vanilla category list pre-filled, all disabled by default, ready to toggle.
+---
+
+#### Construction time
+
+- **`UseCustomConstructionTime`** — master toggle. If false, vanilla construction times are left untouched.
+- **`ConstructionTime`** — dict of stage level → time in seconds. Stages not listed default to `0`. Use an empty dict `{}` to set everything to instant.
+
+---
+
+#### Requirements
+
+Each requirement type (`Item`, `Area`, `Skill`, `TraderLoyalty`) is controlled independently via a `UseCustom*` toggle and a matching dict.
+
+- When **true** : vanilla requirements of that type are **cleared** on every stage first, then the dict is injected per stage.
+- When **false** : vanilla requirements of that type are left completely untouched.
+- To **only clear** without injecting anything, set the toggle to true and leave the dict empty `{}`.
+
+Dict keys are stage level strings (`"1"`, `"2"`, `"3"`...). Stages not listed are left as-is after the clear.
+
+Each requirement type expects the following fields per entry :
+
+- **`ItemRequirements`** — `ItemTpl`, `ItemCount`
+- **`AreaRequirements`** — `AreaName` (matches `HideoutAreas` enum, case-insensitive), `AreaLevel`
+- **`SkillRequirements`** — `SkillName`, `SkillLevel`
+- **`TraderRequirements`** — `TraderName` (trader nickname, case-insensitive), `TraderLoyalty`
+
+---
+
+#### Found in Raid
+
+- **`RequireFoundInRaid`** — forces `IsSpawnedInSession` on every item requirement across all areas and all stages, after all custom patches have been applied. `true` = FIR required everywhere, `false` = FIR removed everywhere, `null` = untouched.
+
+---
+
+#### Bitcoin farm
+
+- **`ProductionSpeedMultiplier`** — divides the base production time. e.g. `2.0` = twice as fast. (default: `1.0` → 145000s per bitcoin)
+- **`MaxCapacity`** — maximum number of bitcoins that can accumulate. (default: `3`)
+- **`GpuBoostRate`** — GPU boost rate per card. (default: `0.041225`)
+
+## ⚗️ Crafting
+
+> Define custom crafting recipes per hideout area, and optionally clear all existing recipes for specific areas before injecting your own.
+
+---
+
+#### ⚙️ Configuration : `craftingConfig.json`
+
+- **`ClearAreas`** — list of hideout areas whose vanilla recipes will be wiped before injection
+- **`Recipes`** — recipes grouped by hideout area. Each recipe supports area level requirement, end product, count, production time, fuel requirement, and a list of input requirements (items or area levels)
 
 ## 🔌 Mod Compatibility
 

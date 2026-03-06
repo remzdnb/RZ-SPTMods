@@ -33,9 +33,6 @@
   // Both can be active simultaneously — multipliers are combined.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  // Master switch for stock amount multipliers.
-  "EnableStockMultipliers": true,
-
   // Stock amount multipliers.
   "StockMultipliers": {
 
@@ -53,7 +50,7 @@
     },
 
     // BY CATEGORY
-    "EnableByCategory": false,
+    "EnableByCategory": true,
     "ByCategory": {
       "5b47574386f77428ca22b33b": 1.0, // Rounds
       "5b47574386f77428ca22b33c": 1.0, // Ammo packs

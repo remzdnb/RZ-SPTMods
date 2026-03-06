@@ -23,9 +23,10 @@ public class MasterConfig
     public bool EnableCraftingConfig { get; set; } = true;
     public bool EnableInsuranceConfig { get; set; } = true;
     public bool EnableHandbookPricesConfig { get; set; } = true;
-
     public bool DisableFleaMarket { get; set; } = true;
-    public Dictionary<string, int> HandbookPrices { get; set; } = new();
+
+    public bool EnableDevMode { get; set; } = false;
+    public bool EnableDevLogs { get; set; } = false;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -198,23 +199,21 @@ public class BuybackConfig
 // supplyConfig.json
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
+public class SupplyConfig
+{
+    public const string FileName = "supplyConfig.json";
+
+    public bool EnableRestockTimes { get; set; } = true;
+    public Dictionary<string, int> RestockTimes { get; set; } = new();
+    public StockMultipliersConfig StockMultipliers { get; set; } = new();
+}
+
 public class StockMultipliersConfig
 {
     public bool EnableByTrader { get; set; } = false;
     public Dictionary<string, double> ByTrader { get; set; } = new();
     public bool EnableByCategory { get; set; } = false;
     public Dictionary<string, double> ByCategory { get; set; } = new();
-}
-
-public class SupplyConfig
-{
-    public const string FileName = "supplyConfig.json";
-
-    public bool EnableRestockTimes { get; set; } = true;
-    public bool EnableStockMultipliers { get; set; } = true;
-
-    public Dictionary<string, int> RestockTimes { get; set; } = new();
-    public StockMultipliersConfig StockMultipliers { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -227,6 +226,7 @@ public class HideoutConfig
 
     public Dictionary<string, HideoutAreaConfig> Areas { get; init; } = new();
     public BitcoinFarmConfig? BitcoinFarm { get; set; }
+    public bool? RequireFoundInRaid { get; set; } = null;
 }
 
 public class HideoutAreaConfig
@@ -351,25 +351,14 @@ public record CategoryBlacklistEntry
 }
 
 // ─────────────────────────────────────────────────────────────────────────
-// devConfig.json
+// handbookPricesConfig.json
 // ─────────────────────────────────────────────────────────────────────────
 
-public class DevConfig
+public class HandbookPricesConfig
 {
-    public const string FileName = "devConfig.json";
+    public const string FileName = "handbookPricesConfig.json";
 
-    // Items dump
-    public bool EnableDevMode { get; set; } = false;
-    public bool EnableDevLogs { get; set; } = false;
-    public bool DumpEnable { get; set; } = false;
-    public bool DumpHandbookPrice { get; set; } = false;
-    public bool DumpModdedItemsOnly { get; set; } = false;
-    public bool DumpOnlyFromCategories { get; set; } = false;
-    public List<CategoryRoute> DumpCategories { get; set; } = new();
-
-
-    // Category dump
-    public bool DumpCategoriesEnable { get; set; } = false;
+    public Dictionary<string, int> Prices { get; set; } = new();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

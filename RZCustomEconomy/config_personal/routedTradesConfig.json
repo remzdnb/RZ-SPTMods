@@ -100,22 +100,22 @@
     "5c0647fdd443bc2504c2d371": [
       { "CategoryId": "5b5f6fa186f77409407a7eb7", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Storage containers
       { "CategoryId": "5b5f6fd286f774093f2ecf0d", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Secure containers
+      { "CategoryId": "5b47574386f77428ca22b341", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Info items
+      { "CategoryId": "5b47574386f77428ca22b33e", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Barter items
+      { "CategoryId": "5b47574386f77428ca22b2ed", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Energy elements
+      { "CategoryId": "5b47574386f77428ca22b2ef", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Electronics
+      { "CategoryId": "5b47574386f77428ca22b2ee", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Building materials
+      { "CategoryId": "5b47574386f77428ca22b2f0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Household materials
+      { "CategoryId": "5b47574386f77428ca22b2f2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Flammable materials
+      { "CategoryId": "5b47574386f77428ca22b2f1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Valuables
+      { "CategoryId": "5b47574386f77428ca22b2f6", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Tools
+      { "CategoryId": "5b47574386f77428ca22b345", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Special equipment
+      { "CategoryId": "5b47574386f77428ca22b2f4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": true }, // Others
     ],
 
     // REF
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
     "6617beeaa9cfa777ca915b7c": [
-      { "CategoryId": "5b47574386f77428ca22b341", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Info items
-      { "CategoryId": "5b47574386f77428ca22b33e", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Barter items
-      { "CategoryId": "5b47574386f77428ca22b2ed", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Energy elements
-      { "CategoryId": "5b47574386f77428ca22b2ef", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Electronics
-      { "CategoryId": "5b47574386f77428ca22b2ee", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Building materials
-      { "CategoryId": "5b47574386f77428ca22b2f0", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Household materials
-      { "CategoryId": "5b47574386f77428ca22b2f2", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Flammable materials
-      { "CategoryId": "5b47574386f77428ca22b2f1", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Valuables
-      { "CategoryId": "5b47574386f77428ca22b2f6", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Tools
-      { "CategoryId": "5b47574386f77428ca22b345", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Special equipment
-      { "CategoryId": "5b47574386f77428ca22b2f4", "PriceMultiplier": 1.0, "LoyaltyLevel": 1, "Enabled": false }, // Others
     ]
   },
 
@@ -160,21 +160,58 @@
     "55d617094bdc2d89028b4568", // KAC QDC 6.5x35 sound suppressor
     "5648b62b4bdc2d9d488b4585", // GP-34 40mm underbarrel grenade launcher
     "62811d61578c54356d6d67ea", // !!!DO_NOT_USE!!!AI AXMC 7.62x51mm bolt assembly
-    "679ba90d269ddfea47012159", // Chained Labrys
     "63a8970d7108f713591149f5", // Small Christmas gift
     "63a898a328e385334e0640a5", // Christmas gift
     "63a897c6b1ff6e29734fcc95", // Large Christmas gift
     "634959225289190e5e773b3b", // Pumpkin with sweets
     "678fa929819ddc4c350c0317", // Valve handwheel
     "67ab3d4b83869afd170fdd3f", // BBQ-S43 gas torch
+
+    "5449016a4bdc2d6f028b456f", // Rouble
+    "62a09ec84f842e1bd12da3f2", // Missam forklift key
+
+    "5e997f0b86f7741ac73993e2", // Sanitar's bag
     "58ac60eb86f77401897560ff", // Balaclava_dev
     "59e8936686f77467ce798647", // Balaclava_test
-    "5449016a4bdc2d6f028b456f", // Rouble
-    "6087e570b998180e9f76dc24", // Superfors DB 2020 Dead Blow Hammer
-    "63495c500c297e20065a08b1", // Old hand scythe
-    "62a09ec84f842e1bd12da3f2", // Missam forklift key
+
     "5d1b33a686f7742523398398", // Canister with purified water
     "5d1b376e86f774252519444e", // Bottle of Fierce Hatchling moonshine
-    "59e3577886f774176a362503"  // Pack of sugar
+    //"59e3577886f774176a362503", // Pack of sugar
+    "5d403f9186f7743cac3f229b", // Bottle of Dan Jackiel whiskey
+    "5d40407c86f774318526545a", // Bottle of Tarkovskaya vodka
+    "614451b71e5874611e2c7ae5", // Bottle of Tarkovskaya vodka
+
+    "62389aaba63f32501b1b444f", // 26x75mm flare cartridge (Green)
+    "62389ba9a63f32501b1b4451", // 26x75mm flare cartridge (Red)
+    "62389bc9423ed1685422dc57", // 26x75mm flare cartridge (White)
+    "62389be94d5d474bf712e709", // 26x75mm flare cartridge (Yellow)
+    "635267f063651329f75a4ee8", // 26x75mm flare cartridge (Acid Green)
+
+    "6087e570b998180e9f76dc24", // Superfors DB 2020 Dead Blow Hammer
+    "63495c500c297e20065a08b1", // Old hand scythe
+    "679ba90d269ddfea47012159", // Chained Labrys
+    "664a5428d5e33a713b622379", // APOK Tactical Wasteland Gladius
+    "5bffdd7e0db834001b734a1a", // Miller Bros. Blades M-2 Tactical Sword
+    "5c0126f40db834002a125382", // Red Rebel ice pick
+    "5bc9c1e2d4351e00367fbcf0", // Antique axe
+    "5fc64ea372b0dd78d51159dc", // Cultist knife
+
+    "60a7ad2a2198820d95707a2e", // Tagilla's welding mask "UBEY"
+    "60a7ad3a0c5cb24b0134664a", // Tagilla's welding mask "Gorilla"
+    "678f84bb9e85556ca60f0362", // Tagilla's welding mask "ZABEY"
+    "62963c18dbc8ab5f0d382d0b", // Death Knight mask
+    "6530e8587cbfc1e309011e37", // Vengeful Zryachiy's balaclava
+    "6531119b9afebff7ff0a1769", // Vengeful Zryachiy's balaclava (folded)
+
+    "5a1eaa87fcdbcb001865f75e", // Trijicon REAP-IR thermal scope
+    "5b3b6e495acfc4330140bd88", // Armasight Vulcan MG 3.5x Bravo night vision scope
+    "5d1b5e94d7ad1a2b865a96b0", // FLIR
+    "63fc44e2429a8a166c7f61e6", // Armasight Zeus-Pro 640 2-8x50 30Hz thermal scope
+    "67641b461c2eb66ade05dba6", // Cyclone Shakhin 3.7x thermal scope
+
+    "5c0558060db834001b735271", // L3Harris GPNVG-18 night vision goggles
+    "5c110624d174af029e69734c", // T-7 Thermal Goggles with a Night Vision mount
+
+    "5b3b713c5acfc4330140bd8d", // TT-33 7.62x25 TT pistol (Golden)
   ]
 }

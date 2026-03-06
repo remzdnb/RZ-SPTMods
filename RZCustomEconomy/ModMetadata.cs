@@ -7,19 +7,12 @@ namespace RZCustomEconomy;
 
 public record ModMetadata : AbstractModMetadata
 {
-    public override string ModGuid { get; init; } = "com.rz.autoassort";
-    public override string Name { get; init; } = "RZCustomEconomy";
-    public override string Author { get; init; } = "RemzDNB";
-
-    public override SemanticVersioning.Version Version { get; init; } = new("1.1.3");
-
-    /// <summary>
-    /// Compatible SPT version range.
-    /// "~4.0.0" = any 4.0.x version.
-    /// "^4.0.0" = any 4.x.x version.
-    /// </summary>
+    public override SemanticVersioning.Version Version { get; init; } = new("1.1.5");
     public override Range SptVersion { get; init; } = new("~4.0.0");
 
+    public override string ModGuid { get; init; } = "com.rz.customeconomy";
+    public override string Name { get; init; } = "RZCustomEconomy";
+    public override string Author { get; init; } = "RemzDNB";
     public override string License { get; init; } = "MIT";
     public override List<string>? Contributors { get; init; } = null;
     public override List<string>? Incompatibilities { get; init; } = null;

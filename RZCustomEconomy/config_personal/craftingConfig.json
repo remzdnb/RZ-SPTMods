@@ -1,0 +1,384 @@
+{
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // CLEAR AREAS
+  // List of hideout areas whose vanilla recipes will be wiped before injection.
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "ClearAreas": [
+    "Workbench",
+    "MedStation",
+    "Kitchen"
+  ],
+
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // RECIPES
+  // Crafting recipes grouped by hideout area.
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "Recipes": {
+
+    // WORKBENCH RECIPES
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    "Workbench": [
+
+      // 1x Pack of screws <= 1x Pack of nails
+      {
+        "AreaLevel": 1,
+        "EndProduct": "59e35ef086f7741777737012", // Pack of screws
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "590c31c586f774245e3141b2", "Count": 1 }, // Pack of nails
+        ]
+      },
+
+      // 1x Pack of nails <= 1x Pack of screws
+      {
+        "AreaLevel": 1,
+        "EndProduct": "590c31c586f774245e3141b2", // Pack of nails
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "59e35ef086f7741777737012", "Count": 1 }, // Pack of screws
+        ]
+      },
+
+      // 1x Bolts <= 1x Screws
+      {
+        "AreaLevel": 1,
+        "EndProduct": "57347c5b245977448d35f6e1", // Bolts
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "57347c77245977448d35f6e2", "Count": 1 }, // Screws
+        ]
+      },
+
+      // 1x Screws <= 1x Bolts
+      {
+        "AreaLevel": 1,
+        "EndProduct": "57347c77245977448d35f6e2", // Screws
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "57347c5b245977448d35f6e1", "Count": 1 }, // Bolts
+        ]
+      },
+
+      // 2x Bundle of wires <= 1x Power cord
+      {
+        "AreaLevel": 1,
+        "EndProduct": "5c06779c86f77426e00dd782", // Bundle of wires
+        "Count": 2,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "59e36c6f86f774176c10a2a7", "Count": 1 }, // Power cord
+        ]
+      },
+
+      // 1x Power cord <= 2x Bundle of wires
+      {
+        "AreaLevel": 1,
+        "EndProduct": "59e36c6f86f774176c10a2a7", // Power cord
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "5c06779c86f77426e00dd782", "Count": 2 }, // Bundle of wires
+        ]
+      },
+
+      // 1x Energy-saving lamp <= 1x Ultraviolet lamp
+      {
+        "AreaLevel": 1,
+        "EndProduct": "590a3cd386f77436f20848cb", // Energy-saving lamp
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "590a3d9c86f774385926e510", "Count": 1 }, // Ultraviolet lamp
+        ]
+      },
+
+      // 2x WD-40 (100ml) <= 1x WD-40 (400ml)
+      {
+        "AreaLevel": 1,
+        "EndProduct": "590c5bbd86f774785762df04", // WD-40 (100ml)
+        "Count": 2,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "590c5c9f86f77477c91c36e7", "Count": 1 }, // WD-40 (400ml)
+        ]
+      },
+
+      // 1x WD-40 (400ml) <= 2x WD-40 (100ml)
+      {
+        "AreaLevel": 1,
+        "EndProduct": "590c5c9f86f77477c91c36e7", // WD-40 (400ml)
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "590c5bbd86f774785762df04", "Count": 2 }, // WD-40 (100ml)
+        ]
+      },
+
+      // 1x Corrugated hose <= 1x Silicon tube
+      {
+        "AreaLevel": 2,
+        "EndProduct": "59e35cbb86f7741778269d83", // Corrugated hose
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "62a0a0bb621468534a797ad5", "Count": 1 }, // Set of files Master
+          { "Type": "Item", "TemplateId": "5d1b39a386f774252339976f", "Count": 1 }, // Silicon tube
+        ]
+      },
+
+      // 1x Silicon tube <= 1x Corrugated hose
+      {
+        "AreaLevel": 2,
+        "EndProduct": "5d1b39a386f774252339976f", // Silicon tube
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "62a0a0bb621468534a797ad5", "Count": 1 }, // Set of files Master
+          { "Type": "Item", "TemplateId": "59e35cbb86f7741778269d83", "Count": 1 }, // Corrugated hose
+        ]
+      },
+
+      // 1x Shustrilo <= 1x Xenomorph
+      {
+        "AreaLevel": 2,
+        "EndProduct": "590c35a486f774273531c822", // Shustrilo
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "62a0a0bb621468534a797ad5", "Count": 1 }, // Set of files Master
+          { "Type": "Item", "TemplateId": "590c346786f77423e50ed342", "Count": 1 }, // Xenomorph
+        ]
+      },
+
+      // 1x Xenomorph <= 1x Shustrilo
+      {
+        "AreaLevel": 2,
+        "EndProduct": "590c346786f77423e50ed342", // Xenomorph
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "62a0a0bb621468534a797ad5", "Count": 1 }, // Set of files Master
+          { "Type": "Item", "TemplateId": "590c35a486f774273531c822", "Count": 1 }, // Shustrilo
+        ]
+      },
+
+      // 1x Power cord + 2x CPU Fan <= 1x Power supply unit
+      {
+        "AreaLevel": 3,
+        "EndProduct": "57347c2e24597744902c94a1", // Power supply unit
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Item", "TemplateId": "59e36c6f86f774176c10a2a7", "Count": 1 }, // Power cord
+          { "Type": "Item", "TemplateId": "5734779624597737e04bf329", "Count": 2 }, // CPU Fan
+        ]
+      },
+
+      // 4x Car battery (1x Toolset, 1x Electric drill) <= 1x Military battery
+      {
+        "AreaLevel": 3,
+        "EndProduct": "5d03794386f77420415576f5", // Military battery
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "59e35de086f7741778269d84", "Count": 1 }, // Electric drill
+          { "Type": "Item", "TemplateId": "5733279d245977289b77ec24", "Count": 4 }, // Car battery
+        ]
+      },
+
+      // 1x Military battery => 4x Car battery
+      {
+        "AreaLevel": 3,
+        "EndProduct": "5733279d245977289b77ec24", // Car battery
+        "Count": 4,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "59e35de086f7741778269d84", "Count": 1 }, // Electric drill
+          { "Type": "Item", "TemplateId": "5d03794386f77420415576f5", "Count": 1 }, // Military battery
+        ]
+      },
+
+      // 1x Electric motor <= 2x Capacitors + 2x Bundle of wires + 1x Electronic components + 1x Magnet
+      {
+        "AreaLevel": 3,
+        "EndProduct": "5d1b2fa286f77425227d1674", // Electric motor
+        "Count": 1,
+        "ProductionTime": 60,
+        "NeedFuelForAllProductionTime": true,
+        "Requirements": [
+          { "Type": "Tool", "TemplateId": "590c2e1186f77425357b6124", "Count": 1 }, // Toolset
+          { "Type": "Tool", "TemplateId": "59e35de086f7741778269d84", "Count": 1 }, // Electric drill
+          { "Type": "Item", "TemplateId": "5c06782b86f77426df5407d2", "Count": 2 }, // Capacitors
+          { "Type": "Item", "TemplateId": "5c06779c86f77426e00dd782", "Count": 2 }, // Bundle of wires
+          { "Type": "Item", "TemplateId": "6389c70ca33d8c4cdf4932c6", "Count": 1 }, // Electronic components
+          { "Type": "Item", "TemplateId": "590a391c86f774385a33c404", "Count": 1 }, // Magnet
+        ]
+      }
+    ],
+
+    // MEDSTATION RECIPES
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    "MedStation": [
+
+      // 1x AI-2 <= 1x Pile Of Meds
+      {
+        "EndProduct": "5755356824597772cb798962",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 }
+        ]
+      },
+
+      // 1x CAR <= 2x Pile Of Meds
+      {
+        "EndProduct": "590c661e86f7741e566b646a",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 }
+        ]
+      },
+
+      // 1x Salewa <= 2x Pile Of Meds + 1x Medical Bloodset
+      {
+        "EndProduct": "544fb45d4bdc2dee738b4568",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
+          { "Type": "Item", "TemplateId": "5b4335ba86f7744d2837a264", "Count": 1 }
+        ]
+      },
+
+      // 1x IFAK <= 1x Pile Of Meds + 1x Medical Bloodset + 1x Bottle of saline solution
+      {
+        "EndProduct": "590c678286f77426c9660122",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 },
+          { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 }
+        ]
+      },
+
+      // 1x Grizzly <= 1x Pile Of Meds + 1x Medical Bloodset + 1x Bottle of saline solution + 1x Bottle of hydrogen peroxide
+      {
+        "EndProduct": "590c657e86f77412b013051d",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 1 },
+          { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 }
+        ]
+      },
+
+      // 1x AFAK <= 2x Pile Of Meds + 1x Disposable Syringe + 1x Medical Bloodset + 1x Bottle of hydrogen peroxide
+      {
+        "EndProduct": "60098ad7c2240c0fe85c570a",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 2 },
+          { "Type": "Item", "TemplateId": "5d1b3f2d86f774253763b735", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 }
+        ]
+      },
+
+      // 1x CMS <= 3x Medical Tools + 1x Bottle of hydrogen peroxide + 1x Bottle of saline solution
+      {
+        "EndProduct": "5d02778e86f774203e7dedbe",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 3 },
+          { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 1 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 1 }
+        ]
+      },
+
+      // meh
+      // 1x Surv12 <= 4x Medical Tools + 2x Bottle of hydrogen peroxide + 2x Bottle of saline solution
+      {
+        "EndProduct": "5d02797c86f774203f38e30a",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "5d1b3a5d86f774252167ba22", "Count": 4 },
+          { "Type": "Item", "TemplateId": "59e361e886f774176c10a2a5", "Count": 2 },
+          { "Type": "Item", "TemplateId": "59e3606886f77417674759a5", "Count": 2 }
+        ]
+      },
+
+      // 1x SJ6 <= 1x Disposable Syringe +
+      {
+        "EndProduct": "5c0e531d86f7747fa23f4d42",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "62a0a043cf4a99369e2624a5", "Count": 1 }
+        ]
+      },
+
+      // 1x SJ6 <= 1x Bottle of OLOLO Multivitamins
+      {
+        "EndProduct": "5c0e531d86f7747fa23f4d42",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "62a0a043cf4a99369e2624a5", "Count": 1 }
+        ]
+      }
+    ],
+
+    // MEDSTATION RECIPES
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    "Kitchen": [
+
+      // 2x Alyonka <= 1x Sugar
+      {
+        "EndProduct": "59e3577886f774176a362503",
+        "Count": 1,
+        "Requirements": [
+          { "Type": "Item", "TemplateId": "57505f6224597709a92585a9", "Count": 2 } // Alyonka
+        ]
+      },
+    ]
+  }
+}
+

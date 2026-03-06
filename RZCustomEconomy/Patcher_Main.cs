@@ -32,53 +32,6 @@ namespace RZCustomEconomy;
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-// POSTDBMOADLOADER + 1
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-[Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
-public class MasterPatcherPostDbModLoader(
-    ILogger<MasterPatcherPostDbModLoader> logger,
-    DatabaseService databaseService,
-    ConfigLoader configLoader
-) : IOnLoad
-{
-    private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-
-    public Task OnLoad()
-    {
-        PatchHandbookPrices();
-
-        return Task.CompletedTask;
-    }
-
-    private void PatchHandbookPrices()
-    {
-        if (!_masterConfig.EnableHandbookPricesConfig || _masterConfig.HandbookPrices.Count == 0)
-            return;
-
-        var handbook = databaseService.GetTables().Templates?.Handbook;
-        if (handbook is null)
-        {
-            logger.LogWarning("[RZCustomEconomy] Handbook is null, cannot patch prices.");
-            return;
-        }
-
-        foreach (var (tpl, price) in _masterConfig.HandbookPrices)
-        {
-            var entry = handbook.Items.FirstOrDefault(i => i.Id.ToString() == tpl);
-            if (entry is null)
-            {
-                logger.LogWarning("[RZCustomEconomy] Handbook entry '{Tpl}' not found, skipping.", tpl);
-                continue;
-            }
-
-            entry.Price = price;
-        }
-    }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 // RAGFAIRCALLBACKS - 3
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -91,7 +44,6 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
     private readonly MasterConfig _defaultTradesConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
@@ -124,7 +76,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             };
         }
 
-        if (_devConfig.EnableDevLogs)
+        if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] All trader assorts cleared.");
     }
 
@@ -143,7 +95,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
         // Block regeneration of expired offers.
         ragfairConfig.Dynamic.ExpiredOfferThreshold = int.MaxValue;
 
-        if (_devConfig.EnableDevLogs)
+        if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Flea market offers removed.");
     }
 
@@ -257,7 +209,7 @@ public class MasterPatcherRagfairCallbacksMinusTwo(
             }
         }
 
-        if (_devConfig.EnableDevLogs)
+        if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] NoBarterTrades: {Converted} barter(s) converted to cash, {Skipped} skipped.", converted, skipped);
     }
 }
@@ -275,7 +227,6 @@ public class MasterPatchRagfairCallbacksMinusOne(
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
@@ -357,7 +308,6 @@ public class RagfairPostPatcher(
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
 
     public Task OnLoad()
     {
@@ -374,7 +324,7 @@ public class RagfairPostPatcher(
             ragfairOfferHolder.RemoveOffer(id);
         }
 
-        if (_devConfig.EnableDevLogs)
+        if (_masterConfig.EnableDevLogs)
             logger.LogInformation("[RZCustomEconomy] Flea market offers purged.");
 
         return Task.CompletedTask;

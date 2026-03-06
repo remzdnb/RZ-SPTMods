@@ -2,6 +2,7 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // Manual offers grouped by trader ID. Always injected on top of auto-routing.
   // Each offer supports rouble price, barter items, stack count, loyalty level, durability, and explicit children.
+  // If no price and no barter items are specified, falls back to the item's handbook price.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "ManualOffers": [
@@ -47,14 +48,31 @@
       "Id": "5c0647fdd443bc2504c2d371",
       "Offers": [
         {
+          // Weapon parts
+          "ItemTpl": "590c745b86f7743cc433c5f2",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+        },
+        {
           // Tripwire installation kit
           "ItemTpl": "666b11055a706400b717cfa5",
           "StackCount": -1,
           "LoyaltyLevel": 1,
-          "Durability": 100,
           "PriceRoubles": 24642,
-          "Children": [],
-          "BarterItems": []
+        },
+        {
+          // Wifi Camera
+          "ItemTpl": "5b4391a586f7745321235ab2",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 40000,
+        },
+        {
+          // Leatherman multitool
+          "ItemTpl": "544fb5454bdc2df8738b456a",
+          "StackCount": -1,
+          "LoyaltyLevel": 1,
+          "PriceRoubles": 20000,
         },
         {
           // Weapon Repair Kit

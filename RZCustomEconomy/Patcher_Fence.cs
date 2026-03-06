@@ -27,7 +27,6 @@ public class FencePatcher(
 ) : IOnLoad
 {
     private static MasterConfig? _masterConfig;
-    private static DevConfig? _devConfig;
     private static SupplyConfig? _supplyConfig;
 
     private static FencePatcher? _fencePatcher;
@@ -41,7 +40,6 @@ public class FencePatcher(
         _fenceService = fenceService;
         _fenceConfig = configLoader.Load<FenceConfig>(FenceConfig.FileName, Assembly.GetExecutingAssembly());
         _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-        _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
         _supplyConfig = configLoader.Load<SupplyConfig>(SupplyConfig.FileName, Assembly.GetExecutingAssembly());
 
         var harmony = new Harmony("com.rz.customeconomy.fence");
@@ -175,7 +173,7 @@ public class FencePatcher(
             injected++;
         }
 
-        if (_devConfig is not null && _devConfig.EnableDevLogs) {
+        if (_masterConfig is not null && _masterConfig.EnableDevLogs) {
             logger.LogInformation("\e[1;32m[RZCustomEconomy] {Count} custom fence offer(s) injected.\e[0m", injected);
         }
     }

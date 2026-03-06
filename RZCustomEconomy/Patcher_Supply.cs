@@ -87,24 +87,20 @@ public class SupplyPatcher(
     private void PatchStockMultipliers(SupplyConfig config)
     {
         var stockConfig = config.StockMultipliers;
-
-        if (!config.EnableStockMultipliers)
-            return;
-
         if (!stockConfig.EnableByTrader && !stockConfig.EnableByCategory)
         {
             logger.LogWarning("[RZCustomEconomy] Supply/StockMultipliers: both EnableByTrader and EnableByCategory are false — nothing to do.");
             return;
         }
 
-        var traders = databaseService.GetTraders();
         var handbook = databaseService.GetTables().Templates?.Handbook;
-
         if (handbook is null)
         {
             logger.LogWarning("[RZCustomEconomy] Supply/StockMultipliers: handbook is null — skipping.");
             return;
         }
+
+        var traders = databaseService.GetTraders();
 
         var tplToCategory = handbook.Items.ToDictionary(
             i => i.Id.ToString(),
@@ -122,7 +118,7 @@ public class SupplyPatcher(
             .ToDictionary(kvp => kvp.Key, kvp => kvp.Value, StringComparer.OrdinalIgnoreCase);
 
         int patched = 0, skippedUnlimited = 0, skippedMult1 = 0, skippedNullUpd = 0;
-        var devLogs = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly()).EnableDevLogs;
+        var devLogs = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly()).EnableDevLogs;
 
         foreach ((MongoId traderId, Trader trader) in traders)
         {

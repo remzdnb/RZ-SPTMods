@@ -16,8 +16,6 @@ namespace RZCustomEconomy;
 public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-    private readonly DevConfig _devConfig = configLoader.Load<DevConfig>(DevConfig.FileName, Assembly.GetExecutingAssembly());
-
     public Task OnLoad()
     {
         if (!_masterConfig.EnableCraftingConfig)
@@ -52,7 +50,7 @@ public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService da
             }
         }
 
-        if (_devConfig.EnableDevLogs) {
+        if (_masterConfig.EnableDevLogs) {
             logger.LogInformation("[RZCustomEconomy] {Count} custom recipe(s) injected.", injected);
         }
 

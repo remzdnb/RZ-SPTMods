@@ -1,6 +1,5 @@
 // RemzDNB - 2026
 // ReSharper disable InvertIf
-// ReSharper disable EnforceIfStatementBraces
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -20,6 +19,10 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     private const string TypeSkill         = "Skill";
     private const string TypeTraderLoyalty = "TraderLoyalty";
 
+    private readonly HideoutConfig _hideoutConfig = configLoader.Load<HideoutConfig>(
+        HideoutConfig.FileName, Assembly.GetExecutingAssembly()
+    );
+
     public Task OnLoad()
     {
         var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
@@ -28,7 +31,8 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
 
         var hideoutConfig = configLoader.Load<HideoutConfig>(HideoutConfig.FileName, Assembly.GetExecutingAssembly());
 
-        ApplyAreaOverrides(hideoutConfig);
+        ApplyAreaOverrides();
+        PatchFoundInRaid();
         PatchBitcoinFarm(hideoutConfig.BitcoinFarm);
 
         return Task.CompletedTask;
@@ -38,7 +42,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     // Area overrides
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private void ApplyAreaOverrides(HideoutConfig config)
+    private void ApplyAreaOverrides()
     {
         var areas = databaseService.GetTables().Hideout?.Areas;
         if (areas is null || areas.Count == 0) {
@@ -46,7 +50,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             return;
         }
 
-        foreach (var (areaName, areaConfig) in config.Areas)
+        foreach (var (areaName, areaConfig) in _hideoutConfig.Areas)
         {
             if (!Enum.TryParse<HideoutAreas>(areaName, ignoreCase: true, out var areaType)) {
                 logger.LogWarning("[RZCustomEconomy] Unknown hideout area '{Name}' in config — skipping.", areaName);
@@ -160,14 +164,14 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     // Converters
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectItemRequirement(ItemRequirement req, string areaName, string levelStr)
+    private StageRequirement? InjectItemRequirement(ItemRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.ItemTpl)) {
             logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Item requirement missing ItemTpl — skipping.", areaName, levelStr);
             return null;
         }
 
-        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+        return new StageRequirement {
             Type = TypeItem,
             TemplateId = req.ItemTpl,
             Count = req.ItemCount,
@@ -176,7 +180,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         };
     }
 
-    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectAreaRequirement(AreaRequirement req, string areaName, string levelStr)
+    private StageRequirement? InjectAreaRequirement(AreaRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.AreaName)) {
             logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Area requirement missing AreaName — skipping.", areaName, levelStr);
@@ -188,7 +192,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             return null;
         }
 
-        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+        return new StageRequirement {
             Type = TypeArea,
             AreaType = (int)depAreaType,
             RequiredLevel = req.AreaLevel,
@@ -196,14 +200,14 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         };
     }
 
-    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectSkillRequirement(SkillRequirement req, string areaName, string levelStr)
+    private StageRequirement? InjectSkillRequirement(SkillRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.SkillName)) {
             logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Skill requirement missing SkillName — skipping.", areaName, levelStr);
             return null;
         }
 
-        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+        return new StageRequirement {
             Type = TypeSkill,
             SkillName = req.SkillName,
             SkillLevel = req.SkillLevel,
@@ -211,7 +215,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         };
     }
 
-    private SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement? InjectTraderRequirement(TraderRequirement req, string areaName, string levelStr)
+    private StageRequirement? InjectTraderRequirement(TraderRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.TraderName)) {
             logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': TraderLoyalty requirement missing TraderName — skipping.", areaName, levelStr);
@@ -228,12 +232,39 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             return null;
         }
 
-        return new SPTarkov.Server.Core.Models.Eft.Hideout.StageRequirement {
+        return new StageRequirement {
             Type = TypeTraderLoyalty,
             TraderId = traderEntry.Key,
             LoyaltyLevel = req.TraderLoyalty,
             IsEncoded = false
         };
+    }
+
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // FIR
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    private void PatchFoundInRaid()
+    {
+        if (!_hideoutConfig.RequireFoundInRaid.HasValue) {
+            return;
+        }
+
+        var areas = databaseService.GetTables().Hideout?.Areas;
+        if (areas is null) {
+            return;
+        }
+
+        foreach (var area in areas)
+        foreach (var (_, stage) in area.Stages ?? [])
+        foreach (var req in stage.Requirements ?? [])
+        {
+            if (req.Type != TypeItem) {
+                continue;
+            }
+
+            req.IsSpawnedInSession = _hideoutConfig.RequireFoundInRaid;
+        }
     }
 
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -251,6 +282,9 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             logger.LogWarning("[RZCustomEconomy] Bitcoin farm — no recipes found, skipping.");
             return;
         }
+
+        logger.LogInformation("[RZCustomEconomy] Bitcoin farm defaults — ProductionTime: {Time}s, MaxCapacity: {Cap}, GpuBoostRate: {Boost}",
+            recipes[0].ProductionTime, recipes[0].ProductionLimitCount, hideout.Settings.GpuBoostRate);
 
         foreach (var recipe in recipes)
         {

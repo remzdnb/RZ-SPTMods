@@ -96,7 +96,21 @@ public class ManualOffersPatcher(
             var manualSlots = offer.Children.Select(c => c.SlotId).ToHashSet(StringComparer.OrdinalIgnoreCase);
             assortHelper.ResolveRequiredChildren(assort.Items, itemId, offer.ItemTpl, offer.Durability, manualSlots);
 
-            assort.BarterScheme[itemId] = new List<List<BarterScheme>> { assortHelper.BuildPayment(offer.PriceRoubles, offer.BarterItems) };
+            var barterItems = offer.BarterItems ?? [];
+            var price = offer.PriceRoubles;
+            if (price <= 0 && barterItems.Count == 0)
+            {
+                var handbook = databaseService.GetTables().Templates?.Handbook;
+                price = (int) (handbook?.Items.FirstOrDefault(h => h.Id == offer.ItemTpl)?.Price ?? 0);
+                if (price <= 0)
+                    logger.LogWarning("[RZCustomEconomy] Manual offer {Tpl}: no price and no handbook price found, defaulting to 1.",
+                        offer.ItemTpl);
+            }
+
+            assort.BarterScheme[itemId] = new List<List<BarterScheme>>
+            {
+                assortHelper.BuildPayment(price, barterItems)
+            };
             assort.LoyalLevelItems[itemId] = offer.LoyaltyLevel;
         }
     }
