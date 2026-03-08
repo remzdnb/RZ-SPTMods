@@ -6,13 +6,10 @@ namespace RZCustomProfiles;
 public record ModMetadata : AbstractModMetadata
 {
     public override SemanticVersioning.Version Version { get; init; } = new(
-        "1.0.1"
+        "1.1.0"
     );
 
-    public override Dictionary<string, Range>? ModDependencies { get; init; } = new()
-    {
-        ["com.rz.shared"] = new Range("~1.0.0")
-    };
+    public override Dictionary<string, Range>? ModDependencies { get; init; } = new() {};
 
     public override string ModGuid { get; init; } = "com.rz.customprofiles";
     public override string Name { get; init; } = "RZCustomProfiles";

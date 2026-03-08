@@ -85,7 +85,7 @@ public class AutoRoutingPatcher(
         {
             var itemTpl = hbItem.Id.ToString();
 
-            if (blacklist.Contains(itemTpl))
+            if (blacklist.Contains(itemTpl) && !autoRoutingConfig.ForceRouteAll)
             {
                 skipped++;
                 continue;

@@ -33,8 +33,6 @@ public class ProfilesUtilities(
 
         ApplyLevel(side, config);
         ApplySkills(side, config, logger);
-
-        ApplyTradersLoyalty(side, sideName, config);
         ApplyHideoutLevels(side, sideName, config);
     }
 
@@ -169,7 +167,7 @@ public class ProfilesUtilities(
         var pouch = side.Character?.Inventory?.Items?.FirstOrDefault(i => i.SlotId == "SecuredContainer");
         if (pouch is null)
         {
-            logger.LogWarning("[RZCustomProfiles] {Side} SecuredContainer not found — skipping.", sideName);
+            logger.LogWarning("[RZCustomProfiles] {Side} SecuredContainer not found : skipping.", sideName);
             return;
         }
 
@@ -181,7 +179,7 @@ public class ProfilesUtilities(
 
         if (!MasterConfig.SecureContainers.TryGetValue(config.SecureContainer, out var tpl))
         {
-            logger.LogWarning("[RZCustomProfiles] Unknown SecureContainer index '{Index}' — skipping.", config.SecureContainer);
+            logger.LogWarning("[RZCustomProfiles] Unknown SecureContainer index '{Index}' : skipping.", config.SecureContainer);
             return;
         }
 
@@ -209,7 +207,7 @@ public class ProfilesUtilities(
         {
             if (!Enum.TryParse<HideoutAreas>(areaName, ignoreCase: true, out var areaType))
             {
-                logger.LogWarning("[RZCustomProfiles] Unknown hideout area '{Name}' — skipped.", areaName);
+                logger.LogWarning("[RZCustomProfiles] Unknown hideout area '{Name}' : skipped.", areaName);
                 continue;
             }
 
@@ -251,6 +249,32 @@ public class ProfilesUtilities(
         targetLevel = Math.Clamp(targetLevel, 1, expTable.Length);
         info.Level      = targetLevel;
         info.Experience = expTable.Take(targetLevel).Sum(e => e.Experience);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // Prestige level
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    private static void ApplyPrestige(TemplateSide side, ProfileConfig config, ILogger<ProfilesUtilities> logger)
+    {
+        if (config.StartingPrestigeLevel is not { } prestige)
+        {
+            logger.LogInformation("[RZCustomProfiles] ApplyPrestige: StartingPrestige is null, skipping.");
+            return;
+        }
+
+        var info = side.Character?.Info;
+        if (info is null)
+        {
+            logger.LogWarning("[RZCustomProfiles] ApplyPrestige: Info is null, skipping.");
+            return;
+        }
+
+        logger.LogInformation("[RZCustomProfiles] ApplyPrestige: Info found, PrestigeLevel before = {Before}", info.PrestigeLevel);
+
+        info.PrestigeLevel = Math.Max(0, prestige);
+
+        logger.LogInformation("[RZCustomProfiles] ApplyPrestige: PrestigeLevel after = {After}", info.PrestigeLevel);
     }
 
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────

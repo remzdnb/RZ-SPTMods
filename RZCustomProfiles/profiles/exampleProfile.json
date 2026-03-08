@@ -1,5 +1,5 @@
 {
-  // Whether this profile is registered and visible in the launcher.
+  // Whether this profile is registered and visible in the launcher
   "Enabled": true,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
@@ -26,16 +26,22 @@
   // Progression
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
+  // Examine all items in the game on character creation
+  "AllItemsExamined": false,
+
   // Start at max level
   "MaxLevel": false,
 
-  // Start at a specific level (1 to max). Ignored if MaxLevel is true. null = leave unchanged from base profile.
+  // Start at a specific level (1 to max). Ignored if MaxLevel is true. null = leave unchanged from base profile
   "StartingLevel": null,
+
+  // Starting prestige level (1-4). null = no prestige applied
+  "StartingPrestigeLevel": null,
 
   // Max out all skills
   "MaxSkills": false,
 
-  // Override specific skills individually (0-51). Ignored if MaxSkills is true.
+  // Override specific skills individually (0-51). Ignored if MaxSkills is true
   "SkillOverrides": {
 
     "Endurance": 0,
@@ -96,9 +102,6 @@
     "Crafting": 0,
     "HideoutManagement": 0,
   },
-
-  // Examine all items in the game on character creation
-  "AllItemsExamined": false,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // Inventory
@@ -179,7 +182,7 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "HideoutStartingLevels": {
-    "Stash": 0,
+    "Stash": 1,
     "Generator": 0,
     "Vents": 0,
     "Security": 0,

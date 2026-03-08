@@ -1,3 +1,7 @@
+- Added UnlockHideoutCustomizations
+- General cleanup
+- Final version, I'm done with this pain in the ass mod
+
 > Define custom profile editions that appear in the SPT launcher at character creation, each with their own starting items, trader standings and more.
 
 *This is part of my personal suite of mods that I use to run my server.*
@@ -16,6 +20,8 @@ The mod runs at server startup and registers your custom profiles into SPT's pro
 
 Each profile is defined by a separate `.json` file dropped in the `profiles/` folder. All files are loaded automatically, just drop and go.
 
+Global settings (unlocks, blacklists, enabled base profiles) are controlled via `masterConfig.json`.
+
 ---
 
 ---
@@ -24,12 +30,15 @@ Each profile is defined by a separate `.json` file dropped in the `profiles/` fo
 
 ## ⚫ masterConfig.json
 
+*Applied at server start, globally for all profiles.*
+
 - **`EnabledBaseProfiles`** — List of vanilla SPT profiles to keep visible in the launcher alongside your custom ones.
-- **`UnlockAllOutfits`** — Unlocks all Ragman outfits for every profile on server start.
-- **`UnlockJaeger`** — Unlocks Jaeger by default, globally regardless of which profile is used.
-- **`UnlockRef`** — Unlocks Ref by default, globally regardless of which profile is used.
-- **`ExaminedCategoryBlacklist`** — Excludes all items belonging to the specified categories from `AllItemsExamined`.
-- **`ExaminedBlacklist`** — Excludes specific items by TPL from `AllItemsExamined`.
+- **`UnlockAllOutfits`** — Unlocks all Ragman outfits.
+- **`UnlockHideoutCustomizations`** — Unlocks hideout customization items by category. Set a category to `false` to leave it locked.
+- **`UnlockJaeger`** — Unlocks Jaeger by default.
+- **`UnlockRef`** — Unlocks Ref by default.
+- **`ExaminedCategoryBlacklist`** — Excludes all items belonging to the listed categories.
+- **`ExaminedBlacklist`** — Excludes specific items by TPL.
 
 ---
 
@@ -39,25 +48,46 @@ Each profile is defined by a separate `.json` file dropped in the `profiles/` fo
 
 ## ⚫ Profile files
 
+### Identity
+
 - **`Enabled`** — Whether this profile is registered and visible in the launcher.
-- **`BaseProfile`** — Vanilla SPT profile to clone as a base.
+- **`BaseProfile`** — Vanilla SPT profile to clone as a base (same indices as `EnabledBaseProfiles`).
 - **`Name`** — Profile name shown in the launcher.
 - **`Description`** — Profile description shown in the launcher.
+
+---
+
+### Progression
+
+- **`AllItemsExamined`** — Examine all handbook items on character creation. Respects `ExaminedCategoryBlacklist` and `ExaminedBlacklist`.
 - **`MaxLevel`** — Start at max level.
 - **`StartingLevel`** — Start at a specific level (1 to max). Ignored if `MaxLevel` is true. `null` = leave unchanged from base profile.
+- **`StartingPrestigeLevel`** — Starting prestige level (1–4). `null` = no prestige applied.
 - **`MaxSkills`** — Max out all skills.
 - **`SkillOverrides`** — Override specific skills individually (values 0–51). Ignored if `MaxSkills` is true.
-- **`AllItemsExamined`** — Examine all handbook items on character creation. Respects `ExaminedCategoryBlacklist` and `ExaminedBlacklist`.
-- **`ClearStash`** — Wipe stash items from the base profile before injecting additional items.
+
+---
+
+### Inventory
+
 - **`ClearEquipment`** — Wipe equipped items from the base profile.
+- **`ClearStash`** — Wipe stash items from the base profile before injecting additional items.
 - **`SecureContainer`** — Override the starting secure container.
 - **`AdditionalStartingItems`** — Items injected into the stash on character creation. If `ClearStash` is false, they are added on top of whatever the base profile already contains. For items with required slots (weapons, armor...), missing children are resolved automatically from the database.
-- **`TradersLoyalty`** — Per-trader standing and sales sum.
+
+---
+
+### Traders
+
+- **`TradersLoyalty`** — Per-trader standing and sales sum, keyed by trader ID.
+
+---
+
+### Hideout
+
 - **`HideoutStartingLevels`** — Starting level for each hideout area.
 
-> 💡 `HideoutStartingLevels` entries are optional, delete any area you don't want to override.
-
-> 💡 `AdditionalStartingItems` and `TradersLoyalty` support modded items and traders, just use their MongoDB ID as the key.
+> 💡 `HideoutStartingLevels` entries are optional : delete any area you don't want to override.
 
 ---
 

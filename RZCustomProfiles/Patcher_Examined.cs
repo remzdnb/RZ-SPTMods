@@ -25,13 +25,13 @@ public class ExaminedPatcher(ILogger<ExaminedPatcher> logger, DatabaseService da
 
         var templateItems = databaseService.GetTables().Templates?.Items;
         if (templateItems is null) {
-            logger.LogWarning("[RZCustomProfiles] Templates.Items is null — skipping AllItemsExamined.");
+            logger.LogWarning("[RZCustomProfiles] Templates.Items is null : skipping AllItemsExamined.");
             return Task.CompletedTask;
         }
 
         var handbook = databaseService.GetTables().Templates?.Handbook;
         if (handbook is null) {
-            logger.LogWarning("[RZCustomProfiles] Handbook is null — skipping AllItemsExamined.");
+            logger.LogWarning("[RZCustomProfiles] Handbook is null : skipping AllItemsExamined.");
             return Task.CompletedTask;
         }
 
@@ -64,7 +64,7 @@ public class ExaminedPatcher(ILogger<ExaminedPatcher> logger, DatabaseService da
         {
             if (!sptProfiles.TryGetValue(config.Name, out var profile))
             {
-                logger.LogWarning("[RZCustomProfiles] Profile '{Name}' not found — skipping AllItemsExamined.", config.Name);
+                logger.LogWarning("[RZCustomProfiles] Profile '{Name}' not found : skipping AllItemsExamined.", config.Name);
                 continue;
             }
 
@@ -95,7 +95,6 @@ public class ExaminedPatcher(ILogger<ExaminedPatcher> logger, DatabaseService da
             }
         }
 
-        logger.LogInformation("[RZCustomProfiles] AllItemsExamined applied to {Count} profile(s).", profilesToExamine.Count);
         return Task.CompletedTask;
     }
 
