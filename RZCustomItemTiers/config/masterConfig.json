@@ -1,0 +1,48 @@
+{
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // TIER DEFINITIONS
+  //
+  // Maps tier names to hex background colors.
+  // These names are referenced by categories.json and overrides/*.json.
+  //
+  // Default    — Unassigned or garbage tier    → Grey
+  // Notable    — Better than garbage xD        → Blue
+  // Superior   — Good                          → Violet
+  // Excellent  — Very good                     → Yellow
+  // Elite      — Best in slot                  → Red
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "Tiers": {
+    "Default":      "black",
+    "Notable":      "blue",
+    "Superior":     "violet",
+    "Excellent":    "tracerYellow",
+    "Elite":        "tracerRed",
+    "Situational":  "orange"
+  },
+
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // PRICE THRESHOLDS
+  //
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "PriceThresholds": [
+    { "MinPrice": 200000, "Tier": "Elite"     },
+    { "MinPrice": 90000, "Tier":  "Excellent" },
+    { "MinPrice": 60000,  "Tier": "Superior"  },
+    { "MinPrice": 30000,  "Tier": "Notable"   }
+  ],
+
+  // SPT native background color values:
+  // "default"       — grey
+  // "blue"          — blue
+  // "violet"        — violet/purple
+  // "yellow"        — pale yellow
+  // "tracerYellow"  — vivid gold
+  // "red"           — red
+  // "tracerRed"     — vivid red
+  // "orange"        — renders as pale brown in-game
+  // "green"         — green
+  // "tracerGreen"   — neon green
+  // "black"         — black
+}
