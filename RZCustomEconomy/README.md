@@ -1,11 +1,8 @@
 # RZCustomEconomy {.tabset}
 
-Economy toolkit — full control over trader assorts, buyback policies, hideout, and crafting through config files.
-
 ## 🔎 Overview
 
-> Full control over SPT's economy through config files : traders, crafting, insurance... Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
-> If you're looking for a ready-to-play experience, stay tuned for **FreeTarkov** : a full overhaul mod built on top of RZCustomEconomy, currently in development.
+> Full control over SPT's economy through config files. Every feature is independently toggleable and fully configurable : pick what you need, ignore the rest. Whether you want to tweak a few trader stocks or rebuild the economy from scratch, it's all just config.
 
 ---
 
@@ -26,9 +23,10 @@ Each feature has a dedicated on/off switch in `masterConfig.json`. Flip it to `t
 - 🏪 **`EnableBuybackConfig`** — 🔴 Off by default → see the **Buyback** tab
 - 📦 **`EnableSupplyConfig`** — 🔴 Off by default → see the **Supply** tab
 - 📝 **`EnableHandbookPricesConfig`** — 🔴 Off by default → see the **Handbook Prices** tab
+- 📈 **`EnableFleaMarketConfig`** — 🔴 Off by default → see the **Flea Market** tab
 - 🛡️ **`EnableInsuranceConfig`** — 🔴 Off by default → see the **Insurance** tab
 - 🏠 **`EnableHideoutConfig`** — 🔴 Off by default → see the **Hideout** tab
-- ⚗️ **`EnableCraftingConfig`** — 🔴 Off by default → see the **Crafting** tab\
+- ⚗️ **`EnableCraftingConfig`** — 🔴 Off by default → see the **Crafting** tab
 
 Pick what you need, leave the rest off. Features are fully independent - run any combination you want.
 
@@ -48,38 +46,10 @@ The three main features that control what players see at traders are **Default T
 
 ---
 
-> You can find all the following settings in `masterConfig.json`
-
----
-
-### *Main Features Switches*
-
-- 🏷️ **`EnableDefaultTrades`** — Master switch for default trader assorts. (`defaultTradesConfig.json`)
-- 🔀 **`EnableRoutedTrades`** — Master switch for automatic handbook → trader routing. (`routedTradesConfig.json`)
-- 🛒 **`EnableManualTrades`** — Master switch for manual offers. (`manualTradesConfig.json`)
-- 👤 **`EnableFenceConfig`** — Master switch for Fence config. (`fenceConfig.json`)
-- 🏪 **`EnableBuybackConfig`** — Master switch for trader buyback rules. (`buybackConfig.json`)
-- 📦 **`EnableSupplyConfig`** — Master switch for supply configuration. (`supplyConfig.json`)
-- 📝 **`EnableHandbookPricesConfig`** — Master switch for handbook prices configuration. (`handbookPricesConfig.json`)
-- 🛡️ **`EnableInsuranceConfig`** — Master switch for insurance configuration. (`insuranceConfig.json`)
-- 🏠 **`EnableHideoutConfig`** — Master switch for hideout patchess. (`hideoutConfig.json`)
-- ⚗️ **`EnableCraftingConfig`** — Master switch for crafting recipe overrides. (`craftingConfig.json`)
-
----
-
-- **`DisableFleaMarket`** — Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-
-> The flea market is not something I'm interested in working on. Disabling it entirely is the only flea-related feature this mod will ever have.
-
----
-
----
-
----
-
-
 > ⚠️ Use Notepad++ or VSCode to edit your config files, the default Windows Notepad will mess up your formatting and won't warn you about syntax errors. ----->
 > [Download Notepad++](https://notepad-plus-plus.org/downloads/v8.9.2/) - [Download VSCode](https://code.visualstudio.com/)
+
+> 💡 The mod ships with an `extras` folder containing `category_dump.json` and `item_dump.json` : direct dumps of the database. If you're just looking for a specific item or category ID, these are significantly more conveninent to copy&paste from than [ItemFinder](https://db.sp-tarkov.com/) : open the file, Ctrl+F, done. `item_dump.json` includes all items added by WTT - Content Backport.
 
 ## 🏷️ Default Trades
 
@@ -91,9 +61,13 @@ The three main features that control what players see at traders are **Default T
 
 ---
 
-#### ⚙️ Configuration : `fenceConfig.json`
+#### ⚙️ Configuration : `defaultTradesConfig.json`
 
-**`NoBarterTraders`** — replaces barter schemes with a straight cash payment at handbook price, per trader. Each trader entry supports:
+**`Blacklist`** — List of TPLs to remove from all trader assorts unconditionally. Applied before any other patch.
+
+**`PriceMultipliers`** — Per-trader cash price multiplier. Only affects cash-only offers (rub/usd/eur) — barter schemes are ignored. Keyed by trader ID.
+
+**`NoBarterTraders`** — Replaces barter schemes with a straight cash payment at handbook price, per trader. Each trader entry supports:
 
 - **`Enabled`** — whether this trader's barters are converted
 - **`Currency`** — currency to use for the converted price : `"rub"` | `"eur"` | `"usd"`. EUR and USD amounts are calculated from the handbook rouble price using the in-game exchange rate.
@@ -103,7 +77,7 @@ The three main features that control what players see at traders are **Default T
 
 > Reads every item in the handbook at runtime and automatically assigns it to a trader based on a category map you define in config. The routing system follows the handbook's category hierarchy : define a route for "Weapons" and every sub-category inherits it automatically. Ships with a full pre-built map covering all vanilla item categories.
 
-**For modded content** — `RouteModdedItemsOnly` detects items not present in the vanilla handbook and routes only those to traders. Every item added by every mod you have installed shows up at a trader immediately, at handbook price. The vanilla_handbook.json file in the mod's root folder is used as the reference to determine what's vanilla and what isn't.
+**For modded content** — `RouteModdedItemsOnly` detects items not present in the vanilla handbook and routes only those to traders. Every item added by every mod you have installed shows up at a trader immediately, at handbook price. The vanilla_items.json file in the mod's root folder is used as the reference to determine what's vanilla and what isn't.
 
 **For visibility** — `ForceRouteAll` bypasses all filters and routes every item in the handbook. Combined with `AllItemsExamined`, nothing is hidden.
 
@@ -118,15 +92,15 @@ The three main features that control what players see at traders are **Default T
 #### ⚙️ Configuration : `routedTradesConfig.json`
 
 - **`ForceRouteAll`** — Route every handbook item regardless of category routes and blacklists.
-- **`RouteModdedItemsOnly`** — Only route items not present in vanilla_handbook.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
-- **`RouteVanillaItemsOnly`** — Only route items present in vanilla_handbook.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
-- **`FallbackTrader`** — When ForceRouteAll is true, items with no matching category route go here.
-- **`Overrides`** — Per-TPL overrides that take precedence over category routes. When enabled, specific items can be redirected to a different trader, priced differently.
-- **`Blacklist`** — Items that are never routed to any trader, regardless of category routes. Use this for broken or invisible items, or anything you simply don't want sold.
+- **`RouteModdedItemsOnly`** — Only route items not present in vanilla_items.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
+- **`RouteVanillaItemsOnly`** — Only route items present in vanilla_items.json (vanilla items). Mutually exclusive with RouteModdedItemsOnly.
+- **`FallbackTrader`** — When ForceRouteAll is true, items with no matching category route go here. Always priced in roubles.
+- **`TraderCurrencies`** — Currency used for routed offers, per trader.
+- **`Blacklist`** — Items that are never routed to any trader, regardless of category routes.
 
 ## 🛒 Manual Trades
 
-> Completely independent from auto-routing. Define specific trades for specific traders with full control over every parameter. Manual offers are always injected first, before auto-routing runs.
+> Completely independent from auto-routing. Define specific trades for specific traders with full control over every parameter.
 
 ---
 
@@ -279,6 +253,28 @@ Handbook prices are the foundation of several SPT systems, this feature has broa
 - **Routed trades** — routed offer prices are derived from handbook price, so overriding a price here directly changes what it costs at the trader.
 - **Trader sell prices** — what traders pay when buying items from the player is also handbook-based.
 
+## 📈 Flea Market
+
+> Controls dynamic flea market offer generation. Trader flea offers are not affected by any of these settings.
+
+---
+
+---
+
+---
+
+#### ⚙️ Configuration : `fleaMarketConfig.json`
+
+- **`Disable`** — Disables all dynamic flea market offer generation entirely. Both blocks new offer generation and purges any offers already present at server start. Trader offers are not affected.
+
+- **`DynamicForceDisable`** — List of TPLs to remove from dynamic flea offers. Sets `CanSellOnRagfair = false` on matching item templates. Nothing outside the listed TPLs is touched.
+
+- **`DynamicForceEnable`** — List of TPLs to force into dynamic flea offers. Sets `CanSellOnRagfair = true` on matching item templates. Nothing outside the listed TPLs is touched.
+
+> Both lists are applied independently and can coexist. If the same TPL appears in both, `ForceEnable` wins as it runs last.
+
+> The flea market is, in my opinion, a leftover from the live game that has no place in a balanced solo/coop experience. It adds a lot of clicking for not much actual fun, and there are better ways to introduce randomness into the economy. That said, I'll add the occasional feature for it if needed.
+
 ## 🛡️ Insurance
 
 > Disable insurance globally or selectively by category and item TPL.
@@ -299,6 +295,8 @@ Handbook prices are the foundation of several SPT systems, this feature has broa
 
 > Full control over hideout area requirements, construction times, and the bitcoin farm through config files.
 
+> 💡 The default `hideoutConfig.json` ships with every area pre-configured to match vanilla exactly. Enabling the feature without changing anything produces zero difference in-game, it's just a clean starting point. Edit only what you want to change, leave the rest as-is.
+
 ---
 
 ---
@@ -311,7 +309,7 @@ Handbook prices are the foundation of several SPT systems, this feature has broa
 
 #### Area fields
 
-- **`RemoveFromDb`** — removes the area from the database entirely. Visually the area looks like it's already built at max level.
+- **`RemoveFromDb`** — removes the area from the database entirely.
 - **`Enabled`** — whether the area is available to the player.
 - **`DisplayLevel`** — whether the current level is displayed in the UI.
 
@@ -359,6 +357,9 @@ Each requirement type expects the following fields per entry :
 
 > Define custom crafting recipes per hideout area, and optionally clear all existing recipes for specific areas before injecting your own.
 
+
+> 💡 The default `craftingConfig.json` ships with all vanilla recipes pre-configured. Enabling the feature without changing anything produces zero difference in-game; it's just a clean starting point. Add your own recipes, remove ones you don't want, or wipe entire areas and rebuild them from scratch.
+
 ---
 
 #### ⚙️ Configuration : `craftingConfig.json`
@@ -366,7 +367,7 @@ Each requirement type expects the following fields per entry :
 - **`ClearAreas`** — list of hideout areas whose vanilla recipes will be wiped before injection
 - **`Recipes`** — recipes grouped by hideout area. Each recipe supports area level requirement, end product, count, production time, fuel requirement, and a list of input requirements (items or area levels)
 
-## 🔌 Mod Compatibility
+## 🔌 Compatibility
 
 Most features work out of the box with modded content. Auto-routing, manual offers, buyback rules, `AllItemsExamined`, and handbook price overrides all operate on TPLs — as long as you know the correct TPL for a modded item, you can reference it anywhere in the config exactly like a vanilla one. I haven't done extensive compatibility testing though, and this is something I'll look to improve in future updates.
 

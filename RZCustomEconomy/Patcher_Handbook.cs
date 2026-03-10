@@ -9,7 +9,7 @@ using SPTarkov.Server.Core.Services;
 
 namespace RZCustomEconomy;
 
-[Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
+[Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 4)]
 public class HandbookPatcher(ILogger<HandbookPatcher> logger, DatabaseService databaseService, ConfigLoader configLoader) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
@@ -27,7 +27,7 @@ public class HandbookPatcher(ILogger<HandbookPatcher> logger, DatabaseService da
 
         var handbook = databaseService.GetTables().Templates?.Handbook;
         if (handbook is null) {
-            logger.LogWarning("[RZCustomEconomy] Handbook is null — skipping price overrides.");
+            logger.LogWarning("[RZCustomEconomy] Handbook is null : skipping price overrides.");
             return Task.CompletedTask;
         }
 
@@ -36,7 +36,7 @@ public class HandbookPatcher(ILogger<HandbookPatcher> logger, DatabaseService da
         {
             var entry = handbook.Items.FirstOrDefault(i => i.Id.ToString() == tpl);
             if (entry is null) {
-                logger.LogWarning("[RZCustomEconomy] Handbook entry '{Tpl}' not found — skipping.", tpl);
+                logger.LogWarning("[RZCustomEconomy] Handbook entry '{Tpl}' not found : skipping.", tpl);
                 continue;
             }
 

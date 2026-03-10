@@ -1,5 +1,4 @@
 // RemzDNB - 2026
-// ReSharper disable EnforceIfStatementBraces
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;

@@ -1,5 +1,4 @@
 // RemzDNB - 2026
-// ReSharper disable EnforceIfStatementBraces
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -12,11 +11,7 @@ using SPTarkov.Server.Core.Services;
 namespace RZCustomEconomy;
 
 [Injectable(TypePriority = OnLoadOrder.PostDBModLoader + 1)]
-public class InsurancePatcher(
-    ILogger<InsurancePatcher> logger,
-    DatabaseService databaseService,
-    ConfigLoader configLoader
-) : IOnLoad
+public class InsurancePatcher(ILogger<InsurancePatcher> logger, DatabaseService databaseService, ConfigLoader configLoader ) : IOnLoad
 {
     public Task OnLoad()
     {
@@ -28,7 +23,7 @@ public class InsurancePatcher(
 
         var items = databaseService.GetTables().Templates?.Items;
         if (items is null) {
-            logger.LogWarning("[RZCustomEconomy] Templates.Items is null — skipping insurance patch.");
+            logger.LogWarning("[RZCustomEconomy] Templates.Items is null : skipping insurance patch.");
             return Task.CompletedTask;
         }
 

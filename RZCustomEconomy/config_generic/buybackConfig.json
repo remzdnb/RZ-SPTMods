@@ -15,12 +15,12 @@
 
     // PRAPOR
     "54cb50c76803fa8b248b4571": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // THERAPIST
     "54cb57776803fa99248b456e": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // FENCE
@@ -41,32 +41,42 @@
 
     // PEACEKEEPER
     "5935c25fb3acc3127c3d8cd9": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // SKIER
     "58330581ace78e27b8b10cee": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // MECHANIC
     "5a7c2eca46aef81a7ca2145d": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // RAGMAN
     "5ac3b934156ae10c4430e83c": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // JAEGER
     "5c0647fdd443bc2504c2d371": {
-      "Mode": "Disabled"
+      "Mode": "Default"
     },
 
     // REF
     "6617beeaa9cfa777ca915b7c": {
-      "Mode": "Disabled"
-    }
+      "Mode": "Default"
+    },
+
+    // SABLE - Modded trader from my CustomTraders mods, ignored if not installed.
+    // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    "fa363fc015e07b5f7828c9f7": {
+      "Mode": "AllWithBlacklist",
+      "Blacklist": [
+
+      ]
+    },
+
   }
 }

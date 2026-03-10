@@ -1,5 +1,4 @@
 // RemzDNB - 2026
-// ReSharper disable EnforceIfStatementBraces
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -14,7 +13,6 @@ using SPTarkov.Server.Core.Services;
 
 namespace RZCustomEconomy;
 
-// Runs after all assort injections (AutoRouting + ManualOffers are both at RagfairCallbacks - 2).
 [Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 1)]
 public class SupplyPatcher(
     ILogger<SupplyPatcher> logger,
@@ -96,7 +94,7 @@ public class SupplyPatcher(
         var handbook = databaseService.GetTables().Templates?.Handbook;
         if (handbook is null)
         {
-            logger.LogWarning("[RZCustomEconomy] Supply/StockMultipliers: handbook is null — skipping.");
+            logger.LogWarning("[RZCustomEconomy] Supply/StockMultipliers: handbook is null : skipping.");
             return;
         }
 

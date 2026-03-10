@@ -32,7 +32,7 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // HIDEOUT AREAS
   //
-  // This file was generated with all UseCustom* toggles set to true and all requirement dicts populated with vanilla values.
+  // This config was generated with all UseCustom* toggles set to true and all requirement dicts populated with vanilla values.
   // This means every area is fully overwriting vanilla data, but since the injected values are the vanilla values, nothing changes in-game
   // out of the box.
   //
@@ -40,7 +40,7 @@
   // Just change what you need, leave the rest as-is.
   //
   // ── Fields ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-  //   RemoveFromDb  : removes the area from the DB entirely — visually looks like it's built at max level.
+  //   RemoveFromDb  : removes the area from the DB entirely.
   //   Enabled       : makes the area available to the player.
   //   DisplayLevel  : whether the current level is shown in the UI.
   //
@@ -53,7 +53,7 @@
   //   If Use* is false : vanilla requirements of that type are left completely untouched.
   //   Keys are stage level strings ("1", "2", "3"...). Missing stages are silently skipped.
   //
-  // ⚠ Disabling certain areas such as CircleOfCultists can cause crashes or infinite loading screens.
+  // ⚠ Disabling/removing certain areas such as CircleOfCultists can cause crashes or infinite loading screens.
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "Areas": {

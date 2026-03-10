@@ -53,13 +53,13 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         foreach (var (areaName, areaConfig) in _hideoutConfig.Areas)
         {
             if (!Enum.TryParse<HideoutAreas>(areaName, ignoreCase: true, out var areaType)) {
-                logger.LogWarning("[RZCustomEconomy] Unknown hideout area '{Name}' in config — skipping.", areaName);
+                logger.LogWarning("[RZCustomEconomy] Unknown hideout area '{Name}' in config : skipping.", areaName);
                 continue;
             }
 
             var area = areas.FirstOrDefault(a => a.Type == areaType);
             if (area is null) {
-                logger.LogWarning("[RZCustomEconomy] Area '{Name}' ({Type}) not found in database — skipping.", areaName, areaType);
+                logger.LogWarning("[RZCustomEconomy] Area '{Name}' ({Type}) not found in database : skipping.", areaName, areaType);
                 continue;
             }
 
@@ -143,7 +143,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         foreach (var (levelStr, requirements) in byStage)
         {
             if (!area.Stages.TryGetValue(levelStr, out var stage)) {
-                logger.LogWarning("[RZCustomEconomy] Area '{Area}': stage '{Level}' not found in database — skipping.", areaName, levelStr);
+                logger.LogWarning("[RZCustomEconomy] Area '{Area}': stage '{Level}' not found in database : skipping.", areaName, levelStr);
                 continue;
             }
 
@@ -167,7 +167,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     private StageRequirement? InjectItemRequirement(ItemRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.ItemTpl)) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Item requirement missing ItemTpl — skipping.", areaName, levelStr);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Item requirement missing ItemTpl : skipping.", areaName, levelStr);
             return null;
         }
 
@@ -183,12 +183,12 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     private StageRequirement? InjectAreaRequirement(AreaRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.AreaName)) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Area requirement missing AreaName — skipping.", areaName, levelStr);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Area requirement missing AreaName : skipping.", areaName, levelStr);
             return null;
         }
 
         if (!Enum.TryParse<HideoutAreas>(req.AreaName, ignoreCase: true, out var depAreaType)) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Unknown dependency area '{Dep}' — skipping.", areaName, levelStr, req.AreaName);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Unknown dependency area '{Dep}' : skipping.", areaName, levelStr, req.AreaName);
             return null;
         }
 
@@ -203,7 +203,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     private StageRequirement? InjectSkillRequirement(SkillRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.SkillName)) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Skill requirement missing SkillName — skipping.", areaName, levelStr);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Skill requirement missing SkillName : skipping.", areaName, levelStr);
             return null;
         }
 
@@ -218,7 +218,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
     private StageRequirement? InjectTraderRequirement(TraderRequirement req, string areaName, string levelStr)
     {
         if (string.IsNullOrEmpty(req.TraderName)) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': TraderLoyalty requirement missing TraderName — skipping.", areaName, levelStr);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': TraderLoyalty requirement missing TraderName : skipping.", areaName, levelStr);
             return null;
         }
 
@@ -228,7 +228,7 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
             t.Value.Base.Nickname.Equals(req.TraderName, StringComparison.OrdinalIgnoreCase));
 
         if (traderEntry.Value is null) {
-            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Trader '{Trader}' not found — skipping.", areaName, levelStr, req.TraderName);
+            logger.LogWarning("[RZCustomEconomy] Area '{Area}' stage '{Level}': Trader '{Trader}' not found : skipping.", areaName, levelStr, req.TraderName);
             return null;
         }
 
@@ -279,12 +279,9 @@ public class HideoutPatcher(ILogger<HideoutPatcher> logger, DatabaseService data
         var hideout = databaseService.GetHideout();
         var recipes = hideout.Production?.Recipes?.FindAll(r => r.EndProduct == ItemTpl.BARTER_PHYSICAL_BITCOIN);
         if (recipes is null || recipes.Count == 0) {
-            logger.LogWarning("[RZCustomEconomy] Bitcoin farm — no recipes found, skipping.");
+            logger.LogWarning("[RZCustomEconomy] Bitcoin farm : no recipes found, skipping.");
             return;
         }
-
-        logger.LogInformation("[RZCustomEconomy] Bitcoin farm defaults — ProductionTime: {Time}s, MaxCapacity: {Cap}, GpuBoostRate: {Boost}",
-            recipes[0].ProductionTime, recipes[0].ProductionLimitCount, hideout.Settings.GpuBoostRate);
 
         foreach (var recipe in recipes)
         {

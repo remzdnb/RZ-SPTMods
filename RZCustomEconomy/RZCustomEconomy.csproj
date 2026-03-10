@@ -27,7 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <HandbookFile Include="$(ProjectDir)vanilla_handbook.json"/>
+    <Extras Include="$(ProjectDir)extras\**\*"/>
+    <Extras Include="runSequence.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <VanillaItemsFile Include="$(ProjectDir)vanilla_items.json"/>
   </ItemGroup>
 
   <Target Name="ExportMod" AfterTargets="Build" Condition="'$(ModExportPath)' != ''">
@@ -36,7 +41,8 @@
     <MakeDir Directories="$(ModExportPath)config\"/>
     <Copy SourceFiles="$(OutputPath)$(AssemblyName).dll" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="true"/>
     <Copy SourceFiles="@(ConfigFiles)" DestinationFiles="@(ConfigFiles->'$(ModExportPath)config\%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>
-    <Copy SourceFiles="@(HandbookFile)" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="true"/>
+    <Copy SourceFiles="@(VanillaItemsFile)" DestinationFolder="$(ModExportPath)" SkipUnchangedFiles="true"/>
+    <Copy SourceFiles="@(Extras)" DestinationFiles="@(Extras->'$(ModExportPath)extras\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>
     <Message Text="→ Mod exported." Importance="High"/>
   </Target>
 

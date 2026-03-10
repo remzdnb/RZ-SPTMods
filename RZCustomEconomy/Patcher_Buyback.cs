@@ -1,5 +1,4 @@
 // RemzDNB - 2026
-// ReSharper disable EnforceIfStatementBraces
 
 using System.Reflection;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,10 @@ public class BuybackPatcher(ILogger<BuybackPatcher> logger, DatabaseService data
         {
             if (!traders.TryGetValue(traderId, out var trader))
             {
-                logger.LogWarning("[RZCustomEconomy] Buyback: trader '{Id}' not found -- skipping.", traderId);
+                if (masterConfig.EnableDevLogs) {
+                    logger.LogWarning("[RZCustomEconomy] Buyback: trader '{Id}' not found, skipping.", traderId);
+                }
+
                 continue;
             }
 

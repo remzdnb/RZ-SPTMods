@@ -21,7 +21,7 @@ public class CraftingPatcher(ILogger<CraftingPatcher> logger, DatabaseService da
         if (!_masterConfig.EnableCraftingConfig)
             return Task.CompletedTask;
 
-        var config = configLoader.Load<CraftsConfig>(CraftsConfig.FileName, Assembly.GetExecutingAssembly());
+        var config = configLoader.Load<CraftingConfig>(CraftingConfig.FileName, Assembly.GetExecutingAssembly());
         var recipes = databaseService.GetTables().Hideout?.Production?.Recipes;
 
         if (recipes is null)

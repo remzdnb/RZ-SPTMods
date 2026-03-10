@@ -4,10 +4,10 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for default trader offers. (defaultTradesConfig.json)
-  "EnableDefaultTrades": true,
+  "EnableDefaultTrades": false,
 
   // Master switch for automatic handbook → trader routing. (routedTradesConfig.json)
-  "EnableRoutedTrades": false,
+  "EnableRoutedTrades": true,
 
   // Master switch for manual trader offers. (manualTradesConfig.json)
   "EnableManualTrades": true,

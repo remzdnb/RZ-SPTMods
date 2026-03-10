@@ -13,8 +13,8 @@ using SPTarkov.Server.Core.Services;
 namespace RZCustomEconomy;
 
 [Injectable(TypePriority = OnLoadOrder.RagfairCallbacks - 2)]
-public class AutoRoutingPatcher(
-    ILogger<AutoRoutingPatcher> logger,
+public class RoutedTradesPatcher(
+    ILogger<RoutedTradesPatcher> logger,
     DatabaseService databaseService,
     ConfigLoader configLoader,
     AssortHelper assortHelper
@@ -28,12 +28,19 @@ public class AutoRoutingPatcher(
             return Task.CompletedTask;
 
         var autoRoutingConfig = configLoader.Load<RoutedTradesConfig>(RoutedTradesConfig.FileName, Assembly.GetExecutingAssembly());
-        var traders = databaseService.GetTraders();
+        var traders  = databaseService.GetTraders();
         var handbook = databaseService.GetTables().Templates?.Handbook;
+        var dbItems  = databaseService.GetTables().Templates?.Items;
 
         if (handbook is null)
         {
             logger.LogWarning("[RZCustomEconomy] Handbook is null -- skipping auto-routing.");
+            return Task.CompletedTask;
+        }
+
+        if (dbItems is null)
+        {
+            logger.LogWarning("[RZCustomEconomy] Templates.Items is null -- skipping auto-routing.");
             return Task.CompletedTask;
         }
 
@@ -56,30 +63,32 @@ public class AutoRoutingPatcher(
         HashSet<string>? moddedTpls = null;
         if (autoRoutingConfig.RouteModdedItemsOnly || autoRoutingConfig.RouteVanillaItemsOnly)
         {
-            moddedTpls = BuildModdedItemSet(handbook);
-            logger.LogInformation("[RZCustomEconomy] Detected {Count} modded item(s) via vanilla_handbook.json diff.", moddedTpls.Count);
+            moddedTpls = BuildModdedItemSet(dbItems);
+            logger.LogInformation("[RZCustomEconomy] Detected {Count} modded item(s) via vanilla_items.json diff.", moddedTpls.Count);
         }
 
-        // 3. Build category route map : categoryId → (traderId, route).
-        //    Dictionary is keyed by trader ID directly — no TraderIds.FromName needed.
+        // 3. Resolve exchange rates for currency conversion.
 
-        var catToParent = handbook.Categories.ToDictionary(
-            c => c.Id.ToString(),
-            c => c.ParentId?.ToString(),
-            StringComparer.OrdinalIgnoreCase
-        );
+        var handbookPrices   = handbook.Items.ToDictionary(e => e.Id.ToString(), e => (double)(e.Price ?? 0));
+        var dollarPriceInRub = handbookPrices.GetValueOrDefault(ItemTpl.MONEY_DOLLARS.ToString(), 0.0);
+        var euroPriceInRub   = handbookPrices.GetValueOrDefault(ItemTpl.MONEY_EUROS.ToString(), 0.0);
 
-        var categoryToTraderRoute = BuildCategoryRouteMap(
-            handbook.Categories,
+        if (dollarPriceInRub <= 0)
+            logger.LogWarning("[RZCustomEconomy] RoutedTrades: handbook price for USD is 0 or missing — USD traders will fallback to roubles.");
+        if (euroPriceInRub <= 0)
+            logger.LogWarning("[RZCustomEconomy] RoutedTrades: handbook price for EUR is 0 or missing — EUR traders will fallback to roubles.");
+
+        // 4. Build category route map : itemTpl → List<(traderId, route)>.
+
+        var categoryToTraderRoutes = BuildCategoryRouteMap(
+            dbItems,
             autoRoutingConfig.CategoryRoutes,
             autoRoutingConfig.ForceRouteAll
         );
 
-        var overrides = autoRoutingConfig.Overrides.ToDictionary(o => o.ItemTpl, StringComparer.OrdinalIgnoreCase);
+        int routed = 0, skipped = 0;
 
-        int routed = 0, overridden = 0, skipped = 0;
-
-        // 4. Route.
+        // 5. Route.
 
         foreach (var hbItem in handbook.Items)
         {
@@ -101,38 +110,14 @@ public class AutoRoutingPatcher(
                 }
             }
 
-            // Override.
-
-            if (autoRoutingConfig.EnableOverrides && overrides.TryGetValue(itemTpl, out var ov))
+            if (!categoryToTraderRoutes.TryGetValue(hbItem.Id, out var traderRoutes))
             {
-                if (string.IsNullOrEmpty(ov.TraderId))
+                if (autoRoutingConfig.ForceRouteAll && autoRoutingConfig.FallbackTrader is not null)
                 {
-                    skipped++;
-                    continue;
-                }
-
-                if (!traders.TryGetValue(ov.TraderId, out var ovTrader))
-                {
-                    logger.LogWarning("[RZCustomEconomy] Override trader '{Id}' not found for '{Tpl}'.", ov.TraderId, itemTpl);
-                    skipped++;
-                    continue;
-                }
-
-                InjectAutoOffer(ovTrader.Assort, hbItem.Id, ov.PriceRoubles, ov.StackCount, ov.LoyaltyLevel, ov.BarterItems, 100);
-                overridden++;
-                continue;
-            }
-
-            // Normal route.
-
-            if (!categoryToTraderRoute.TryGetValue(hbItem.ParentId, out var traderRoute))
-            {
-                if (autoRoutingConfig.ForceRouteAll && autoRoutingConfig.FallbackTraderId is not null)
-                {
-                    if (traders.TryGetValue(autoRoutingConfig.FallbackTraderId, out var fallbackTrader))
+                    if (traders.TryGetValue(autoRoutingConfig.FallbackTrader, out var fallbackTrader))
                     {
                         var fallbackPrice = Math.Max(1, (int)Math.Round(hbItem.Price ?? 0));
-                        InjectAutoOffer(fallbackTrader.Assort, hbItem.Id, fallbackPrice, -1, 1, new List<BarterItem>(), 100);
+                        InjectAutoOffer(fallbackTrader.Assort, hbItem.Id, fallbackPrice, ItemTpl.MONEY_ROUBLES, -1, 1, 100);
                         routed++;
                     }
                 }
@@ -143,27 +128,59 @@ public class AutoRoutingPatcher(
                 continue;
             }
 
-            var traderId = traderRoute.TraderId;
-            var route = traderRoute.Route;
-
-            if (!traders.TryGetValue(traderId, out var trader))
+            foreach (var (traderId, route) in traderRoutes)
             {
-                logger.LogWarning("[RZCustomEconomy] Route trader '{Id}' not found.", traderId);
-                skipped++;
-                continue;
-            }
+                if (!traders.TryGetValue(traderId, out var trader))
+                {
+                    if (masterConfig.EnableDevLogs) {
+                        logger.LogWarning("[RZCustomEconomy] Route trader '{Id}' not found, skipping.", traderId);
+                    }
 
-            var handbookPrice = Math.Max(1, (int)Math.Round((hbItem.Price ?? 0) * route.PriceMultiplier));
-            InjectAutoOffer(trader.Assort, hbItem.Id, handbookPrice, -1, route.LoyaltyLevel, new List<BarterItem>(), 100);
-            routed++;
+                    continue;
+                }
+
+                var currency = autoRoutingConfig.TraderCurrencies.GetValueOrDefault(traderId, TradeCurrency.Rub);
+                var (currencyTpl, price) = ResolvePrice(
+                    hbItem.Price ?? 0, route.PriceMultiplier,
+                    currency,
+                    dollarPriceInRub, euroPriceInRub
+                );
+                InjectAutoOffer(trader.Assort, hbItem.Id, price, currencyTpl, -1, route.LoyaltyLevel, 100);
+                routed++;
+            }
         }
 
-        logger.LogInformation(
-            "[RZCustomEconomy] {Routed} auto-routed, {Overridden} overridden, {Skipped} skipped.{RouteAll}",
-            routed, overridden, skipped, autoRoutingConfig.ForceRouteAll ? " [ForceRouteAll ON]" : ""
-        );
+        if (masterConfig.EnableDevLogs)
+        {
+            logger.LogInformation("[RZCustomEconomy] {Routed} auto-routed, {Skipped} skipped.{RouteAll}", routed, skipped, autoRoutingConfig.ForceRouteAll ? " [ForceRouteAll ON]" : "");
+        }
 
         return Task.CompletedTask;
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // ResolvePrice
+    // Converts a rouble handbook price to the target currency.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private static (MongoId CurrencyTpl, int Price) ResolvePrice(
+        double priceRub,
+        double multiplier,
+        TradeCurrency currency,
+        double dollarPriceInRub,
+        double euroPriceInRub
+    )
+    {
+        var adjusted = priceRub * multiplier;
+        return currency switch
+        {
+            TradeCurrency.Usd when dollarPriceInRub > 0 =>
+                (ItemTpl.MONEY_DOLLARS, Math.Max(1, (int)Math.Round(adjusted / dollarPriceInRub))),
+            TradeCurrency.Eur when euroPriceInRub > 0 =>
+                (ItemTpl.MONEY_EUROS, Math.Max(1, (int)Math.Round(adjusted / euroPriceInRub))),
+            _ =>
+                (ItemTpl.MONEY_ROUBLES, Math.Max(1, (int)Math.Round(adjusted))),
+        };
     }
 
     // ─────────────────────────────────────────────────────────────────────────
@@ -173,50 +190,48 @@ public class AutoRoutingPatcher(
     private void InjectAutoOffer(
         TraderAssort assort,
         MongoId tpl,
-        int priceRoubles,
+        int price,
+        MongoId currencyTpl,
         int stackCount,
         int loyaltyLevel,
-        List<BarterItem> barterItems,
         int durability
     )
     {
         var itemId = new MongoId();
 
-        assort.Items.Add(
-            new Item
+        assort.Items.Add(new Item
+        {
+            Id       = itemId,
+            Template = tpl,
+            ParentId = "hideout",
+            SlotId   = "hideout",
+            Upd      = new Upd
             {
-                Id = itemId,
-                Template = tpl,
-                ParentId = "hideout",
-                SlotId = "hideout",
-                Upd = new Upd
-                {
-                    UnlimitedCount = stackCount <= 0,
-                    StackObjectsCount = stackCount <= 0 ? 999999 : stackCount,
-                    BuyRestrictionMax = null,
-                    BuyRestrictionCurrent = null,
-                },
-            }
-        );
+                UnlimitedCount        = stackCount <= 0,
+                StackObjectsCount     = stackCount <= 0 ? 999999 : stackCount,
+                BuyRestrictionMax     = null,
+                BuyRestrictionCurrent = null,
+            },
+        });
 
         assortHelper.ResolveRequiredChildren(assort.Items, itemId, tpl, durability, new HashSet<string>());
-        assort.BarterScheme[itemId] = new List<List<BarterScheme>> { assortHelper.BuildPayment(priceRoubles, barterItems) };
+        assort.BarterScheme[itemId]    = [[new BarterScheme { Template = currencyTpl, Count = price }]];
         assort.LoyalLevelItems[itemId] = loyaltyLevel;
     }
 
     // ─────────────────────────────────────────────────────────────────────────
     // BuildCategoryRouteMap
-    // Returns a map of categoryId → (traderId, route) with parent inheritance.
+    // Returns a map of itemTpl → List<(traderId, route)>.
+    // Supports multiple traders per category.
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static Dictionary<MongoId, (string TraderId, CategoryRoute Route)> BuildCategoryRouteMap(
-        List<HandbookCategory> categories,
+    private static Dictionary<MongoId, List<(string TraderId, CategoryRoute Route)>> BuildCategoryRouteMap(
+        Dictionary<MongoId, TemplateItem> dbItems,
         Dictionary<string, List<CategoryRoute>> categoryRoutes,
         bool forceRouteAll
     )
     {
-        // Flatten to categoryId → (traderId, route), respecting Enabled flag unless ForceRouteAll.
-        var directRoutes = new Dictionary<string, (string TraderId, CategoryRoute Route)>(StringComparer.OrdinalIgnoreCase);
+        var directRoutes = new Dictionary<string, List<(string TraderId, CategoryRoute Route)>>(StringComparer.OrdinalIgnoreCase);
 
         foreach (var (traderId, routes) in categoryRoutes)
         {
@@ -225,39 +240,56 @@ public class AutoRoutingPatcher(
                 if (!forceRouteAll && !route.Enabled)
                     continue;
 
-                // Last writer wins if a category is defined under multiple traders.
-                directRoutes[route.CategoryId] = (traderId, route);
+                if (!directRoutes.TryGetValue(route.CategoryId, out var list))
+                {
+                    list = new List<(string, CategoryRoute)>();
+                    directRoutes[route.CategoryId] = list;
+                }
+
+                list.Add((traderId, route));
             }
         }
 
-        var catById = categories.ToDictionary(c => c.Id.ToString(), StringComparer.OrdinalIgnoreCase);
-        var result = new Dictionary<MongoId, (string, CategoryRoute)>();
+        var result = new Dictionary<MongoId, List<(string, CategoryRoute)>>();
 
-        foreach (var cat in categories)
+        foreach (var (tpl, _) in dbItems)
         {
-            var resolved = FindRouteForCategory(cat.Id.ToString(), catById, directRoutes);
-            if (resolved.HasValue)
-                result[cat.Id] = resolved.Value;
+            var resolved = FindRoutesForItem(tpl.ToString(), dbItems, directRoutes);
+            if (resolved is { Count: > 0 })
+                result[tpl] = resolved;
         }
 
         return result;
     }
 
-    private static (string TraderId, CategoryRoute Route)? FindRouteForCategory(
-        string categoryId,
-        Dictionary<string, HandbookCategory> catById,
-        Dictionary<string, (string TraderId, CategoryRoute Route)> directRoutes
+    // ─────────────────────────────────────────────────────────────────────────
+    // FindRoutesForItem
+    // Walks the DB parent chain, returns all routes matching the first
+    // category hit. Supports multiple traders on the same category.
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private static List<(string TraderId, CategoryRoute Route)>? FindRoutesForItem(
+        string tpl,
+        Dictionary<MongoId, TemplateItem> dbItems,
+        Dictionary<string, List<(string TraderId, CategoryRoute Route)>> directRoutes
     )
     {
-        var current = categoryId;
-        while (current is not null)
+        if (!dbItems.TryGetValue(tpl, out var item))
+            return null;
+
+        var current = item.Parent.ToString();
+
+        while (!string.IsNullOrEmpty(current))
         {
-            if (directRoutes.TryGetValue(current, out var route))
-                return route;
-            if (!catById.TryGetValue(current, out var cat))
+            if (directRoutes.TryGetValue(current, out var routes))
+                return routes;
+
+            if (!dbItems.TryGetValue(current, out var parent))
                 break;
-            current = cat.ParentId?.ToString();
+
+            current = parent.Parent.ToString();
         }
+
         return null;
     }
 
@@ -265,14 +297,15 @@ public class AutoRoutingPatcher(
     // BuildModdedItemSet
     // ─────────────────────────────────────────────────────────────────────────
 
-    private HashSet<string> BuildModdedItemSet(HandbookBase handbook)
+    private HashSet<string> BuildModdedItemSet(Dictionary<MongoId, TemplateItem> dbItems)
     {
-        var vanillaPath = System.IO.Path.Combine(AppContext.BaseDirectory, "user", "mods", "RZCustomEconomy", "vanilla_handbook.json");
+        var vanillaPath = System.IO.Path.Combine(
+            AppContext.BaseDirectory, "user", "mods", "RZCustomEconomy", "vanilla_items.json");
 
         if (!System.IO.File.Exists(vanillaPath))
         {
             logger.LogWarning(
-                "[RZCustomEconomy] vanilla_handbook.json not found at '{Path}'. "
+                "[RZCustomEconomy] vanilla_items.json not found at '{Path}'. "
                     + "RouteModdedItemsOnly / RouteVanillaItemsOnly will have no effect.",
                 vanillaPath
             );
@@ -285,27 +318,18 @@ public class AutoRoutingPatcher(
             var raw = System.IO.File.ReadAllText(vanillaPath);
             using var doc = System.Text.Json.JsonDocument.Parse(raw);
 
-            if (!doc.RootElement.TryGetProperty("Items", out var itemsEl))
-            {
-                logger.LogWarning("[RZCustomEconomy] vanilla_handbook.json is empty or malformed -- modded item detection disabled.");
-                return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            }
-
             vanillaTpls = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (var item in itemsEl.EnumerateArray())
-            {
-                if (item.TryGetProperty("Id", out var idEl))
-                    vanillaTpls.Add(idEl.GetString() ?? "");
-            }
+            foreach (var prop in doc.RootElement.EnumerateObject())
+                vanillaTpls.Add(prop.Name);
         }
         catch (Exception ex)
         {
-            logger.LogWarning("[RZCustomEconomy] Failed to parse vanilla_handbook.json: {Err}", ex.Message);
+            logger.LogWarning("[RZCustomEconomy] Failed to parse vanilla_items.json: {Err}", ex.Message);
             return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         }
 
-        return handbook
-            .Items.Select(i => i.Id.ToString())
+        return dbItems.Keys
+            .Select(k => k.ToString())
             .Where(tpl => !vanillaTpls.Contains(tpl))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
     }

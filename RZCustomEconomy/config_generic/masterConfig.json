@@ -33,8 +33,8 @@
   // Master switch for handbook prices overrides. (handbookPricesConfig.json)
   "EnableHandbookPricesConfig": false,
 
-  // Disables flea market dynamic offers. Both blocks new offer generation and purges any existing ones. Trader offers are not affected.
-  "DisableFleaMarket": false,
+  // Master switch for flea market configuration. (fleaMarketConfig.json)
+  "EnableFleaMarketConfig": false,
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // DEV SETTINGS
