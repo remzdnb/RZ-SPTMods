@@ -2,28 +2,51 @@
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // TIER DEFINITIONS
   //
-  // Maps tier names to hex background colors.
-  // These names are referenced by categories.json and overrides/*.json.
+  // Maps tier names to background colors.
   //
-  // Default    — Unassigned or garbage tier    → Grey
-  // Notable    — Better than garbage xD        → Blue
-  // Superior   — Good                          → Violet
-  // Excellent  — Very good                     → Yellow
-  // Elite      — Best in slot                  → Red
+  // Default    — Unassigned or garbage tier
+  // Notable    — Better than garbage
+  // Superior   — Good
+  // Excellent  — Very good
+  // Elite      — Best in slot
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-  "Tiers": {
-    "Default":      "black",
-    "Notable":      "blue",
-    "Superior":     "violet",
-    "Excellent":    "tracerYellow",
-    "Elite":        "tracerRed",
-    "Situational":  "orange"
+  // "dark" or "bright" (or you can make your own)
+  "Theme": "bright",
+
+  //
+  "ThemePresets": {
+    "dark": {
+      "Default":     "black",
+      "Notable":     "blue",
+      "Superior":    "violet",
+      "Excellent":   "tracerYellow",
+      "Elite":       "tracerRed",
+      "Situational": "#555555",
+      "Quest":       "green"
+    },
+    "bright": {
+      "Default":     "black",
+      "Notable":     "#0000bf",
+      "Superior":    "#7f00bf",
+      "Excellent":   "#bfbf00",
+      "Elite":       "#bf0000",
+      "Situational": "#888888",
+      "Quest":       "tracerGreen"
+    },
+    "verybright": {
+      "Default":     "#555555",
+      "Notable":     "#0000ff",
+      "Superior":    "#aa00ff",
+      "Excellent":   "#ffff00",
+      "Elite":       "#ff0000",
+      "Situational": "#cccccc",
+      "Quest":       "tracerGreen"
+    }
   },
 
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
   // PRICE THRESHOLDS
-  //
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "PriceThresholds": [
@@ -33,16 +56,24 @@
     { "MinPrice": 30000,  "Tier": "Notable"   }
   ],
 
-  // SPT native background color values:
-  // "default"       — grey
-  // "blue"          — blue
-  // "violet"        — violet/purple
-  // "yellow"        — pale yellow
-  // "tracerYellow"  — vivid gold
-  // "red"           — red
-  // "tracerRed"     — vivid red
-  // "orange"        — renders as pale brown in-game
-  // "green"         — green
-  // "tracerGreen"   — neon green
-  // "black"         — black
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+  // VERBOSE LOGGING
+  //
+  // Set to true to log skipped TPL warnings (useful if you have modded items in the config)
+  // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  "EnableVerboseLogging": false
 }
+
+// SPT native background color values:
+// "default"       — grey
+// "blue"          — blue
+// "violet"        — violet/purple
+// "yellow"        — pale yellow
+// "tracerYellow"  — vivid gold
+// "red"           — red
+// "tracerRed"     — vivid red
+// "orange"        — renders as pale brown in-game
+// "green"         — green
+// "tracerGreen"   — neon green
+// "black"         — black

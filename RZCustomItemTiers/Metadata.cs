@@ -7,7 +7,7 @@ namespace RZCustomItemTiers;
 
 public record ModMetadata : AbstractModMetadata
 {
-    public override SemanticVersioning.Version Version { get; init; } = new("1.0.0");
+    public override SemanticVersioning.Version Version { get; init; } = new("1.0.2");
     public override Range SptVersion { get; init; } = new("~4.0.0");
 
     public override string ModGuid { get; init; } = "com.rz.customitemcolors";

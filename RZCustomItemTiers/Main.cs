@@ -28,7 +28,8 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
         // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
         var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
-        if (masterConfig?.Tiers is null || masterConfig.Tiers.Count == 0)
+        var tiers = masterConfig?.GetTiers();
+        if (tiers is null || tiers.Count == 0)
         {
             logger.LogError("[RZCustomItemTiers] masterConfig.json is empty or missing — aborting.");
             return Task.CompletedTask;
@@ -39,7 +40,7 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
         var tplOverrides  = LoadAndMergeOverrides();
 
         // Pre-sort price thresholds descending so first match wins
-        masterConfig.PriceThresholds.Sort((a, b) => b.MinPrice.CompareTo(a.MinPrice));
+        masterConfig!.PriceThresholds.Sort((a, b) => b.MinPrice.CompareTo(a.MinPrice));
 
         // Build handbook price lookup
         var handbookPrices = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -50,7 +51,7 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
             }
         }
 
-        var defaultColor = masterConfig.Tiers.GetValueOrDefault("Default", "default");
+        var defaultColor = tiers.GetValueOrDefault("Default", "default");
 
         // Build price rule category set for fast lookup (same DB IDs as categoryRules)
         var priceRuleCategories = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -71,11 +72,18 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
         {
             if (item.Properties is null) continue;
 
+            if (item.Properties.QuestItem == true && tiers.ContainsKey("Quest"))
+            {
+                item.Properties.BackgroundColor = tiers["Quest"];
+                pass1++;
+                continue;
+            }
+
             var tier = categoryRules?.Assignments is not null
                 ? FindCategoryTier(mongoId.ToString(), items, categoryRules.Assignments)
                 : null;
 
-            item.Properties.BackgroundColor = tier is not null && masterConfig.Tiers.TryGetValue(tier, out var c) ? c : defaultColor;
+            item.Properties.BackgroundColor = tier is not null && tiers.TryGetValue(tier, out var c) ? c : defaultColor;
             pass1++;
         }
 
@@ -98,7 +106,7 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
 
                 var tier = ResolvePriceTier(price, masterConfig.PriceThresholds) ?? "Default";
 
-                if (!masterConfig.Tiers.TryGetValue(tier, out var color)) continue;
+                if (!tiers.TryGetValue(tier, out var color)) continue;
 
                 item.Properties.BackgroundColor = color;
                 pass2++;
@@ -112,15 +120,18 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
         {
             if (!items.TryGetValue(tpl, out var item))
             {
-                logger.LogWarning("[RZCustomItemTiers] Override TPL '{Tpl}' not found in DB — skipped.", tpl);
+                if (masterConfig.EnableVerboseLogging) {
+                    logger.LogWarning("[RZCustomItemTiers] Override TPL '{Tpl}' not found in DB : skipped.", tpl);
+                }
+
                 continue;
             }
 
             if (item.Properties is null) continue;
 
-            if (!masterConfig.Tiers.TryGetValue(tierName, out var color))
+            if (!tiers.TryGetValue(tierName, out var color))
             {
-                logger.LogWarning("[RZCustomItemTiers] Override TPL '{Tpl}': unknown tier '{Tier}' — skipped.", tpl, tierName);
+                logger.LogWarning("[RZCustomItemTiers] Override TPL '{Tpl}': unknown tier '{Tier}' : skipped.", tpl, tierName);
                 continue;
             }
 
@@ -149,12 +160,6 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
 
             item.Properties.BackgroundColor = cartridge.Properties.BackgroundColor;
         }
-
-        //
-
-        logger.LogInformation(
-            "[RZCustomItemTiers] Done — {P1} categorized, {P2} price-tiered, {P3} TPL override(s).",
-            pass1, pass2, pass3);
 
         return Task.CompletedTask;
     }
@@ -246,7 +251,7 @@ public class ColorPatcher(ILogger<ColorPatcher> logger, DatabaseService database
             foreach (var (tpl, tier) in file.Overrides)
             {
                 if (merged.ContainsKey(tpl))
-                    logger.LogWarning("[RZCustomItemTiers] Duplicate TPL override '{Tpl}' — last file wins.", tpl);
+                    logger.LogWarning("[RZCustomItemTiers] Duplicate TPL override '{Tpl}' : last file wins.", tpl);
 
                 merged[tpl] = tier;
             }

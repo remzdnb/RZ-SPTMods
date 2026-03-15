@@ -10,8 +10,18 @@ public class MasterConfig
 {
     public const string FileName = "masterConfig.json";
 
-    public Dictionary<string, string> Tiers { get; set; } = new();
+    public string Theme { get; set; } = "dark";
+    public Dictionary<string, Dictionary<string, string>> ThemePresets { get; set; } = new();
     public List<PriceThreshold> PriceThresholds { get; set; } = new();
+    public bool EnableVerboseLogging { get; set; } = false;
+
+    public Dictionary<string, string> GetTiers()
+    {
+        if (ThemePresets.TryGetValue(Theme, out var preset))
+            return preset;
+
+        return ThemePresets.Values.FirstOrDefault() ?? new Dictionary<string, string>();
+    }
 }
 
 public class PriceThreshold

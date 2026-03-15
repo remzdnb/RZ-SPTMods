@@ -70,12 +70,12 @@ public class ConfigLoader(ILogger<ConfigLoader> logger, ModHelper modHelper)
                 {
                     var result = JsonSerializer.Deserialize<T>(File.ReadAllText(path), _serializerOptions);
                     if (result is null)
-                        logger.LogWarning("[{Tag}] Could not deserialize '{File}' — skipping.", tag, path);
+                        logger.LogWarning("[{Tag}] Could not deserialize '{File}' : skipping.", tag, path);
                     return result;
                 }
                 catch (Exception ex)
                 {
-                    logger.LogWarning("[{Tag}] Failed to load '{File}' : {Msg} — skipping.", tag, path, ex.Message);
+                    logger.LogWarning("[{Tag}] Failed to load '{File}' : {Msg} : skipping.", tag, path, ex.Message);
                     return default;
                 }
             })
