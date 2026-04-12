@@ -21,7 +21,8 @@ namespace RZCustomEconomy;
 public class DefaultTradesPatcher(
     ILogger<DefaultTradesPatcher> logger,
     DatabaseService databaseService,
-    ConfigLoader configLoader
+    ConfigLoader configLoader,
+    AssortHelper assortHelper
 ) : IOnLoad
 {
     private readonly MasterConfig _masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
@@ -38,7 +39,7 @@ public class DefaultTradesPatcher(
 
         ApplyBlacklist(config);
         ApplyPriceMultipliers(config);
-        ReplaceBarterTrades(config);
+        ReplaceBarterTrades(config, assortHelper);
 
         return Task.CompletedTask;
     }
@@ -161,7 +162,7 @@ public class DefaultTradesPatcher(
     // ReplaceBarterTrades
     // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-    private void ReplaceBarterTrades(DefaultTradesConfig config)
+    private void ReplaceBarterTrades(DefaultTradesConfig config, AssortHelper assortHelper)
     {
         if (config.NoBarterTraders.Count == 0)
             return;
@@ -227,10 +228,12 @@ public class DefaultTradesPatcher(
                         continue;
                     }
 
-                    if (!handbookItems.TryGetValue(rootItem.Template.ToString(), out var priceRub) || priceRub <= 0)
+                    var priceRub = assortHelper.GetTotalHandbookPrice(rootItem.Template, handbookItems);
+                    if (priceRub <= 0)
                     {
                         skipped++;
-                        logger.LogWarning("[RZCustomEconomy] DefaultTrades/NoBarterTrades: no handbook price for '{Tpl}' : skipping.", rootItem.Template);
+                        logger.LogWarning("[RZCustomEconomy] DefaultTrades/NoBarterTrades: no handbook price for '{Tpl}' : skipping.",
+                            rootItem.Template);
                         continue;
                     }
 

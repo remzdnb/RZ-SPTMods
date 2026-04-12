@@ -153,4 +153,39 @@ public class AssortHelper(DatabaseService databaseService, ConfigLoader configLo
 
         return null;
     }
+
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+    // GetTotalHandbookPrice
+    // Returns the handbook price of an item PLUS all its required children (e.g. armor plates).
+    // This prevents selling an item+children bundle for less than the sum of its parts.
+    // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    public double GetTotalHandbookPrice(MongoId tpl, Dictionary<string, double> handbookPrices, int depth = 0)
+    {
+        if (depth > 5)
+            return 0;
+
+        var total = handbookPrices.GetValueOrDefault(tpl.ToString(), 0.0);
+
+        if (!ItemTemplates.TryGetValue(tpl, out var template))
+            return total;
+
+        var slots = template.Properties?.Slots;
+        if (slots is null)
+            return total;
+
+        foreach (var slot in slots)
+        {
+            if (slot.Required != true)
+                continue;
+
+            var childTpl = ResolveSlotDefaultTpl(slot);
+            if (childTpl is null)
+                continue;
+
+            total += GetTotalHandbookPrice(childTpl.Value, handbookPrices, depth + 1);
+        }
+
+        return total;
+    }
 }

@@ -116,7 +116,9 @@ public class RoutedTradesPatcher(
                 {
                     if (traders.TryGetValue(autoRoutingConfig.FallbackTrader, out var fallbackTrader))
                     {
-                        var fallbackPrice = Math.Max(1, (int)Math.Round(hbItem.Price ?? 0));
+                        var fallbackPrice = Math.Max(1, (int)Math.Round(
+                            assortHelper.GetTotalHandbookPrice(hbItem.Id, handbookPrices)
+                        ));
                         InjectAutoOffer(fallbackTrader.Assort, hbItem.Id, fallbackPrice, ItemTpl.MONEY_ROUBLES, -1, 1, 100);
                         routed++;
                     }
@@ -141,7 +143,8 @@ public class RoutedTradesPatcher(
 
                 var currency = autoRoutingConfig.TraderCurrencies.GetValueOrDefault(traderId, TradeCurrency.Rub);
                 var (currencyTpl, price) = ResolvePrice(
-                    hbItem.Price ?? 0, route.PriceMultiplier,
+                    assortHelper.GetTotalHandbookPrice(hbItem.Id, handbookPrices),
+                    route.PriceMultiplier,
                     currency,
                     dollarPriceInRub, euroPriceInRub
                 );

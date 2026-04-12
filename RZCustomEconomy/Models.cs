@@ -82,7 +82,7 @@ public class CategoryRoute
 public class TradeOffer
 {
     public string ItemTpl { get; set; } = "";
-    public int StackCount { get; set; } = 1;
+    public int StackCount { get; set; } = -1;
     public int LoyaltyLevel { get; set; } = 1;
     public int Durability { get; set; } = 100;
     public int PriceRoubles { get; set; } = 0;

@@ -1,0 +1,7 @@
+{
+  // Force all assort prices to 1 rouble, ignoring all price config.
+  "EnableDevMode": false,
+
+  // Enable verbose logging.
+  "EnableDevLogs": false,
+}

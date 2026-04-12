@@ -20,9 +20,9 @@ public class ManualOffersPatcher(
 {
     public Task OnLoad()
     {
-        var userConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
+        var masterConfig = configLoader.Load<MasterConfig>(MasterConfig.FileName, Assembly.GetExecutingAssembly());
 
-        if (!userConfig.EnableManualTrades)
+        if (!masterConfig.EnableManualTrades)
             return Task.CompletedTask;
 
         var config = configLoader.Load<ManualTradesConfig>(ManualTradesConfig.FileName, Assembly.GetExecutingAssembly());
@@ -43,7 +43,9 @@ public class ManualOffersPatcher(
             injected += manualOffers.Offers.Count;
         }
 
-        logger.LogInformation("[RZCustomEconomy] {Count} manual offer(s) injected.", injected);
+        if (masterConfig.EnableDevLogs) {
+            logger.LogInformation("[RZCustomEconomy] {Count} manual offer(s) injected.", injected);
+        }
 
         return Task.CompletedTask;
     }
