@@ -657,6 +657,8 @@ The dumps also include the full contents of **WTT - Content Backport**, so modde
 
 > ⚠️ Use Notepad++ or VSCode to edit config files. The default Windows Notepad won't warn you about syntax errors.
 
+> 💡 My personal config is available on the repository if you want more concrete examples of what the mod can do.
+
 > 💡 A good chunk of this mod was written with Claude AI as a coding assistant. I have no issue saying that, and I don't consider it reflects on my ability as a developer, my background is Unreal Engine C++ and I have zero personal interest in becoming an expert in C#, SPT internals, or Tarkov's codebase. What I care about is whether the config is flexible and whether the features actually work.
 I'm mentioning this preemptively because it tends to come up. If you're the type to have **strong** feelings about it, that's fine, just know it's not a conversation I'm going to have.
 

@@ -83,6 +83,18 @@
         "5a341c4686f77469e155819e", // FaceCover
         "5448e5724bdc2ddf718b4568", // Visors (Eyewear)
       ]
+    },
+    {
+      "FromTpls": [
+        "5f60c076f2bcbb675b00dac2", // Galvion Caiman Hybrid Ballistic Mandible Guard
+        "693be056fd3a5c751e00de04", // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam Alpine)
+        "68a9b6c8d3a061d8b6058346", // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam)
+        "68a9b73bd3a061d8b6058348", // Galvion Caiman Hybrid Ballistic Mandible Guard (Mutualist)
+        "5c178a942e22164bef5ceca3", // Crye Precision AirFrame Chops
+      ],
+      "ToCategories": [
+        "5645bcb74bdc2ded0b8b4578", // Headphones (Earpiece)
+      ]
     }
   ]
 }
