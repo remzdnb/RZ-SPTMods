@@ -5,7 +5,7 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Route every handbook item regardless of category routes and blacklists.
-  "ForceRouteAll": true,
+  "ForceRouteAll": false,
 
   // Only route items not present in vanilla_items.json (modded items). Mutually exclusive with RouteVanillaItemsOnly.
   "RouteModdedItemsOnly": false,
@@ -371,6 +371,8 @@
 
     // AMMO
     // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    "5a2a57cfc4a2826c6e06d44a", // RDG-2B smoke grenade
 
     // Grenades
     "5ede474b0c226a66f5402622", // 40x46mm M381 (HE) grenade

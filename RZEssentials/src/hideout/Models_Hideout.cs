@@ -141,7 +141,7 @@ public class CraftRecipe
 {
     public string EndProduct { get; set; } = "";
     public int Count { get; set; } = 1;
-    public int ProductionTime { get; set; } = 30;
+    public int ProductionTime { get; set; } = 60;
     public bool NeedFuelForAllProductionTime { get; set; } = false;
     public bool Locked { get; set; } = false;
     public bool Continuous { get; set; } = false;

@@ -167,12 +167,6 @@
     "545cdae64bdc2d39198b4568": { "Grids": { "0": { "CellsH": 5, "CellsV": 6 } } },
     // Camelbak Tri-Zip assault backpack (MultiCam) (5x6)
     "66b5f22b78bbc0200425f904": { "Grids": { "0": { "CellsH": 5, "CellsV": 6 } } },
-    // Eberlestock F5 Switchblade backpack (Dry Earth) (5x6)
-    "5f5e467b0bc58666c37e7821": { "Grids": { "0": { "CellsH": 5, "CellsV": 6 } } },
-    // Gruppa 99 T30 backpack (Black) (5x6)
-    "628e1ffc83ec92260c0f437f": { "Grids": { "0": { "CellsH": 5, "CellsV": 6 } } },
-    // Gruppa 99 T30 backpack (MultiCam) (5x6)
-    "62a1b7fbc30cfa1d366af586": { "Grids": { "0": { "CellsH": 5, "CellsV": 6 } } },
     // Mystery Ranch Terraframe backpack (Christmas Edition) (2x5 + 4x5)
     "674da9cf0cb4bcde7103c07b": { "Grids": { "0": { "CellsH": 2, "CellsV": 5 }, "1": { "CellsH": 4, "CellsV": 5 } } },
     // Mystery Ranch Terraframe backpack (Olive Drab) (2x5 + 4x5)
@@ -189,8 +183,6 @@
     "61b9e1aaef9a1b5d6a79899a": { "Grids": { "0": { "CellsH": 5, "CellsV": 7 } } },
     // SSO Attack 2 raid backpack (Khaki) (5x7)
     "5ab8ebf186f7742d8b372e80": { "Grids": { "0": { "CellsH": 5, "CellsV": 7 } } },
-    // Tasmanian Tiger Trooper 35 backpack (Khaki) (5x7)
-    "639346cc1c8f182ad90c8972": { "Grids": { "0": { "CellsH": 5, "CellsV": 7 } } },
     // Mystery Ranch SATL Bridger Assault Pack (Foliage) (6x2 + 3x4 + 3x4)
     "656e0436d44a1bb4220303a0": { "Grids": { "0": { "CellsH": 6, "CellsV": 2 }, "1": { "CellsH": 3, "CellsV": 4 }, "2": { "CellsH": 3, "CellsV": 4 } } },
     // Eberlestock F4 Terminator load bearing backpack (Tiger Stripe) (5x4 + 5x2 + 5x2)
@@ -202,6 +194,26 @@
     // Mystery Ranch Terraplane backpack (6x50)
     "56e294cdd2720b603a8b4575": { "Grids": { "0": { "CellsH": 6, "CellsV": 50 } } },
 
+    // Gruppa 99 T30 backpack (Black) (5x6)
+    "628e1ffc83ec92260c0f437f": {
+      "Ops": { "Width": { "Value": 6 }, "Height": { "Value": 8 } },
+      "Grids": { "0": { "CellsH": 6, "CellsV": 8 } }
+    },
+    // Gruppa 99 T30 backpack (MultiCam) (5x6)
+    "62a1b7fbc30cfa1d366af586": {
+      "Ops": { "Width": { "Value": 6 }, "Height": { "Value": 8 } },
+      "Grids": { "0": { "CellsH": 6, "CellsV": 8 } }
+    },
+    // Eberlestock F5 Switchblade backpack (Dry Earth) (5x6)
+    "5f5e467b0bc58666c37e7821": {
+      "Ops": { "Width": { "Value": 6 }, "Height": { "Value": 8 } },
+      "Grids": { "0": { "CellsH": 6, "CellsV": 8 } }
+    },
+    // Tasmanian Tiger Trooper 35 backpack (Khaki) (5x7)
+    "639346cc1c8f182ad90c8972": {
+      "Ops": { "Width": { "Value": 6 }, "Height": { "Value": 8 } },
+      "Grids": { "0": { "CellsH": 6, "CellsV": 8 } }
+    },
     // Mystery Ranch NICE Frame Load Sling (5x7)
     "68947ad3e4bf255d1b0ca75c": {
       "Ops": { "Width": { "Value": 6 }, "Height": { "Value": 8 } },

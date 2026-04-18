@@ -53,10 +53,10 @@
   // ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   "PriceThresholds": [
-    { "MinPrice": 150000, "Tier": "Elite"     },
-    { "MinPrice": 70000, "Tier":  "Excellent" },
-    { "MinPrice": 50000,  "Tier": "Superior"  },
-    { "MinPrice": 30000,  "Tier": "Notable"   }
+    { "MinPrice": 200000, "Tier": "Elite"     },
+    { "MinPrice": 120000, "Tier": "Excellent" },
+    { "MinPrice": 80000, "Tier": "Superior"  },
+    { "MinPrice": 40000, "Tier": "Notable"   }
   ],
 }
 

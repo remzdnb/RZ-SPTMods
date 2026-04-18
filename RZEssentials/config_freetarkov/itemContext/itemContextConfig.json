@@ -59,10 +59,10 @@
     },
 
     "PriceThresholds": [
-      { "Min": 150000, "Color": "#cc4444" },
-      { "Min": 70000, "Color": "#cccc44" },
-      { "Min": 50000, "Color": "#8844cc" },
-      { "Min": 30000, "Color": "#4444cc" },
+      { "Min": 200000, "Color": "#cc4444" },
+      { "Min": 120000, "Color": "#cccc44" },
+      { "Min": 80000, "Color": "#8844cc" },
+      { "Min": 40000, "Color": "#4444cc" },
       { "Min": 0, "Color": "#ffffff" }
     ]
 

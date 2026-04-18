@@ -6,6 +6,8 @@
 
 > ⭐ This mod is built for players who want to craft their own experience and aren't afraid to dig into config files. That said, it's designed to be approachable : the configs are well organized and clearly commented. Most features ship with sensible default, enabling them is often enough to get a solid base without touching anything else.
 
+> ⚠️ All my previous mods are deprecated and replaced by this one. Make sure to remove them before installing RZEssentials, or you'll have conflicts.
+
 *This mod was designed around a flea-market-disabled server. Flea-related features are limited and not a development priority. Most systems have nothing to do with the flea market either way.*
 
 *Some features overlap with SVM.*
@@ -579,7 +581,7 @@ Both lists are combined : an item is allowed if it matches either one.
 
 ## 🖥️ UI
 
-### 💠 Locale Overrides ( *uiSettings/localesConfig.json* )
+### 💠 Locale Overrides ( *ui/localesConfig.json* )
 
 **Force English items** — Replaces all item names, short names, and descriptions with their English equivalents for non-English clients. A great way to teach your friends English without them realizing it xD
 
@@ -597,11 +599,33 @@ Both lists are combined : an item is allowed if it matches either one.
 
 ---
 
-### 💠 Avatar Overrides ( *uiSettings/avatarsConfig.json* )
+### 💠 Avatar Overrides ( *ui/avatarsConfig.json* )
 
 Remap trader portrait images. Image files are placed in the `db/` folder of the mod.
 
 > 💡 After changing portraits, press **Clean Temp Files** in the SPT launcher before restarting. Without this step portraits won't update.
+
+---
+
+### 💠 Client Config ( *ui/clientConfig.json* )
+
+Controls various client-side UI behaviours. All options apply to every player on the server.
+
+**Skip side selection screen** — Skips the PMC/Scav selection screen before raids.
+
+**Skip insurance screen** — Skips the insurance selection screen before raids.
+
+**Skip raid settings screen** — Skips the raid settings screen before raids.
+
+**Skip experience screen** — Skips the experience summary screen after raids.
+
+**Category sort / Item sort / Alphabetical sort** — Controls trader inventory sorting behaviour. Category order and item order can be defined explicitly via their respective lists.
+
+> 💡 Client config is intentionally managed server-side rather than through a BepInEx F12 menu. The mod is designed around Fika : regular players have no business touching F12 config, and keeping everything in files makes it easier to push changes without asking everyone to reinstall anything. The only tradeoff is that a game restart is required after any change, which is fine.
+
+> ⚠️ Category sort was put together quickly and may not be practical for every setup — it's worth testing before committing to it. Item sort and alphabetical sort work reliably.
+
+[![Skip](https://i.imgur.com/pac4sQ3.gif)](https://i.imgur.com/pac4sQ3.gif)
 
 ## 🔧 Misc Settings
 
@@ -658,15 +682,6 @@ The dumps also include the full contents of **WTT - Content Backport**, so modde
 > ⚠️ Use Notepad++ or VSCode to edit config files. The default Windows Notepad won't warn you about syntax errors.
 
 > 💡 My personal config is available on the repository if you want more concrete examples of what the mod can do.
-
-> 💡 A good chunk of this mod was written with Claude AI as a coding assistant. I have no issue saying that, and I don't consider it reflects on my ability as a developer, my background is Unreal Engine C++ and I have zero personal interest in becoming an expert in C#, SPT internals, or Tarkov's codebase. What I care about is whether the config is flexible and whether the features actually work.
-I'm mentioning this preemptively because it tends to come up. If you're the type to have **strong** feelings about it, that's fine, just know it's not a conversation I'm going to have.
-
-> 🔮 A few things currently in the works or being considered :
-> - **Client patcher** — Sort trader inventories by category, ID, or alphabetically.
-> - **UI toggles** — Enable/disable various UI elements (scav mode button, insurance screen, etc.).
-> - **Item template management** — Create and patch custom item templates.
-> - **Quest rework** — Possibly a rework of the vanilla questline, still undecided.
 
 ## 🐱
 

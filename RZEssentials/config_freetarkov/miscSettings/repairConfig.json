@@ -81,7 +81,7 @@
     // Weapon
     "Weapon": {
       "RarityWeight":    { "Common": 5, "Rare": 1 },
-      "BonusTypeWeight": { "WeaponSpread": 1, "MalfunctionProtections": 0 },
+      "BonusTypeWeight": { "WeaponSpread": 1 },
       "Common": {
         "WeaponSpread": {
           "ValuesMinMax":                  { "Min": 0.9,  "Max": 0.99 },

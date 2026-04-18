@@ -65,6 +65,28 @@
     "6567e7681265c8a131069b0f": 68601, // SIG Sauer TANGO6T 1-6x24 30mm riflescope
     "5dff772da3651922b360bf91": 14468, // VOMZ Pilad 4x32 25.4mm riflescope
 
+    // HELMET MODS
+    // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+    "5f60bf4558eff926626a60f2": 30000, // Galvion Caiman Fixed Arm Visor
+    "5f60b85bbdb8e27dee3dc985": 80000, // Galvion Caiman Hybrid Ballistic Applique
+    "693be0ee50fafa102607aebd": 80000, // Galvion Caiman Hybrid Ballistic Applique (MultiCam Alpine)
+    "68a9b601863d2a71fa0494ae": 80000, // Galvion Caiman Hybrid Ballistic Applique (MultiCam)
+    "68a9b669fa39b6976e07de96": 80000, // Galvion Caiman Hybrid Ballistic Applique (Mutualist)
+    "5f60c076f2bcbb675b00dac2": 30000, // Galvion Caiman Hybrid Ballistic Mandible Guard
+    "693be056fd3a5c751e00de04": 30000, // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam Alpine)
+    "68a9b6c8d3a061d8b6058346": 30000, // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam)
+    "68a9b73bd3a061d8b6058348": 30000, // Galvion Caiman Hybrid Ballistic Mandible Guard (Mutualist)
+    "5ea18c84ecf1982c7712d9a2": 120000, // Diamond Age Bastion helmet armor plate
+    "6570a88c8f221f3b210353b7": 40000, // Diamond Age NeoSteel helmet ballistic mandible
+    "68a9c0ed6d47c49b700faaf9": 40000, // Diamond Age NeoSteel helmet ballistic mandible (Aces)
+    "68a9bf7d9f4c45817b0d83b6": 40000, // Diamond Age NeoSteel helmet ballistic mandible (Black)
+    "5a16ba61fcdbcb098008728a": 30000, // Ops-Core FAST Gunsight Mandible
+    "5a16b7e1fcdbcb00165aa6c9": 40000, // Ops-Core FAST multi-hit ballistic face shield
+    "5a16badafcdbcb001865f72d": 40000, // Ops-Core FAST Side Armor
+    "5a16b672fcdbcb001912fa83": 20000, // Ops-Core FAST Visor
+    "5c0e66e2d174af02a96252f4": 120000, // Ops-Core SLAAP armor helmet plate (Tan)
+
     // HEADSETS
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
@@ -411,14 +433,15 @@
     "62a091170b9d3c46de5b6cf2": 40000, // Axel parrot figurine
     "59e3658a86f7741776641ac4": 40000, // Cat figurine
     "5e54f62086f774219b0f1937": 40000, // Raven figurine
+    "5bc9bc53d4351e00367fbcee": 120000, // Golden rooster figurine
+    "59e3639286f7741777737013": 200000, // Bronze lion figurine
     "5bc9bdb8d4351e003562b8a1": 40000, // Silver Badge
     "5f745ee30acaeb0d490d8c5b": 40000, // Veritas guitar pick
     "66b37eb4acff495a29492407": 40000, // Viibiin sneaker
     "5734758f24597738025ee253": 40000, // Golden neck chain
-    "59faf7ca86f7740dbe19f6c2": 70000, // Roler Submariner gold wrist watch
-    "5bc9c377d4351e3bac12251b": 70000, // Old firesteel
-    "59e3647686f774176a362507": 100000, // Wooden clock
-    "59e3639286f7741777737013": 150000, // Bronze lion figurine
+    "59faf7ca86f7740dbe19f6c2": 80000, // Roler Submariner gold wrist watch
+    "5bc9c377d4351e3bac12251b": 80000, // Old firesteel
+    "59e3647686f774176a362507": 120000, // Wooden clock
 
     // KEYS
     // ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

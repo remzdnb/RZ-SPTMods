@@ -7,19 +7,20 @@
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   // Master switch for restock timer overrides.
-  "EnableRestockTimes": false,
+  "EnableRestockTimes": true,
 
   // Restock times.
   "RestockTimes": {
-    "54cb50c76803fa8b248b4571": 20, // Prapor
-    "54cb57776803fa99248b456e": 20, // Therapist
-    "579dc571d53a0658a154fbec": 20, // Fence
-    "58330581ace78e27b8b10cee": 20, // Skier
-    "5935c25fb3acc3127c3d8cd9": 20, // Peacekeeper
-    "5a7c2eca46aef81a7ca2145d": 20, // Mechanic
-    "5ac3b934156ae10c4430e83c": 20, // Ragman
-    "5c0647fdd443bc2504c2d371": 20, // Jaeger
-    "6617beeaa9cfa777ca915b7c": 20  // Ref
+    "54cb50c76803fa8b248b4571": 300, // Prapor
+    "54cb57776803fa99248b456e": 300, // Therapist
+    "579dc571d53a0658a154fbec": 300, // Fence
+    "58330581ace78e27b8b10cee": 300, // Skier
+    "5935c25fb3acc3127c3d8cd9": 300, // Peacekeeper
+    "5a7c2eca46aef81a7ca2145d": 300, // Mechanic
+    "5ac3b934156ae10c4430e83c": 300, // Ragman
+    "5c0647fdd443bc2504c2d371": 300, // Jaeger
+    "6617beeaa9cfa777ca915b7c": 300, // Ref
+    "fa363fc015e07b5f7828c9f7": 300, // Sable
   },
 
   // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────

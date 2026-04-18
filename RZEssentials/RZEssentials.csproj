@@ -35,6 +35,10 @@
     <Folder Include="docs\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ConfigFiles Include="config_generic\ui\clientConfig.json" />
+  </ItemGroup>
+
   <Target Name="ExportMod" AfterTargets="Build" Condition="'$(ModExportPath)' != ''">
     <Message Text="→ Cleaning $(ModExportPath)" Importance="High"/>
     <RemoveDir Directories="$(ModExportPath)"/>

@@ -53,19 +53,19 @@
         // FACECOVERS
         {
           "Tpl": "6570aead4d84f81fd002a033", // Death Shadow lightweight armored mask
-          "BarterItems": [ { "Tpl": "5d235b4d86f7742e017bc88a", "Count": 5 } ] // GP
+          "BarterItems": [ { "Tpl": "657089638db3adca1009f4ca", "Count": 1 } ]
         },
         {
           "Tpl": "68a9b821cdf661cc5a0626c6", // Death Shadow lightweight armored mask (Gold)
-          "BarterItems": [ { "Tpl": "6570aead4d84f81fd002a033", "Count": 1 } ]
+          "BarterItems": [ { "Tpl": "657089638db3adca1009f4ca", "Count": 1 } ]
         },
         {
           "Tpl": "68a9b852cdf661cc5a0626c9", // Death Shadow lightweight armored mask (Gray)
-          "BarterItems": [ { "Tpl": "6570aead4d84f81fd002a033", "Count": 1 } ]
+          "BarterItems": [ { "Tpl": "657089638db3adca1009f4ca", "Count": 1 } ]
         },
         {
           "Tpl": "68a9b873a4b28d56c80a1818", // Death Shadow lightweight armored mask (White)
-          "BarterItems": [ { "Tpl": "6570aead4d84f81fd002a033", "Count": 1 } ]
+          "BarterItems": [ { "Tpl": "657089638db3adca1009f4ca", "Count": 1 } ]
         },
         {
           "Tpl": "657089638db3adca1009f4ca", // Atomic Defense CQCM up armored ballistic mask (Black)
@@ -331,8 +331,27 @@
         {
           "Tpl": "68bee28f79c8186398098e6f", // Champion's helmet
           "BarterItems": [ { "Tpl": "5d235b4d86f7742e017bc88a", "Count": 10 } ] // GP
-        }
+        },
 
+        // HELMET MODS
+        { "Tpl": "5f60bf4558eff926626a60f2" }, // Galvion Caiman Fixed Arm Visor
+        { "Tpl": "5f60b85bbdb8e27dee3dc985" }, // Galvion Caiman Hybrid Ballistic Applique
+        { "Tpl": "693be0ee50fafa102607aebd" }, // Galvion Caiman Hybrid Ballistic Applique (MultiCam Alpine)
+        { "Tpl": "68a9b601863d2a71fa0494ae" }, // Galvion Caiman Hybrid Ballistic Applique (MultiCam)
+        { "Tpl": "68a9b669fa39b6976e07de96" }, // Galvion Caiman Hybrid Ballistic Applique (Mutualist)
+        { "Tpl": "5f60c076f2bcbb675b00dac2" }, // Galvion Caiman Hybrid Ballistic Mandible Guard
+        { "Tpl": "693be056fd3a5c751e00de04" }, // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam Alpine)
+        { "Tpl": "68a9b6c8d3a061d8b6058346" }, // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam)
+        { "Tpl": "68a9b73bd3a061d8b6058348" }, // Galvion Caiman Hybrid Ballistic Mandible Guard (Mutualist)
+        { "Tpl": "5ea18c84ecf1982c7712d9a2" }, // Diamond Age Bastion helmet armor plate
+        { "Tpl": "6570a88c8f221f3b210353b7" }, // Diamond Age NeoSteel helmet ballistic mandible
+        { "Tpl": "68a9c0ed6d47c49b700faaf9" }, // Diamond Age NeoSteel helmet ballistic mandible (Aces)
+        { "Tpl": "68a9bf7d9f4c45817b0d83b6" }, // Diamond Age NeoSteel helmet ballistic mandible (Black)
+        { "Tpl": "5a16ba61fcdbcb098008728a" }, // Ops-Core FAST Gunsight Mandible
+        { "Tpl": "5a16b7e1fcdbcb00165aa6c9" }, // Ops-Core FAST multi-hit ballistic face shield
+        { "Tpl": "5a16badafcdbcb001865f72d" }, // Ops-Core FAST Side Armor
+        { "Tpl": "5a16b672fcdbcb001912fa83" }, // Ops-Core FAST Visor
+        { "Tpl": "5c0e66e2d174af02a96252f4" }, // Ops-Core SLAAP armor helmet plate (Tan)
       ]
     },
     {
@@ -537,14 +556,29 @@
         {
           "Tpl": "64be7095047e826eae02b0c1"
         },
-
         // BAGS
         {
-          "Tpl": "68947ad3e4bf255d1b0ca75c", //   Mystery Ranch NICE Frame Load Sling
+          "Tpl": "628e1ffc83ec92260c0f437f", // Gruppa 99 T30 backpack (Black)
           "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
         },
         {
-          "Tpl": "5c0e774286f77468413cc5b2", //  Mystery Ranch Blackjack 50 backpack (MultiCam)
+          "Tpl": "62a1b7fbc30cfa1d366af586", // Gruppa 99 T30 backpack (MultiCam)
+          "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
+        },
+        {
+          "Tpl": "68947a8ce4bf255d1b0ca759", // Tasmanian Tiger Trooper 35 backpack (Khaki)
+          "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
+        },
+        {
+          "Tpl": "5f5e467b0bc58666c37e7821", // Eberlestock F5 Switchblade backpack (Dry Earth)
+          "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
+        },
+        {
+          "Tpl": "68947ad3e4bf255d1b0ca75c", // Mystery Ranch NICE Frame Load Sling
+          "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
+        },
+        {
+          "Tpl": "5c0e774286f77468413cc5b2", // Mystery Ranch Blackjack 50 backpack (MultiCam)
           "BarterItems": [ { "Tpl": "59e3647686f774176a362507", "Count": 1 } ] // Wooden clock
         },
         {
@@ -952,6 +986,26 @@
         {
           "Tpl": "59e3647686f774176a362507", // Wooden clock
           "BarterItems": [ { "Tpl": "6937ed118715e9fd1b0f286d", "Count": 1 } ] // Tangerine
+        },
+        {
+          "Tpl": "59e3647686f774176a362507", // Wooden clock
+          "BarterItems": [ { "Tpl": "5f5e467b0bc58666c37e7821", "Count": 1 } ] // Eberlestock F5 Switchblade backpack (Dry Earth)
+        },
+        {
+          "Tpl": "59e3647686f774176a362507", // Wooden clock
+          "BarterItems": [ { "Tpl": "639346cc1c8f182ad90c8972", "Count": 1 } ] // Tasmanian Tiger Trooper 35 backpack (Khaki)
+        },
+        {
+          "Tpl": "59e3647686f774176a362507", // Wooden clock
+          "BarterItems": [ { "Tpl": "628e1ffc83ec92260c0f437f", "Count": 1 } ] // Gruppa 99 T30 backpack (Black)
+        },
+        {
+          "Tpl": "59e3647686f774176a362507", // Wooden clock
+          "BarterItems": [ { "Tpl": "62a1b7fbc30cfa1d366af586", "Count": 1 } ] // Gruppa 99 T30 backpack (MultiCam)
+        },
+        {
+          "Tpl": "59e3647686f774176a362507", // Wooden clock
+          "BarterItems": [ { "Tpl": "5bc9bc53d4351e00367fbcee", "Count": 1 } ] // Golden rooster figurine
         },
         //
         {

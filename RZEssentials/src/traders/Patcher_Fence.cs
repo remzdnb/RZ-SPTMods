@@ -48,8 +48,7 @@ public class Patcher_Fence(
 
         // Supply
 
-        if (_supplyConfig.EnableSupplyConfig &&
-            _supplyConfig.EnableRestockTimes &&
+        if (_supplyConfig.EnableRestockTimes &&
             _supplyConfig.RestockTimes.TryGetValue(SPTarkov.Server.Core.Models.Enums.Traders.FENCE, out var fenceSeconds))
         {
             configServer.GetConfig<TraderConfig>().Fence.PartialRefreshTimeSeconds = fenceSeconds;
@@ -184,7 +183,7 @@ public class Patcher_Fence(
 
             // Fix NextResupply on the assort - SPT calculates it in CreateFenceAssortSkeleton() using the old
             // PartialRefreshTimeSeconds, so we overwrite it here with the correct value.
-            if (_logConfig != null && _supplyConfig != null && _supplyConfig.EnableSupplyConfig && _restockSeconds.HasValue && _fenceService is not null)
+            if (_logConfig != null && _supplyConfig != null && _restockSeconds.HasValue && _fenceService is not null)
             {
                 var main = _fenceService.GetMainFenceAssort();
                 if (main is not null)

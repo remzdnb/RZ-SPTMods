@@ -86,6 +86,13 @@
     },
     {
       "FromTpls": [
+        "66bdc28a0b603c26902b2011", // DevTac Ronin ballistic helmet
+        "5b4329f05acfc47a86086aa1", // DevTac Ronin Respirator
+        "68a9a85c3e1ee5a70504c12e", // DevTac Ronin Respirator (Beast)
+        "68a9a92b838d65bcb3050176", // DevTac Ronin Respirator (Eternal Green)
+        "6570a88c8f221f3b210353b7", // Diamond Age NeoSteel helmet ballistic mandible
+        "68a9c0ed6d47c49b700faaf9", // Diamond Age NeoSteel helmet ballistic mandible (Aces)
+        "68a9bf7d9f4c45817b0d83b6", // Diamond Age NeoSteel helmet ballistic mandible (Black)
         "5f60c076f2bcbb675b00dac2", // Galvion Caiman Hybrid Ballistic Mandible Guard
         "693be056fd3a5c751e00de04", // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam Alpine)
         "68a9b6c8d3a061d8b6058346", // Galvion Caiman Hybrid Ballistic Mandible Guard (MultiCam)

@@ -170,7 +170,6 @@ public class BuybackRule
 public class SupplyConfig : IConfig
 {
     public static string FileName => "traders/supplyConfig.json";
-    public bool EnableSupplyConfig { get; set; } = false;
 
     public bool EnableRestockTimes { get; set; } = true;
     public Dictionary<string, int> RestockTimes { get; set; } = new();

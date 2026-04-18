@@ -22,8 +22,6 @@ public class Patcher_Supply(
     public Task OnLoad()
     {
         var supplyConfig = configLoader.Load<SupplyConfig>();
-        if (!supplyConfig.EnableSupplyConfig)
-            return Task.CompletedTask;
 
         PatchRestockTimes(supplyConfig);
         PatchStockMultipliers(supplyConfig);

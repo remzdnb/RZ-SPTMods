@@ -186,7 +186,7 @@ public class TiersPatcher(RzeLogger log, DatabaseService databaseService, Config
         var merged = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         var files = configLoader.LoadAll<OverrideFile>(
-            "itemtiers", exclude: [ItemTiersConfig.FileName, CategoryRulesConfig.FileName, PriceRulesConfig.FileName]
+            "itemTiers", exclude: [ItemTiersConfig.FileName, CategoryRulesConfig.FileName, PriceRulesConfig.FileName]
         );
 
         foreach (var file in files)
